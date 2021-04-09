@@ -1,2 +1,3 @@
 # alphabeta_project
-JOUEUR À INTELLIGENCE ARTIFICIELLE BASÉE SUR L’ALGORITHME  ALPHA-BÊTA EN C++
+
+Développement d'un joueur à intelligence artificielle basé sur l'algortihme Alpha Beta
