@@ -7,13 +7,26 @@ Jeu::Jeu() {
 
 void Jeu::reset(){
     // Initialisation du plateau aleatoirement
+
+    //std::vector<std::string> piecesAPlacer = {"BNBN","BJBB","VJJJ","JBJB","JRBR","VVRV","JJBJ","BBBR","RVRV","JRJV","RVRJ","VBJR","BVBV","RRRB","JBJR","BJBR","RBRV","VVVV","JJJJ","VJVR","RRRR","RJJJ","BVVV","RJRR","JRJR","BVBJ","JVJV","BVBB","RRRV","BJVJ","BBBB","BVRV","RBRB","VJVV","BRBV","VBVJ"};
+    //int nbPiecesAPlacer = 36;
+
     std::vector<int> indicesPiecesParcourus(36);
     for (auto & ligne : _plateau){
         for (auto & colonne : ligne){
+
+            
+            // int randPiece = rand()%(nbPiecesAPlacer);
+            // nbPiecesAPlacer-=1;
+            // if (randPiece==0) colonne = "TROU";
+            // else colonne = piecesAPlacer.at(randPiece);
+            // piecesAPlacer.erase(piecesAPlacer.begin()+randPiece);
+
             bool piecePasPresente = false;
             while (!piecePasPresente){
                 //on choisit une piece au hasard
                 int randPiece = rand()%(0-35 + 1);
+
 
                 //on verifie qu'elle ne soit pas deja placée sur le plateau
                 auto appartient = std::find(begin(indicesPiecesParcourus), end(indicesPiecesParcourus), randPiece);
@@ -50,6 +63,7 @@ int Jeu::nbCoupJoue() const
 
 
 // SUREMENT A FAIRE PAR LA SUITE  : adapter cette fonction pour qu'elle prenne en compte le nombre de déplacement que le joueur veut ET peut effectuer avec sa piece
+// En amont : vérifier si la piece que le joueur bouge lui appartient bel et bien
 bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
     if (!coup.getDefinie() || !coordValide(abscisse,ordonnee))
         return false;
@@ -63,6 +77,7 @@ bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
         (coup.getOrdonnee()+2 == ordonnee && coup.getAbscisse()==abscisse && _plateau[abscisse][ordonnee+1]!="TROU" ) ||
         (coup.getOrdonnee()-2 == ordonnee && coup.getAbscisse()==abscisse && _plateau[abscisse][ordonnee-1]!="TROU" ))
         return true;
+        //Ajouter une vérification : il faut que la case abscisse ordonnee soit un TROU pour les deux cas
 
     return false;
 }
