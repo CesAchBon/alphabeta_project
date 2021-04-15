@@ -8,21 +8,25 @@ Jeu::Jeu() {
 void Jeu::reset(){
     // Initialisation du plateau aleatoirement
 
-    //std::vector<std::string> piecesAPlacer = {"BNBN","BJBB","VJJJ","JBJB","JRBR","VVRV","JJBJ","BBBR","RVRV","JRJV","RVRJ","VBJR","BVBV","RRRB","JBJR","BJBR","RBRV","VVVV","JJJJ","VJVR","RRRR","RJJJ","BVVV","RJRR","JRJR","BVBJ","JVJV","BVBB","RRRV","BJVJ","BBBB","BVRV","RBRB","VJVV","BRBV","VBVJ"};
-    //int nbPiecesAPlacer = 36;
+    std::vector<std::string> piecesAPlacer = {"BNBN","BJBB","VJJJ","JBJB","JRBR","VVRV","JJBJ","BBBR","RVRV","JRJV","RVRJ","VBJR","BVBV","RRRB","JBJR","BJBR","RBRV","VVVV","JJJJ","VJVR","RRRR","RJJJ","BVVV","RJRR","JRJR","BVBJ","JVJV","BVBB","RRRV","BJVJ","BBBB","BVRV","RBRB","VJVV","BRBV","VBVJ"};
+    int nbPiecesAPlacer = 36;
+    bool maitrePlace = false;
 
     std::vector<int> indicesPiecesParcourus(36);
     for (auto & ligne : _plateau){
         for (auto & colonne : ligne){
 
             
-            // int randPiece = rand()%(nbPiecesAPlacer);
-            // nbPiecesAPlacer-=1;
-            // if (randPiece==0) colonne = "TROU";
-            // else colonne = piecesAPlacer.at(randPiece);
-            // piecesAPlacer.erase(piecesAPlacer.begin()+randPiece);
+            int randPiece = rand()%(nbPiecesAPlacer);
+            nbPiecesAPlacer-=1;
+            if (randPiece==0&&!maitrePlace){
+                colonne = "TROU";
+                maitrePlace=true;
+            } 
+            else colonne = piecesAPlacer.at(randPiece);
+            piecesAPlacer.erase(piecesAPlacer.begin()+randPiece);
 
-            bool piecePasPresente = false;
+            /*bool piecePasPresente = false;
             while (!piecePasPresente){
                 //on choisit une piece au hasard
                 int randPiece = rand()%(0-35 + 1);
@@ -41,6 +45,7 @@ void Jeu::reset(){
                     indicesPiecesParcourus.push_back(randPiece);
                 }
             }
+            */
         }
     }
 
@@ -52,7 +57,7 @@ void Jeu::reset(){
 bool Jeu::coordValide(int abscisse,int ordonnee) const{
     return (abscisse >= 0) && (abscisse < MAX_LARGEUR) &&
            (ordonnee >= 0) && (ordonnee < MAX_HAUTEUR) &&
-           (_plateau[abscisse][ordonnee]!="TROU");
+           (_plateau[abscisse][ordonnee]=="TROU");
 }
 
 
@@ -77,7 +82,6 @@ bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
         (coup.getOrdonnee()+2 == ordonnee && coup.getAbscisse()==abscisse && _plateau[abscisse][ordonnee+1]!="TROU" ) ||
         (coup.getOrdonnee()-2 == ordonnee && coup.getAbscisse()==abscisse && _plateau[abscisse][ordonnee-1]!="TROU" ))
         return true;
-        //Ajouter une vérification : il faut que la case abscisse ordonnee soit un TROU pour les deux cas
 
     return false;
 }
@@ -157,3 +161,20 @@ std::ostream& operator<<( std::ostream &flux, Jeu const& jeu ){
     return flux;
 }
 
+/*
+Quel coup voulez vous jouer :
+    si il répond avec une piece a plusieurs couleurs, il faut lui redemander autant de fois qu'elle a de couleurs -1 (avec actualisation du plateau)
+
+Liste des coups possibles
+
+Pour chaque Piece :
+    vérifier si elle appartient au joueur actuel
+    regarder les coups qu'elle peut faire
+    si elle a 2 couleurs ou plus :
+        regarder les coups "déplacements"
+        regarder les sauts
+    si elle a une couleur :
+        regarder les sauts
+
+
+    
