@@ -45,3 +45,24 @@ std::ostream& operator<<( std::ostream &flux, Piece const & p){
         }
     return flux;
 }
+
+bool Piece::contient(std::string couleur)const{
+    for (int i = 0; i < _couleurs.length(); ++i){
+        if(_couleurs.substr(i,1)==couleur){
+            return true;
+        }
+    }
+    return false;
+}
+
+int Piece::degre(std::string couleur)const{
+    int degre_couleur=0;
+    if(contient(couleur)){
+        for (int i = 0; i < _couleurs.length(); ++i){
+            if(_couleurs.substr(i,1)==couleur){
+                degre_couleur+=1;
+            }
+        }
+    }
+    return degre_couleur;
+}
