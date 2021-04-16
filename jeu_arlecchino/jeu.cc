@@ -86,6 +86,7 @@ bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
     return false;
 }
 
+// 
 void Jeu::joue(Piece const & coup,int abscisse,int ordonnee) {
     _nb_tours++;
     _plateau[ordonnee][abscisse]= coup.getCouleurs();
@@ -106,15 +107,35 @@ void Jeu::joue(Piece const & coup,int abscisse,int ordonnee) {
 //puis modifier la mise a jour d'état
 
 //Je mets à jour état
-if (_alignementO && !_alignementX)
-_etat = Etat::ALIGNEMENT_O;
+    if (_alignementO && !_alignementX)
+    _etat = Etat::ALIGNEMENT_O;
 
-if (_alignementX && !_alignementO)
-_etat = Etat::ALIGNEMENT_X;
+    if (_alignementX && !_alignementO)
+    _etat = Etat::ALIGNEMENT_X;
 
-if ((_nb_tours == NB_PIECE_MAX) || (_alignementX && _alignementO))
-_etat = Etat::PARTIE_NULLE;
+    if ((_nb_tours == NB_PIECE_MAX) || (_alignementX && _alignementO))
+    _etat = Etat::PARTIE_NULLE;
 
+}
+
+std::vector<int> comptage_couleurs() const{
+   int nb_Rouge=0;
+   int nb_Vert=0;
+   int nb_Jaune=0;
+   int nb_Bleu=0;
+    for (auto & ligne : _plateau){
+        for (auto & colonne : ligne){
+            for(int i = 0; i < colonne.getCouleurs().length(); ++i){
+                char c = colonne.getCouleurs()[i];
+                if (c=='B') {nb_Bleu++;}
+                if (c=='J') {nb_Jaune++;}
+                if (c=='V') {nb_Vert++;}
+                if (c=='R') {nb_Rouge++;}
+            }
+        }
+    }
+    std::vector<int> vector_couleurs={nb_Bleu,nb_Jaune,nb_Rouge,nb_Vert};
+    return vector_couleurs;
 }
 
 
@@ -129,12 +150,12 @@ bool Jeu::partie_nulle() const {
     return (_etat == Etat::PARTIE_NULLE);
 }
 
-bool Jeu::partie_O() const {
-    return _etat == Etat::ALIGNEMENT_O;
+bool Jeu::partie_J1() const {
+    return _etat == Etat::AVANTAGE_EXI;
 }
 
-bool Jeu::partie_X() const{
-    return _etat ==Etat::ALIGNEMENT_X;
+bool Jeu::partie_J2() const{
+    return _etat ==Etat::AVANTAGE_UNI;
 }
 
 

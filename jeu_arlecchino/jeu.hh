@@ -13,7 +13,7 @@ const int MAX_LARGEUR(6);
 
 
 
-enum class Etat {PARTIE_NON_TERMINEE, PARTIE_NULLE, ALIGNEMENT_X ,ALIGNEMENT_O} ;//A MODIFIER
+enum class Etat {PARTIE_NON_TERMINEE, PARTIE_NULLE, AVANTAGE_EXI,AVANTAGE_UNI} ;//A MODIFIER
 
 
 //le tableau des pieces
@@ -40,6 +40,9 @@ public :
     int nbCoupJoue() const;// Retourne le nombre de coup deja joue
     bool coup_licite(Piece const & coup,int abscisse,int ordonnee) const; // Vérifie si le coup a jouer est licite
     void joue(Piece const & coup,int abscisse,int ordonnee); // Joue le coup (sans vérifier qu'il est licite)
+
+    std::vector<int> comptage_couleurs() const;//compte le nombre de couleur de chaque joueur
+
     bool fini()const; // Vérifie si un état final a été atteint (dans ce cas le jeu prend fin)
     bool partie_nulle() const; // Vérifie si la partie est nulle
     bool partie_J1() const; // Vérifie si la partie est gagnée par joueur 1
