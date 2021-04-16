@@ -15,7 +15,8 @@ void Jeu::reset(){
     std::vector<int> indicesPiecesParcourus(36);
     for (auto & ligne : _plateau){
         for (auto & colonne : ligne){
-
+            
+            //FONCTION A MODIFIER, IL FAUT QUE LES CASES DU PLATEAU CONTIENNENT DES PIECES ET NON DES STRING
             
             int randPiece = rand()%(nbPiecesAPlacer);
             nbPiecesAPlacer-=1;
@@ -73,6 +74,8 @@ bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
     if (!coup.getDefinie() || !coordValide(abscisse,ordonnee))
         return false;
     //verification si on se deplace d'une case sans eliminer une piece
+    // A MODIFIER IL FAUT QUE LON PRENNE EN COMPTE QUUNE PIECE AVEC UNE UNIQUE COULEUR (sous entendu couleur du joueur qui joue le coup) NE PEUT PAS SE DEPLACER SANS SAUT (Cesar)
+    // DECOMPOSER LE COUP LICITE EN PLUSIEURS MOUVEMENTS (Cesar)
     if ((coup.getAbscisse()+1 == abscisse && coup.getOrdonnee()==ordonnee) || (coup.getAbscisse()-1==abscisse && coup.getOrdonnee()==ordonnee) 
         || (coup.getOrdonnee()+1==ordonnee && coup.getAbscisse()==abscisse) || (coup.getOrdonnee()-1==ordonnee&& coup.getAbscisse()==abscisse))
         return true;
@@ -85,6 +88,7 @@ bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
 
     return false;
 }
+
 
 // 
 void Jeu::joue(Piece const & coup,int abscisse,int ordonnee) {
@@ -141,10 +145,38 @@ std::vector<int> comptage_couleurs() const{
 
 //PUIS MODIFIER CES FONCTIONS
 
+
+
+bool Jeu::reste_des_coups() const{
+    std::vector<int> vector_couleurs=comptage_couleurs();
+    int points_Exi=vector_couleurs[0]+vector_couleurs[2];
+    int points_Uni=vector_couleurs[1]+vector_couleurs[3];
+
+    if (points_Exi==0 || points_Uni==0){
+        return false;
+    }
+    else{
+        if (points_Exi<=points_Uni){
+            for (auto & ligne : _plateau){
+                for (auto & colonne : ligne){
+                    if (colonne.contient("R")||colonne.contient("B")){
+                        if (coup_licite(colonne,colonne.getAbscisse(),colonne.getOrdonnee())){
+                            return true;
+                            // PLACEHOLDER : la fonction doit être terminée après implémentation des coups licites terminaux.
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+    return false;
+}
+
+
 bool Jeu::fini() const {
     return (_etat != Etat::PARTIE_NON_TERMINEE);
 }
-
 
 bool Jeu::partie_nulle() const {
     return (_etat == Etat::PARTIE_NULLE);

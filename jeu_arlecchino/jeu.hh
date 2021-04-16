@@ -42,6 +42,7 @@ public :
     void joue(Piece const & coup,int abscisse,int ordonnee); // Joue le coup (sans vérifier qu'il est licite)
 
     std::vector<int> comptage_couleurs() const;//compte le nombre de couleur de chaque joueur
+    bool Jeu::reste_des_coups() const;// retourne si il reste encore des coups licites a jouer
 
     bool fini()const; // Vérifie si un état final a été atteint (dans ce cas le jeu prend fin)
     bool partie_nulle() const; // Vérifie si la partie est nulle
