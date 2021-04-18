@@ -3,11 +3,9 @@
 Piece::Piece(){
     _definie=false;
 }
-Piece::Piece (std::string couleurs,int abscisse, int ordonnee)
+Piece::Piece (std::string couleurs)
     :
       _couleurs(couleurs),
-      _abscisse(abscisse),
-      _ordonnee(ordonnee),
       _definie(true)
 {}
 
@@ -15,17 +13,9 @@ void Piece::setCouleurs(std::string couleurs){
 _couleurs=couleurs;
 }
 
-void Piece::setAbscisse(int abscisse){
-_abscisse=abscisse;
-}
-void Piece::setOrdonnee(int ordonnee){
-    _ordonnee=ordonnee;
-}
 
-void Piece::setCase(std::string couleurs,int abscisse, int ordonnee){
+void Piece::setCase(std::string couleurs){
     _couleurs=couleurs;
-    _abscisse=abscisse;
-    _ordonnee=ordonnee;
     _definie=true;
 
 }
@@ -41,7 +31,7 @@ std::ostream& operator<<( std::ostream &flux, Piece const & p){
         }
     else
         {
-            flux<<"Piece : ("<< p.getAbscisse()<<" , " <<p.getOrdonnee() <<") couleurs : " << p.getCouleurs();
+            flux<<"Piece : " << p.getCouleurs();
         }
     return flux;
 }

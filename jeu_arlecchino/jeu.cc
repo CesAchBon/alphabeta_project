@@ -11,22 +11,20 @@ void Jeu::reset(){
     std::vector<std::string> piecesAPlacer = {"BNBN","BJBB","VJJJ","JBJB","JRBR","VVRV","JJBJ","BBBR","RVRV","JRJV","RVRJ","VBJR","BVBV","RRRB","JBJR","BJBR","RBRV","VVVV","JJJJ","VJVR","RRRR","RJJJ","BVVV","RJRR","JRJR","BVBJ","JVJV","BVBB","RRRV","BJVJ","BBBB","BVRV","RBRB","VJVV","BRBV","VBVJ"};
     int nbPiecesAPlacer = 36;
     bool maitrePlace = false;
-
+    // MAJ FAITE , le plateau comporte maintenant des pieces et non plus des string
     std::vector<int> indicesPiecesParcourus(36);
     for (auto & ligne : _plateau){
         for (auto & colonne : ligne){
             
-            //FONCTION A MODIFIER, IL FAUT QUE LES CASES DU PLATEAU CONTIENNENT DES PIECES ET NON DES STRING
-            
             int randPiece = rand()%(nbPiecesAPlacer);
             nbPiecesAPlacer-=1;
+            Piece piece (piecesAPlacer.at(randPiece));
+            colonne = piece;
             if (randPiece==0&&!maitrePlace){
-                colonne = "TROU";
+                colonne.setCouleurs("TROU");
                 maitrePlace=true;
             } 
-            else colonne = piecesAPlacer.at(randPiece);
             piecesAPlacer.erase(piecesAPlacer.begin()+randPiece);
-
             /*bool piecePasPresente = false;
             while (!piecePasPresente){
                 //on choisit une piece au hasard
@@ -58,7 +56,7 @@ void Jeu::reset(){
 bool Jeu::coordValide(int abscisse,int ordonnee) const{
     return (abscisse >= 0) && (abscisse < MAX_LARGEUR) &&
            (ordonnee >= 0) && (ordonnee < MAX_HAUTEUR) &&
-           (_plateau[abscisse][ordonnee]=="TROU");
+           (_plateau[abscisse][ordonnee].getCouleurs()=="TROU");
 }
 
 
@@ -68,22 +66,24 @@ int Jeu::nbCoupJoue() const
 }
 
 
-// SUREMENT A FAIRE PAR LA SUITE  : adapter cette fonction pour qu'elle prenne en compte le nombre de déplacement que le joueur veut ET peut effectuer avec sa piece
-// En amont : vérifier si la piece que le joueur bouge lui appartient bel et bien
+//UPDATE DE DIMANCHE (Mathias) pour implementer cette fonction coup_licite : verifier le tour de la couleur actuel (si la piece a 0 fois la couleur on revoie false) puis compter sur la piece le nb de fois qu'il y a cette couleur
+// stocker le resultat dans une variable "nbdeplacements" puis faire une boucle while pour jouer autant de deplacements possibles (decrementer nbdeplacements à chaque tour)
+// si a la fin de la boucle on a pas sauter de pieces le coup n'est pas licite et on renvoie false
 bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
     if (!coup.getDefinie() || !coordValide(abscisse,ordonnee))
         return false;
-    //verification si on se deplace d'une case sans eliminer une piece
+
+
     // A MODIFIER IL FAUT QUE LON PRENNE EN COMPTE QUUNE PIECE AVEC UNE UNIQUE COULEUR (sous entendu couleur du joueur qui joue le coup) NE PEUT PAS SE DEPLACER SANS SAUT (Cesar)
     // DECOMPOSER LE COUP LICITE EN PLUSIEURS MOUVEMENTS (Cesar)
-    if ((coup.getAbscisse()+1 == abscisse && coup.getOrdonnee()==ordonnee) || (coup.getAbscisse()-1==abscisse && coup.getOrdonnee()==ordonnee) 
-        || (coup.getOrdonnee()+1==ordonnee && coup.getAbscisse()==abscisse) || (coup.getOrdonnee()-1==ordonnee&& coup.getAbscisse()==abscisse))
+    if ((_plateau[abscisse+1][ordonnee].getCouleurs() ==  coup.getCouleurs()) || (_plateau[abscisse-1][ordonnee].getCouleurs() ==  coup.getCouleurs())
+        || (_plateau[abscisse][ordonnee+1].getCouleurs() ==  coup.getCouleurs()) || (_plateau[abscisse][ordonnee-1].getCouleurs() ==  coup.getCouleurs()))
         return true;
     //verification si on elimine une piece
-    if ((coup.getAbscisse()+2 == abscisse && coup.getOrdonnee()==ordonnee && _plateau[abscisse+1][ordonnee]!="TROU" ) ||
-        (coup.getAbscisse()-2 == abscisse && coup.getOrdonnee()==ordonnee && _plateau[abscisse-1][ordonnee]!="TROU" ) ||
-        (coup.getOrdonnee()+2 == ordonnee && coup.getAbscisse()==abscisse && _plateau[abscisse][ordonnee+1]!="TROU" ) ||
-        (coup.getOrdonnee()-2 == ordonnee && coup.getAbscisse()==abscisse && _plateau[abscisse][ordonnee-1]!="TROU" ))
+    if ((_plateau[abscisse+2][ordonnee].getCouleurs() ==  coup.getCouleurs() && _plateau[abscisse+1][ordonnee].getCouleurs()!="TROU" ) ||
+        (_plateau[abscisse-2][ordonnee].getCouleurs() ==  coup.getCouleurs() && _plateau[abscisse-1][ordonnee].getCouleurs()!="TROU" ) ||
+        (_plateau[abscisse][ordonnee+2].getCouleurs() ==  coup.getCouleurs() && _plateau[abscisse][ordonnee+1].getCouleurs()!="TROU" ) ||
+        (_plateau[abscisse][ordonnee-2].getCouleurs() ==  coup.getCouleurs() && _plateau[abscisse][ordonnee-1].getCouleurs()!="TROU" ))
         return true;
 
     return false;
@@ -93,8 +93,8 @@ bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
 // 
 void Jeu::joue(Piece const & coup,int abscisse,int ordonnee) {
     _nb_tours++;
-    _plateau[ordonnee][abscisse]= coup.getCouleurs();
-    _plateau[coup.getOrdonnee()][coup.getAbscisse()]= "TROU";
+    _plateau[ordonnee][abscisse]= coup;
+    _plateau[coup.getOrdonnee()][coup.getAbscisse()].setCouleurs("TROU");
     int min;
 
 
@@ -122,7 +122,9 @@ void Jeu::joue(Piece const & coup,int abscisse,int ordonnee) {
 
 }
 
-std::vector<int> comptage_couleurs() const{
+
+//compte le totale des pieces restantes sur le plateau
+std::vector<int> Jeu::comptage_couleurs() const{
    int nb_Rouge=0;
    int nb_Vert=0;
    int nb_Jaune=0;
@@ -159,10 +161,16 @@ bool Jeu::reste_des_coups() const{
         if (points_Exi<=points_Uni){
             for (auto & ligne : _plateau){
                 for (auto & colonne : ligne){
-                    if (colonne.contient("R")||colonne.contient("B")){
+                    if (colonne.contient("R")||colonne.contient("B"))// a modifier suite puisqu'on joue qu'une couleur par tour{
+                        //UPDATE DE DIMANCHE (Mathias)
+                        //etape 1 on compte le nb de fois qu il y a la couleur du tour sur la piece
+                        //etape 2 on  regarde si il y a une possibilité de sauter une piece avec le nombre de coup qu'on doit faire 
+                        //si c'est bon on revoir true (sinon on continue la boucle a la recherche d'une autre piece)
+                        /*
                         if (coup_licite(colonne,colonne.getAbscisse(),colonne.getOrdonnee())){
                             return true;
                             // PLACEHOLDER : la fonction doit être terminée après implémentation des coups licites terminaux.
+                        */
                         }
                     }
                 }

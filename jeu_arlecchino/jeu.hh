@@ -27,7 +27,7 @@ class Jeu {
 
 
 private :
-    using ligne=std::array<std::string,MAX_LARGEUR>;
+    using ligne=std::array<Piece,MAX_LARGEUR>;
     using board=std::array<ligne,MAX_HAUTEUR>;
     board _plateau;
     Etat _etat;
