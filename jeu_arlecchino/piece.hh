@@ -22,9 +22,8 @@ public:
         return _definie;
     }//accesseur de _definie, retourne false si la piece est considéré comme vide
 
-    void setCouleurs(std::string couleurs); //mutateur de l'abscisse de la pièce
-    void setAbscisse(int abscisse); //mutateur de l'abscisse de la pièce
-    void setOrdonnee(int ordonnee);//mutateur de l'ordonnée de la pièce
+    void setCouleurs(std::string couleurs); //mutateur des couleurs de la pièce
+   
     void setCase(std::string couleurs);//mutateur des données de la pièce, met _definie à true
     void setDefinie(bool def);//mutateur _definie
 
