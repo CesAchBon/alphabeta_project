@@ -41,8 +41,8 @@ public :
     bool coordValide(int abscisse,int ordonnee) const;//Le coup est dans le plateau et est un trou
     int nbCoupJoue() const;// Retourne le nombre de coup deja joue
 
-    bool coup_licite(Piece const & coup,int abscisse,int ordonnee) const; // Vérifie si le coup a jouer est licite
-    void joue(Piece const & coup,int abscisse,int ordonnee); // Joue le coup (sans vérifier qu'il est licite)
+    bool coup_licite(std::string couleur,Piece piece,std::vector<int> coupChoisi) const; // Vérifie si le coup a jouer est licite
+    void joue(std::string couleur,Piece const & piece,std::vector<int> coupChoisi); // Joue le coup (sans vérifier qu'il est licite)
 
     bool saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const;//Retourne si on peut deplacer une piece par un saut des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
     bool deplacement_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const;//Retourne si on peut deplacer une piece des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)

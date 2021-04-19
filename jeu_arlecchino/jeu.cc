@@ -104,7 +104,7 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
     // Déclaration du vector de tous les déplacements possibles
     deplacements dpts;
 
-    // Si la piece ne contient pas la couleur du joueur, alors aucun deplacement nest possible 
+    // Si la piece ne contient pas la couleur du joueur, alors aucun deplacement n est possible 
     if(!coup.contient(couleur)){
         return dpts;
     }
@@ -122,8 +122,8 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
         for(auto direction : directions){
             if (saut_possible(a0,o0,direction[0],direction[1])){
                 // SAUT
-                a1=a0+direction[0]*2;
-                o1=o0+direction[1]*2;
+                int a1=a0+direction[0]*2;
+                int o1=o0+direction[1]*2;
                 dpts.push_back({a0,o0,a1,o1});
             }
         }
@@ -137,34 +137,34 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
         // DEPLACEMENT puis SAUT
         for(auto direction : directions){
             if (saut_possible(a0,o0,direction[0],direction[1])){
-                a1=a0+direction[0]*2;
-                o1=o0+direction[1]*2;
+                int a1=a0+direction[0]*2;
+                int o1=o0+direction[1]*2;
                 // SAUT puis IMMOBILE
                 dpts.push_back({a0,o0,a1,o1,a1,o1});
                 
                 for (auto dir : directions){
                     if(saut_possible(a1,o1,dir[0],dir[1])){
-                        a2=a1+dir[0]*2;
-                        o2=o1+dir[1]*2;
+                        int a2=a1+dir[0]*2;
+                        int o2=o1+dir[1]*2;
                         // SAUT puis SAUT
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                     }
                     if(deplacement_possible(a1,o1,dir[0],dir[1])){
-                        a2=a1+dir[0];
-                        o2=o1+dir[1];
+                        int a2=a1+dir[0];
+                        int o2=o1+dir[1];
                         // SAUT puis DEPLACEMENT
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                     }
                 }
 
             }
-            if(deplacement_possible(a0,o2,direction[0],direction[1])){
-                a1=a0+direction[0];
-                o1=o0+direction[1];
+            if(deplacement_possible(a0,o0,direction[0],direction[1])){
+                int a1=a0+direction[0];
+                int o1=o0+direction[1];
                 for (auto dir : directions){
                     if(saut_possible(a1,o1,dir[0],dir[1])){
-                        a2=a1+dir[0]*2;
-                        o2=o1+dir[1]*2;
+                        int a2=a1+dir[0]*2;
+                        int o2=o1+dir[1]*2;
                         // DEPLACEMENT puis SAUT
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                     }
@@ -188,27 +188,27 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
         // DEPLACEMENT puis DEPLACEMENT puis SAUT
         for(auto direction : directions){
             if (saut_possible(a0,o0,direction[0],direction[1])){
-                a1=a0+direction[0]*2;
-                o1=o0+direction[1]*2;
+                int a1=a0+direction[0]*2;
+                int o1=o0+direction[1]*2;
                 // SAUT puis IMMOBILE
                 dpts.push_back({a0,o0,a1,o1,a1,o1,a1,o1});
 
                 for (auto dir : directions){
                     if(saut_possible(a1,o1,dir[0],dir[1])){
-                        a2=a1+dir[0]*2;
-                        o2=o1+dir[1]*2;
+                        int a2=a1+dir[0]*2;
+                        int o2=o1+dir[1]*2;
                         // SAUT puis SAUT puis IMMOBILE
                         dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
-                                a3=a2+d[0]*2;
-                                o3=o2+d[1]*2;
+                                int a3=a2+d[0]*2;
+                                int o3=o2+d[1]*2;
                                 // SAUT puis SAUT puis SAUT
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
                             if (deplacement_possible(a2,o2,d[0],d[1])){
-                                a3=a2+d[0];
-                                o3=o2+d[1];
+                                int a3=a2+d[0];
+                                int o3=o2+d[1];
                                 // SAUT puis SAUT puis DEPLACEMENT
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
@@ -216,20 +216,20 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
 
                     }
                     if(deplacement_possible(a1,o1,dir[0],dir[1])){
-                        a2=a1+dir[0];
-                        o2=o1+dir[1];
+                        int a2=a1+dir[0];
+                        int o2=o1+dir[1];
                         // SAUT puis DEPLACEMENT puis IMMOBILE
                         dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
-                                a3=a2+d[0]*2;
-                                o3=o2+d[1]*2;
+                                int a3=a2+d[0]*2;
+                                int o3=o2+d[1]*2;
                                 // SAUT puis DEPLACEMENT puis SAUT
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
                             if (deplacement_possible(a2,o2,d[0],d[1])){
-                                a3=a2+d[0];
-                                o3=o2+d[1];
+                                int a3=a2+d[0];
+                                int o3=o2+d[1];
                                 // SAUT puis DEPLACEMENT puis DEPLACEMENT
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
@@ -238,37 +238,37 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
 
                 }
             }
-            if(deplacement_possible(a0,o2,direction[0],direction[1])){
-                a1=a0+direction[0];
-                o1=o0+direction[1];
+            if(deplacement_possible(a0,o0,direction[0],direction[1])){
+                int a1=a0+direction[0];
+                int o1=o0+direction[1];
                 for (auto dir : directions){
                     if(saut_possible(a1,o1,dir[0],dir[1])){
-                        a2=a1+dir[0]*2;
-                        o2=o1+dir[1]*2;
+                        int a2=a1+dir[0]*2;
+                        int o2=o1+dir[1]*2;
                         // DEPLACEMENT puis SAUT puis IMMOBILE
                         dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
-                                a3=a2+d[0]*2;
-                                o3=o2+d[1]*2;
+                                int a3=a2+d[0]*2;
+                                int o3=o2+d[1]*2;
                                 // DEPLACEMENT puis SAUT puis SAUT
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
                             if (deplacement_possible(a2,o2,d[0],d[1])){
-                                a3=a2+d[0];
-                                o3=o2+d[1];
+                                int a3=a2+d[0];
+                                int o3=o2+d[1];
                                 // DEPLACEMENT puis SAUT puis DEPLACEMENT
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
                         }
                     }
                     if(deplacement_possible(a1,o1,dir[0],dir[1])){
-                        a2=a1+dir[0];
-                        o2=o1+dir[1];
+                        int a2=a1+dir[0];
+                        int o2=o1+dir[1];
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
-                                a3=a2+d[0]*2;
-                                o3=o2+d[1]*2;
+                                int a3=a2+d[0]*2;
+                                int o3=o2+d[1]*2;
                                 // DEPLACEMENT puis DEPLACEMENT puis SAUT
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
@@ -288,34 +288,84 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
 
 }
 
-//UPDATE DE DIMANCHE (Mathias) pour implementer cette fonction coup_licite : verifier le tour de la couleur actuel (si la piece a 0 fois la couleur on revoie false) puis compter sur la piece le nb de fois qu'il y a cette couleur
-// stocker le resultat dans une variable "nbdeplacements" puis faire une boucle while pour jouer autant de deplacements possibles (decrementer nbdeplacements à chaque tour)
-// si a la fin de la boucle on a pas sauter de pieces le coup n'est pas licite et on renvoie false
-bool Jeu::coup_licite( Piece const & coup,int abscisse,int ordonnee) const {
+// verifie si a partir des coordonnées d'une piece passée en parametre le tour représenté par un vecteur de coordonnées passé en parametre est licite
+bool Jeu::coup_licite( std::string couleur,Piece piece,std::vector<int> coupChoisi ) const {
     
+    deplacements deplacements_possibles = this->coups_possibles(couleur,piece);
 
-    // A MODIFIER IL FAUT QUE LON PRENNE EN COMPTE QUUNE PIECE AVEC UNE UNIQUE COULEUR (sous entendu couleur du joueur qui joue le coup) NE PEUT PAS SE DEPLACER SANS SAUT (Cesar)
-    // DECOMPOSER LE COUP LICITE EN PLUSIEURS MOUVEMENTS (Cesar)
-    if ((_plateau[abscisse+1][ordonnee].getCouleurs() ==  coup.getCouleurs()) || (_plateau[abscisse-1][ordonnee].getCouleurs() ==  coup.getCouleurs())
-        || (_plateau[abscisse][ordonnee+1].getCouleurs() ==  coup.getCouleurs()) || (_plateau[abscisse][ordonnee-1].getCouleurs() ==  coup.getCouleurs()))
-        return true;
-    //verification si on elimine une piece
-    if ((_plateau[abscisse+2][ordonnee].getCouleurs() ==  coup.getCouleurs() && _plateau[abscisse+1][ordonnee].getCouleurs()!="TROU" ) ||
-        (_plateau[abscisse-2][ordonnee].getCouleurs() ==  coup.getCouleurs() && _plateau[abscisse-1][ordonnee].getCouleurs()!="TROU" ) ||
-        (_plateau[abscisse][ordonnee+2].getCouleurs() ==  coup.getCouleurs() && _plateau[abscisse][ordonnee+1].getCouleurs()!="TROU" ) ||
-        (_plateau[abscisse][ordonnee-2].getCouleurs() ==  coup.getCouleurs() && _plateau[abscisse][ordonnee-1].getCouleurs()!="TROU" ))
-        return true;
+    if (deplacements_possibles.size()>0){
+        for (const auto &coup : deplacements_possibles) {
+            if (coup==coupChoisi) 
+                return true;
+        }
+    }
 
     return false;
+
 }
 
 
-// 
-void Jeu::joue(Piece const & coup,int abscisse,int ordonnee) {
+//joue le coup en partant du principe que le coup est licite (on le verifiera avant)
+void Jeu::joue(std::string couleur,Piece const & piece,std::vector<int> coupChoisi) {
     _nb_tours++;
-    _plateau[ordonnee][abscisse]= coup;
-    _plateau[coup.getOrdonnee()][coup.getAbscisse()].setCouleurs("TROU");
-    int min;
+    
+    std::array<int,2> position=get_position(piece);
+    int abs=position[0];
+    int ord=position[1];
+
+    // on joue sur le plateau chacun des deplacements/sauts chaque couple de coordonnées que contient le vecteur coupChoisi
+    for (int i=0;i<coupChoisi.size()/2;i+=2){
+        // si c'est un deplacement
+        //haut
+        if (coupChoisi[i+1]==ord+1){
+            _plateau[abs][ord+1].setCouleurs(piece.getCouleurs());
+            _plateau[abs][ord].setCouleurs("TROU");
+        }
+        //bas
+        else if (coupChoisi[i+1]==ord-1){
+            _plateau[abs][ord-1].setCouleurs(piece.getCouleurs());
+            _plateau[abs][ord].setCouleurs("TROU");
+        }
+        //gauche
+        else if (coupChoisi[i]==abs+1){
+            _plateau[abs+1][ord].setCouleurs(piece.getCouleurs());
+            _plateau[abs][ord].setCouleurs("TROU");
+        }
+        //droite
+        else if (coupChoisi[i]==abs-1){
+            _plateau[abs-1][ord].setCouleurs(piece.getCouleurs());
+            _plateau[abs][ord].setCouleurs("TROU");
+        }
+        //si c'est un saut
+        //haut
+        else if (coupChoisi[i+1]==ord+2){
+            _plateau[abs][ord+2].setCouleurs(piece.getCouleurs());
+            _plateau[abs][ord].setCouleurs("TROU");
+            _plateau[abs][ord+1].setCouleurs("TROU");
+
+        }
+        //bas
+        else if (coupChoisi[i+1]==ord-2){
+            _plateau[abs][ord-2].setCouleurs(piece.getCouleurs());
+            _plateau[abs][ord].setCouleurs("TROU");
+            _plateau[abs][ord-1].setCouleurs("TROU");
+        }
+        //gauche
+        else if (coupChoisi[i]==abs+2){
+            _plateau[abs+2][ord].setCouleurs(piece.getCouleurs());
+            _plateau[abs][ord].setCouleurs("TROU");
+            _plateau[abs+1][ord].setCouleurs("TROU");
+        }
+        //droite
+        else if (coupChoisi[i]==abs-2){
+            _plateau[abs-2][ord].setCouleurs(piece.getCouleurs());
+            _plateau[abs][ord].setCouleurs("TROU");
+            _plateau[abs-1][ord].setCouleurs("TROU");
+        }
+
+        abs = coupChoisi[i];
+        ord = coupChoisi[i+1];
+    }
 
 
 //RENDU ICI TACHE : IMPLEMENTER LA VERIFICATION DE FIN DE PARTIE
