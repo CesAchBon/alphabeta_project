@@ -11,6 +11,8 @@ const int NB_PIECE_MAX(35);
 const int MAX_HAUTEUR(6);
 const int MAX_LARGEUR(6);
 
+using deplacement=std::vector<int>;
+using deplacements=std::vector<deplacement>;
 
 
 enum class Etat {PARTIE_NON_TERMINEE, PARTIE_NULLE, AVANTAGE_EXI,AVANTAGE_UNI} ;//A MODIFIER
@@ -38,11 +40,18 @@ public :
     void reset(); // Remet à la graine le jeu
     bool coordValide(int abscisse,int ordonnee) const;//Le coup est dans le plateau et est un trou
     int nbCoupJoue() const;// Retourne le nombre de coup deja joue
+
     bool coup_licite(Piece const & coup,int abscisse,int ordonnee) const; // Vérifie si le coup a jouer est licite
     void joue(Piece const & coup,int abscisse,int ordonnee); // Joue le coup (sans vérifier qu'il est licite)
 
+    bool saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const;//Retourne si on peut deplacer une piece par un saut des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
+    bool deplacement_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const;//Retourne si on peut deplacer une piece des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
+    std::array<int,2> get_position(Piece const & coup) const; // Retourne les coordonnees dune piece sur le plateau
+    deplacements coups_possibles(std::string couleur, Piece const & coup) const;//Renvoie le vector de tous les coups possibles d'une piece
+
+
     std::vector<int> comptage_couleurs() const;//compte le nombre de couleur de chaque joueur
-    bool Jeu::reste_des_coups() const;// retourne si il reste encore des coups licites a jouer
+    bool reste_des_coups() const;// retourne si il reste encore des coups licites a jouer
 
     bool fini()const; // Vérifie si un état final a été atteint (dans ce cas le jeu prend fin)
     bool partie_nulle() const; // Vérifie si la partie est nulle

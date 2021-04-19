@@ -65,14 +65,234 @@ int Jeu::nbCoupJoue() const
     return _nb_tours;
 }
 
+// Retourne si il est possible d'effectuer un saut depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un trou et
+// qu'une piece est sautée
+bool Jeu::saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const {
+    if (coordValide(abs_depart+abscisse*2,ord_depart+ordonnee*2) && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getCouleurs()!="TROU" )
+    {
+        return true;
+    }
+    return false;
+}
+
+// Retourne si il est possible d'effectuer un déplacement depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un trou
+bool Jeu::deplacement_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const {
+    if (coordValide(abs_depart+abscisse,ord_depart+ordonnee))
+    {
+        return true;
+    }
+    return false;
+}
+
+// Retourne la position (en coordonnees) d'une piece sur le plateau
+std::array<int,2> Jeu::get_position(Piece const & coup) const{
+    for(int abscisse =0;abscisse < MAX_LARGEUR;abscisse++){
+        for(int ordonnee =0;ordonnee < MAX_HAUTEUR;ordonnee++){
+            if (_plateau[abscisse][ordonnee].getCouleurs() ==  coup.getCouleurs()){
+                return {abscisse,ordonnee};
+            }
+        }
+    }
+}
+
+//Retourne un vector contenant tous les coups possibles d'une piece donnée
+deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const {
+    
+    // Les 4 directions possibles de déplacements
+    deplacements directions = {{1,0},{-1,0},{0,1},{0,-1}};
+
+    // Déclaration du vector de tous les déplacements possibles
+    deplacements dpts;
+
+    // Si la piece ne contient pas la couleur du joueur, alors aucun deplacement nest possible 
+    if(!coup.contient(couleur)){
+        return dpts;
+    }
+
+    // on récupère la position de la pièce que l'on souhaite bouger
+    std::array<int,2> position=get_position(coup);
+    int a0=position[0];
+    int o0=position[1];
+
+    int degre=coup.degre(couleur);
+
+    if (degre==1){
+        // Coups possibles : 
+        // SAUT
+        for(auto direction : directions){
+            if (saut_possible(a0,o0,direction[0],direction[1])){
+                // SAUT
+                a1=a0+direction[0]*2;
+                o1=o0+direction[1]*2;
+                dpts.push_back({a0,o0,a1,o1});
+            }
+        }
+    }
+
+    if (degre==2){
+        // Coups possibles : 
+        // SAUT puis SAUT
+        // SAUT puis DEPLACEMENT
+        // SAUT puis IMMOBILE
+        // DEPLACEMENT puis SAUT
+        for(auto direction : directions){
+            if (saut_possible(a0,o0,direction[0],direction[1])){
+                a1=a0+direction[0]*2;
+                o1=o0+direction[1]*2;
+                // SAUT puis IMMOBILE
+                dpts.push_back({a0,o0,a1,o1,a1,o1});
+                
+                for (auto dir : directions){
+                    if(saut_possible(a1,o1,dir[0],dir[1])){
+                        a2=a1+dir[0]*2;
+                        o2=o1+dir[1]*2;
+                        // SAUT puis SAUT
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
+                    }
+                    if(deplacement_possible(a1,o1,dir[0],dir[1])){
+                        a2=a1+dir[0];
+                        o2=o1+dir[1];
+                        // SAUT puis DEPLACEMENT
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
+                    }
+                }
+
+            }
+            if(deplacement_possible(a0,o2,direction[0],direction[1])){
+                a1=a0+direction[0];
+                o1=o0+direction[1];
+                for (auto dir : directions){
+                    if(saut_possible(a1,o1,dir[0],dir[1])){
+                        a2=a1+dir[0]*2;
+                        o2=o1+dir[1]*2;
+                        // DEPLACEMENT puis SAUT
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
+                    }
+                }
+            }
+        }
+    }
+       
+    if (degre==3){
+        // Coups possibles : 
+        // SAUT puis IMMOBILE
+        // SAUT puis SAUT puis SAUT
+        // SAUT puis SAUT puis DEPLACEMENT
+        // SAUT puis SAUT puis IMMOBILE
+        // SAUT puis DEPLACEMENT puis SAUT
+        // SAUT puis DEPLACEMENT puis DEPLACEMENT
+        // SAUT puis DEPLACEMENT puis IMMOBILE
+        // DEPLACEMENT puis SAUT puis SAUT
+        // DEPLACEMENT puis SAUT puis IMMOBILE
+        // DEPLACEMENT puis SAUT puis DEPLACEMENT
+        // DEPLACEMENT puis DEPLACEMENT puis SAUT
+        for(auto direction : directions){
+            if (saut_possible(a0,o0,direction[0],direction[1])){
+                a1=a0+direction[0]*2;
+                o1=o0+direction[1]*2;
+                // SAUT puis IMMOBILE
+                dpts.push_back({a0,o0,a1,o1,a1,o1,a1,o1});
+
+                for (auto dir : directions){
+                    if(saut_possible(a1,o1,dir[0],dir[1])){
+                        a2=a1+dir[0]*2;
+                        o2=o1+dir[1]*2;
+                        // SAUT puis SAUT puis IMMOBILE
+                        dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
+                        for (auto d : directions){
+                            if (saut_possible(a2,o2,d[0],d[1])){
+                                a3=a2+d[0]*2;
+                                o3=o2+d[1]*2;
+                                // SAUT puis SAUT puis SAUT
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                            }
+                            if (deplacement_possible(a2,o2,d[0],d[1])){
+                                a3=a2+d[0];
+                                o3=o2+d[1];
+                                // SAUT puis SAUT puis DEPLACEMENT
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                            }
+                        }
+
+                    }
+                    if(deplacement_possible(a1,o1,dir[0],dir[1])){
+                        a2=a1+dir[0];
+                        o2=o1+dir[1];
+                        // SAUT puis DEPLACEMENT puis IMMOBILE
+                        dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
+                        for (auto d : directions){
+                            if (saut_possible(a2,o2,d[0],d[1])){
+                                a3=a2+d[0]*2;
+                                o3=o2+d[1]*2;
+                                // SAUT puis DEPLACEMENT puis SAUT
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                            }
+                            if (deplacement_possible(a2,o2,d[0],d[1])){
+                                a3=a2+d[0];
+                                o3=o2+d[1];
+                                // SAUT puis DEPLACEMENT puis DEPLACEMENT
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                            }
+                        }
+                    }
+
+                }
+            }
+            if(deplacement_possible(a0,o2,direction[0],direction[1])){
+                a1=a0+direction[0];
+                o1=o0+direction[1];
+                for (auto dir : directions){
+                    if(saut_possible(a1,o1,dir[0],dir[1])){
+                        a2=a1+dir[0]*2;
+                        o2=o1+dir[1]*2;
+                        // DEPLACEMENT puis SAUT puis IMMOBILE
+                        dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
+                        for (auto d : directions){
+                            if (saut_possible(a2,o2,d[0],d[1])){
+                                a3=a2+d[0]*2;
+                                o3=o2+d[1]*2;
+                                // DEPLACEMENT puis SAUT puis SAUT
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                            }
+                            if (deplacement_possible(a2,o2,d[0],d[1])){
+                                a3=a2+d[0];
+                                o3=o2+d[1];
+                                // DEPLACEMENT puis SAUT puis DEPLACEMENT
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                            }
+                        }
+                    }
+                    if(deplacement_possible(a1,o1,dir[0],dir[1])){
+                        a2=a1+dir[0];
+                        o2=o1+dir[1];
+                        for (auto d : directions){
+                            if (saut_possible(a2,o2,d[0],d[1])){
+                                a3=a2+d[0]*2;
+                                o3=o2+d[1]*2;
+                                // DEPLACEMENT puis DEPLACEMENT puis SAUT
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (degre==4){
+        //A FAIRE
+    }
+
+    return dpts;
+    
+
+}
 
 //UPDATE DE DIMANCHE (Mathias) pour implementer cette fonction coup_licite : verifier le tour de la couleur actuel (si la piece a 0 fois la couleur on revoie false) puis compter sur la piece le nb de fois qu'il y a cette couleur
 // stocker le resultat dans une variable "nbdeplacements" puis faire une boucle while pour jouer autant de deplacements possibles (decrementer nbdeplacements à chaque tour)
 // si a la fin de la boucle on a pas sauter de pieces le coup n'est pas licite et on renvoie false
-bool Jeu::coup_licite(Piece const & coup,int abscisse,int ordonnee) const {
-    if (!coup.getDefinie() || !coordValide(abscisse,ordonnee))
-        return false;
-
+bool Jeu::coup_licite( Piece const & coup,int abscisse,int ordonnee) const {
+    
 
     // A MODIFIER IL FAUT QUE LON PRENNE EN COMPTE QUUNE PIECE AVEC UNE UNIQUE COULEUR (sous entendu couleur du joueur qui joue le coup) NE PEUT PAS SE DEPLACER SANS SAUT (Cesar)
     // DECOMPOSER LE COUP LICITE EN PLUSIEURS MOUVEMENTS (Cesar)
