@@ -180,7 +180,7 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
         // SAUT puis SAUT puis DEPLACEMENT
         // SAUT puis SAUT puis IMMOBILE
         // SAUT puis DEPLACEMENT puis SAUT
-        // SAUT puis DEPLACEMENT puis DEPLACEMENT
+        //*SAUT puis DEPLACEMENT puis DEPLACEMENT
         // SAUT puis DEPLACEMENT puis IMMOBILE
         // DEPLACEMENT puis SAUT puis SAUT
         // DEPLACEMENT puis SAUT puis IMMOBILE
@@ -230,8 +230,10 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                             if (deplacement_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0];
                                 int o3=o2+d[1];
-                                // SAUT puis DEPLACEMENT puis DEPLACEMENT
-                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                //*SAUT puis DEPLACEMENT puis DEPLACEMENT
+                                if(!((a3==a0) && (o3==o0))){
+                                    dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                }
                             }
                         }
                     }
@@ -280,33 +282,33 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
     }
 
     if (degre==4){
-        //Coups possibles :
-        //SAUT puis IMMOBILE
-        //SAUT puis SAUT puis IMMOBILE
-        //SAUT puis SAUT puis SAUT puis IMMOBILE
-        //SAUT puis SAUT puis DEPLACEMENT puis IMMOBILE
-        //SAUT puis SAUT puis SAUT puis SAUT
-        //SAUT puis SAUT puis SAUT puis DEPLACEMENT
-        //SAUT puis SAUT puis DEPLACEMENT puis SAUT
-        //SAUT puis SAUT puis DEPLACEMENT puis DEPLACEMENT
-        //SAUT puis DEPLACEMENT puis IMMOBILE
-        //SAUT puis DEPLACEMENT puis SAUT puis IMMOBILE
-        //SAUT puis DEPLACEMENT puis DEPLACEMENT puis IMMOBILE
-        //SAUT puis DEPLACEMENT puis SAUT puis SAUT
-        //SAUT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
-        //SAUT puis DEPLACEMENT puis DEPLACEMENT puis SAUT
-        //SAUT puis DEPLACEMENT puis DEPLACEMENT puis DEPLACEMENT
-        //DEPLACEMENT puis SAUT puis IMMOBILE
-        //DEPLACEMENT puis SAUT puis SAUT puis IMMOBILE
-        //DEPLACEMENT puis SAUT puis DEPLACEMENT puis IMMOBILE
-        //DEPLACEMENT puis SAUT puis SAUT puis SAUT
-        //DEPLACEMENT puis SAUT puis SAUT puis DEPLACEMENT
-        //DEPLACEMENT puis SAUT puis DEPLACEMENT puis SAUT
-        //DEPLACEMENT puis SAUT puis DEPLACEMENT puis DEPLACEMENT
-        //DEPLACEMENT puis DEPLACEMENT puis SAUT puis IMMOBILE
-        //DEPLACEMENT puis DEPLACEMENT puis SAUT puis SAUT
-        //DEPLACEMENT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
-        //DEPLACEMENT puis DEPLACEMENT puis DEPLACEMENT puis SAUT
+        // Coups possibles :
+        // SAUT puis IMMOBILE
+        // SAUT puis SAUT puis IMMOBILE
+        // SAUT puis SAUT puis SAUT puis IMMOBILE
+        // SAUT puis SAUT puis DEPLACEMENT puis IMMOBILE
+        // SAUT puis SAUT puis SAUT puis SAUT
+        // SAUT puis SAUT puis SAUT puis DEPLACEMENT
+        // SAUT puis SAUT puis DEPLACEMENT puis SAUT
+        // SAUT puis SAUT puis DEPLACEMENT puis DEPLACEMENT
+        // SAUT puis DEPLACEMENT puis IMMOBILE
+        // SAUT puis DEPLACEMENT puis SAUT puis IMMOBILE
+        //*SAUT puis DEPLACEMENT puis DEPLACEMENT puis IMMOBILE
+        // SAUT puis DEPLACEMENT puis SAUT puis SAUT
+        //*SAUT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
+        // SAUT puis DEPLACEMENT puis DEPLACEMENT puis SAUT
+        // SAUT puis DEPLACEMENT puis DEPLACEMENT puis DEPLACEMENT
+        // DEPLACEMENT puis SAUT puis IMMOBILE
+        // DEPLACEMENT puis SAUT puis SAUT puis IMMOBILE
+        // DEPLACEMENT puis SAUT puis DEPLACEMENT puis IMMOBILE
+        // DEPLACEMENT puis SAUT puis SAUT puis SAUT
+        // DEPLACEMENT puis SAUT puis SAUT puis DEPLACEMENT
+        //*DEPLACEMENT puis SAUT puis DEPLACEMENT puis SAUT
+        // DEPLACEMENT puis SAUT puis DEPLACEMENT puis DEPLACEMENT
+        // DEPLACEMENT puis DEPLACEMENT puis SAUT puis IMMOBILE
+        // DEPLACEMENT puis DEPLACEMENT puis SAUT puis SAUT
+        // DEPLACEMENT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
+        // DEPLACEMENT puis DEPLACEMENT puis DEPLACEMENT puis SAUT
         for(auto direction : directions){
             if (saut_possible(a0,o0,direction[0],direction[1])){
                 int a1=a0+direction[0]*2;
@@ -386,7 +388,10 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                                         int a4=a3+d4[0];
                                         int o4=o3+d4[1];
                                         // SAUT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
-                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                        if(!((a4==a0) && (o4==o0))){
+                                            dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                        }
+                                       
                                     }
                                 }
                             }
@@ -394,7 +399,9 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                                 int a3=a2+d[0];
                                 int o3=o2+d[1];
                                 // SAUT puis DEPLACEMENT puis DEPLACEMENT puis IMMOBILE
-                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                if(!((a3==a0) && (o3==o0))){
+                                    dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                }
                                 for (auto d4 : directions){
                                     if (saut_possible(a3,o3,d4[0],d4[1])){
                                         int a4=a3+d4[0]*2;
@@ -455,7 +462,9 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                                         int a4=a3+d4[0]*2;
                                         int o4=o3+d4[1]*2;
                                         // DEPLACEMENT puis SAUT puis DEPLACEMENT puis SAUT
-                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                        if(!((a4==a0) && (o4==o0))){
+                                            dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                        }
                                     }
                                     if (deplacement_possible(a3,o3,d4[0],d4[1])){
                                         int a4=a3+d4[0];
