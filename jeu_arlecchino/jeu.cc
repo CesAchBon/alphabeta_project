@@ -140,7 +140,7 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                 int a1=a0+direction[0]*2;
                 int o1=o0+direction[1]*2;
                 // SAUT puis IMMOBILE
-                dpts.push_back({a0,o0,a1,o1,a1,o1});
+                dpts.push_back({a0,o0,a1,o1});
                 
                 for (auto dir : directions){
                     if(saut_possible(a1,o1,dir[0],dir[1])){
@@ -191,14 +191,14 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                 int a1=a0+direction[0]*2;
                 int o1=o0+direction[1]*2;
                 // SAUT puis IMMOBILE
-                dpts.push_back({a0,o0,a1,o1,a1,o1,a1,o1});
+                dpts.push_back({a0,o0,a1,o1});
 
                 for (auto dir : directions){
                     if(saut_possible(a1,o1,dir[0],dir[1])){
                         int a2=a1+dir[0]*2;
                         int o2=o1+dir[1]*2;
                         // SAUT puis SAUT puis IMMOBILE
-                        dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
@@ -219,7 +219,7 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                         int a2=a1+dir[0];
                         int o2=o1+dir[1];
                         // SAUT puis DEPLACEMENT puis IMMOBILE
-                        dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
@@ -246,7 +246,7 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                         int a2=a1+dir[0]*2;
                         int o2=o1+dir[1]*2;
                         // DEPLACEMENT puis SAUT puis IMMOBILE
-                        dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
@@ -280,7 +280,234 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
     }
 
     if (degre==4){
-        //A FAIRE
+        //Coups possibles :
+        //SAUT puis IMMOBILE
+        //SAUT puis SAUT puis IMMOBILE
+        //SAUT puis SAUT puis SAUT puis IMMOBILE
+        //SAUT puis SAUT puis DEPLACEMENT puis IMMOBILE
+        //SAUT puis SAUT puis SAUT puis SAUT
+        //SAUT puis SAUT puis SAUT puis DEPLACEMENT
+        //SAUT puis SAUT puis DEPLACEMENT puis SAUT
+        //SAUT puis SAUT puis DEPLACEMENT puis DEPLACEMENT
+        //SAUT puis DEPLACEMENT puis IMMOBILE
+        //SAUT puis DEPLACEMENT puis SAUT puis IMMOBILE
+        //SAUT puis DEPLACEMENT puis DEPLACEMENT puis IMMOBILE
+        //SAUT puis DEPLACEMENT puis SAUT puis SAUT
+        //SAUT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
+        //SAUT puis DEPLACEMENT puis DEPLACEMENT puis SAUT
+        //SAUT puis DEPLACEMENT puis DEPLACEMENT puis DEPLACEMENT
+        //DEPLACEMENT puis SAUT puis IMMOBILE
+        //DEPLACEMENT puis SAUT puis SAUT puis IMMOBILE
+        //DEPLACEMENT puis SAUT puis DEPLACEMENT puis IMMOBILE
+        //DEPLACEMENT puis SAUT puis SAUT puis SAUT
+        //DEPLACEMENT puis SAUT puis SAUT puis DEPLACEMENT
+        //DEPLACEMENT puis SAUT puis DEPLACEMENT puis SAUT
+        //DEPLACEMENT puis SAUT puis DEPLACEMENT puis DEPLACEMENT
+        //DEPLACEMENT puis DEPLACEMENT puis SAUT puis IMMOBILE
+        //DEPLACEMENT puis DEPLACEMENT puis SAUT puis SAUT
+        //DEPLACEMENT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
+        //DEPLACEMENT puis DEPLACEMENT puis DEPLACEMENT puis SAUT
+        for(auto direction : directions){
+            if (saut_possible(a0,o0,direction[0],direction[1])){
+                int a1=a0+direction[0]*2;
+                int o1=o0+direction[1]*2;
+                // SAUT puis IMMOBILE
+                dpts.push_back({a0,o0,a1,o1});
+
+                for (auto dir : directions){
+                    if(saut_possible(a1,o1,dir[0],dir[1])){
+                        int a2=a1+dir[0]*2;
+                        int o2=o1+dir[1]*2;
+                        // SAUT puis SAUT puis IMMOBILE
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
+                        for (auto d : directions){
+                            if (saut_possible(a3,o3,d[0],d[1])){
+                                int a3=a2+d[0]*2;
+                                int o3=o2+d[1]*2;
+                                // SAUT puis SAUT puis SAUT puis IMMOBILE
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                for (auto d4 : directions){
+                                    if (saut_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0]*2;
+                                        int o4=o3+d4[1]*2;
+                                        // SAUT puis SAUT puis SAUT puis SAUT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                    if (deplacement_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0];
+                                        int o4=o3+d4[1];
+                                        // SAUT puis SAUT puis SAUT puis DEPLACEMENT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                }
+                            }
+                            if (deplacement_possible(a2,o2,d[0],d[1])){
+                                int a3=a2+d[0];
+                                int o3=o2+d[1];
+                                // SAUT puis SAUT puis DEPLACEMENT puis IMMOBILE
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                for (auto d4 : directions){
+                                    if (saut_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0]*2;
+                                        int o4=o3+d4[1]*2;
+                                        // SAUT puis SAUT puis DEPLACEMENT puis SAUT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                    if (deplacement_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0];
+                                        int o4=o3+d4[1];
+                                        // SAUT puis SAUT puis DEPLACEMENT puis DEPLACEMENT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    if(deplacement_possible(a1,o1,dir[0],dir[1])){
+                        int a2=a1+dir[0];
+                        int o2=o1+dir[1];
+                        // SAUT puis DEPLACEMENT puis IMMOBILE
+                        dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
+                        for (auto d : directions){
+                            if (saut_possible(a2,o2,d[0],d[1])){
+                                int a3=a2+d[0]*2;
+                                int o3=o2+d[1]*2;
+                                // SAUT puis DEPLACEMENT puis SAUT puis IMMOBILE
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                for (auto d4 : directions){
+                                    if (saut_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0]*2;
+                                        int o4=o3+d4[1]*2;
+                                        // SAUT puis DEPLACEMENT puis SAUT puis SAUT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                    if (deplacement_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0];
+                                        int o4=o3+d4[1];
+                                        // SAUT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                }
+                            }
+                            if (deplacement_possible(a2,o2,d[0],d[1])){
+                                int a3=a2+d[0];
+                                int o3=o2+d[1];
+                                // SAUT puis DEPLACEMENT puis DEPLACEMENT puis IMMOBILE
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                for (auto d4 : directions){
+                                    if (saut_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0]*2;
+                                        int o4=o3+d4[1]*2;
+                                        // SAUT puis DEPLACEMENT puis DEPLACEMENT puis SAUT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                    if (deplacement_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0];
+                                        int o4=o3+d4[1];
+                                        // SAUT puis DEPLACEMENT puis DEPLACEMENT puis DEPLACEMENT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            if(deplacement_possible(a0,o0,direction[0],direction[1])){
+                int a1=a0+direction[0];
+                int o1=o0+direction[1];
+                for (auto dir : directions){
+                    if(saut_possible(a1,o1,dir[0],dir[1])){
+                        int a2=a1+dir[0]*2;
+                        int o2=o1+dir[1]*2;
+                        // DEPLACEMENT puis SAUT puis IMMOBILE
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
+                        for (auto d : directions){
+                            if (saut_possible(a2,o2,d[0],d[1])){
+                                int a3=a2+d[0]*2;
+                                int o3=o2+d[1]*2;
+                                // DEPLACEMENT puis SAUT puis SAUT puis IMMOBILE
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                for (auto d4 : directions){
+                                    if (saut_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0]*2;
+                                        int o4=o3+d4[1]*2;
+                                        // DEPLACEMENT puis SAUT puis SAUT puis SAUT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                    if (deplacement_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0];
+                                        int o4=o3+d4[1];
+                                        // DEPLACEMENT puis SAUT puis SAUT puis DEPLACEMENT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                }
+                            }
+                            if (deplacement_possible(a2,o2,d[0],d[1])){
+                                int a3=a2+d[0];
+                                int o3=o2+d[1];
+                                // DEPLACEMENT puis SAUT puis DEPLACEMENT puis IMMOBILE
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                for (auto d4 : directions){
+                                    if (saut_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0]*2;
+                                        int o4=o3+d4[1]*2;
+                                        // DEPLACEMENT puis SAUT puis DEPLACEMENT puis SAUT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                    if (deplacement_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0];
+                                        int o4=o3+d4[1];
+                                        // DEPLACEMENT puis SAUT puis DEPLACEMENT puis DEPLACEMENT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if(deplacement_possible(a1,o1,dir[0],dir[1])){
+                        int a2=a1+dir[0];
+                        int o2=o1+dir[1];
+                        for (auto d : directions){
+                            if (saut_possible(a2,o2,d[0],d[1])){
+                                int a3=a2+d[0]*2;
+                                int o3=o2+d[1]*2;
+                                // DEPLACEMENT puis DEPLACEMENT puis SAUT puis IMMOBILE
+                                dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
+                                for (auto d4 : directions){
+                                    if (saut_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0]*2;
+                                        int o4=o3+d4[1]*2;
+                                        // DEPLACEMENT puis DEPLACEMENT puis SAUT puis SAUT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                    if (deplacement_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0];
+                                        int o4=o3+d4[1];
+                                        // DEPLACEMENT puis DEPLACEMENT puis SAUT puis DEPLACEMENT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                }
+                            }
+                            if(deplacement_possible(a2,o2,d[0],d[1])){
+                                int a3=a2+d[0];
+                                int o3=o2+d[1];
+                                for (auto d4 : directions){
+                                    if (saut_possible(a3,o3,d4[0],d4[1])){
+                                        int a4=a3+d4[0]*2;
+                                        int o4=o3+d4[1]*2;
+                                        // DEPLACEMENT puis DEPLACEMENT puis DEPLACEMENT puis SAUT
+                                        dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     return dpts;
