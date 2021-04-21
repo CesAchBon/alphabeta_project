@@ -53,7 +53,7 @@ public :
 
 
     std::vector<int> comptage_couleurs() const;//compte le nombre de couleur de chaque joueur
-    bool reste_des_coups() const;// retourne si il reste encore des coups licites a jouer
+    bool reste_des_coups(int indice_couleur) const;// retourne si il reste encore des coups licites a jouer
 
     bool fini()const; // Vérifie si un état final a été atteint (dans ce cas le jeu prend fin)
     bool partie_nulle() const; // Vérifie si la partie est nulle

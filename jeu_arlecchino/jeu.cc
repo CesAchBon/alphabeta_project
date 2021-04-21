@@ -680,40 +680,24 @@ std::vector<int> Jeu::comptage_couleurs() const{
 
 
 //(mathias) je crois pas que la foncion reste_des_coups nous servira
+//(cesar) Elle peut être utile pour regarder si une couleur peut jouer ou non (je l'ai réimplémentée)
 
-/*
-bool Jeu::reste_des_coups() const{
-    std::vector<int> vector_couleurs=comptage_couleurs();
-    int points_Exi=vector_couleurs[0]+vector_couleurs[2];
-    int points_Uni=vector_couleurs[1]+vector_couleurs[3];
-
-    if (points_Exi==0 || points_Uni==0){
-        return false;
-    }
-    else{
-        if (points_Exi<=points_Uni){
-            for (auto & ligne : _plateau){
-                for (auto & colonne : ligne){
-                    if (colonne.contient("R")||colonne.contient("B"))// a modifier suite puisqu'on joue qu'une couleur par tour{
-                        //UPDATE DE DIMANCHE (Mathias)
-                        //etape 1 on compte le nb de fois qu il y a la couleur du tour sur la piece
-                        //etape 2 on  regarde si il y a une possibilité de sauter une piece avec le nombre de coup qu'on doit faire 
-                        //si c'est bon on revoir true (sinon on continue la boucle a la recherche d'une autre piece)
-                        
-                        if (coup_licite(colonne,colonne.getAbscisse(),colonne.getOrdonnee())){
-                            return true;
-                            // PLACEHOLDER : la fonction doit être terminée après implémentation des coups licites terminaux.
-                        
-                        }
+bool Jeu::reste_des_coups(int indice_couleur) const{
+    if(comptage_couleurs()[indice_couleur]!=0){
+        for (auto & ligne : _plateau){
+            for (auto & colonne : ligne){
+                if (colonne.contient(couleurs[indice_couleur])){
+                    deplacements coupsPotentiels = coups_possibles(colonne);
+                    if (coupsPotentiels.size()!=0) {
+                        return true;
                     }
                 }
             }
-
         }
     }
     return false;
 }
-*/
+
 
 bool Jeu::fini() const {
     return (_etat != Etat::PARTIE_NON_TERMINEE);
