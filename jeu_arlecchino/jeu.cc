@@ -371,7 +371,7 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                         int a2=a1+dir[0];
                         int o2=o1+dir[1];
                         // SAUT puis DEPLACEMENT puis IMMOBILE
-                        dpts.push_back({a0,o0,a1,o1,a2,o2,a2,o2});
+                        dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
