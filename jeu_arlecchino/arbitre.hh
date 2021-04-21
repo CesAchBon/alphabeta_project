@@ -7,7 +7,7 @@
 #include <utility>
 #include <functional>
 #include <vector>
-#include "brix.hh"
+#include "piece.hh"
 #include "jeu.hh"
 #include "joueurs/joueur.hh"
 #include "joueurs/joueur_random.hh"
@@ -30,7 +30,7 @@ const int TEMPS_POUR_UN_COUP(15000); // millisecondes
  * MANUEL s'appelle Caro (C) et MANUEL2 s'appelle Vio (V)
  * */
 enum class player {M_1, M_2 , MANUEL , MANUEL2, RAND, RAND2} ;
-enum class result {NULLE , X , O, ERREUR } ;
+enum class result {NULLE , EXI , UNI, ERREUR } ;
 
 /**
  * @brief The Arbitre class
@@ -48,7 +48,8 @@ private:
     std::shared_ptr<Joueur> _joueur2;
 
     Jeu _jeu;
-    std::vector<Brix> _coups;
+    Piece _piece;
+    deplacements _coups;
 
     std::vector<std::mutex> _coups_mutex;
 

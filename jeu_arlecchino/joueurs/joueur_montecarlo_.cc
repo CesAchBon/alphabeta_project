@@ -12,7 +12,7 @@ Joueur_MonteCarlo_::Joueur_MonteCarlo_(std::string nom, bool joueur)
     return 'M';
 }
 */
-void Joueur_MonteCarlo_::recherche_coup(Jeu jeu, Brix &coup)
+void Joueur_MonteCarlo_::recherche_coup(Jeu jeu, std::vector<int> &coup)
 {
 
 }

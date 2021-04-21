@@ -36,14 +36,14 @@ public:
      * @param coup : le coup doit etre modifié par le joueur avant la fin du temps imparti
      * @param coup_mutex : le mutex doit etre pris par le joueur au début de la partie puis rendu avant le temps imparti
      */
-    virtual void jouer(Jeu jeu, Brix & coup , std::mutex & coup_mutex) final;
+    virtual void jouer(Jeu jeu, std::vector<int> &coup , std::mutex & coup_mutex) final;
 
     /**
      * @brief recherche_coup
      * @param jeu
      * @param coup : le coup doit etre modifié par le joueur avant la fin du temps imparti
      */
-    virtual void recherche_coup(Jeu, Brix & coup) =0;
+    virtual void recherche_coup(Jeu, std::vector<int> &coup) =0;
 
 
     /**

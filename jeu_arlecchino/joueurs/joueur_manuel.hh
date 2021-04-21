@@ -11,6 +11,6 @@ private:
 public:
   Joueur_Manuel(std::string nom, bool joueur);
 
-  void recherche_coup(Jeu, Brix & coup) override;
+  void recherche_coup(Jeu, std::vector<int> &coup) override;
 
 };

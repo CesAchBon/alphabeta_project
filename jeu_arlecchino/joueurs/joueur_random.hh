@@ -14,7 +14,7 @@ public:
     Joueur_Random(std::string nom,bool joueur);
 
 
-    void recherche_coup(Jeu jeu, Brix & coup) override;
+    void recherche_coup(Jeu jeu, std::vector<int> &coup) override;
 };
 
 

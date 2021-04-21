@@ -2,7 +2,8 @@
 
 
 Arbitre::Arbitre(player player1, player player2, int nombre_parties):
-    _coups(nombre_parties,Brix()),
+    _coups(),
+    _piece(),
     _coups_mutex(nombre_parties),
     _nombre_parties(nombre_parties),
     _numero_partie(1),
@@ -85,7 +86,7 @@ int Arbitre::challenge()
                     std::cerr << "Alerte bug. Sauvez votre terminal et prévenez Me Devred. Merci. " << std::endl;
                     return 1;
                 } else if (resultat != result::NULLE)
-                (resultat==result::X?
+                (resultat==result::EXI?
                         ((_numero_partie%2)?
                              victoire_joueur_1++
                            :
@@ -112,7 +113,6 @@ result Arbitre::partie()
     while(!_jeu.fini())
         {
             bool try_lock = false;
-            _coups[_numero_partie-1].setDefinie(false);
             tour++;
             std::cout << "tour : " << tour << std::endl;
             _coups_mutex[_numero_partie-1].unlock();
@@ -121,6 +121,7 @@ result Arbitre::partie()
                                       ((tour%2)? (_joueur1) :(_joueur2) ),
                                       _jeu,
                                       std::ref(_coups[_numero_partie-1]),
+                                      std::ref(_piece),
                     std::ref(_coups_mutex[_numero_partie-1]));
 
             std::this_thread::sleep_for (std::chrono::milliseconds(TEMPS_POUR_UN_COUP));
@@ -130,18 +131,13 @@ result Arbitre::partie()
                     std::cerr <<  std::endl << "mutex non rendu " << std::endl;
                     try_lock = true;
                 }
-            else if(_coups[_numero_partie-1].getDefinie() == false) {
-                    std::cerr << "coup invalide Brix non définie" << std::endl;
-                }
-            else if(!_jeu.coup_licite(_coups[_numero_partie-1],tour)) {
-                    std::cerr << "coup invalide " << _coups[_numero_partie-1] << std::endl;
+            else if(!_jeu.coup_licite(_piece,_coups[_numero_partie-1])) {
+                    std::cerr << "coup invalide " << _piece << std::endl;
                 }
 
             thread_joueur.detach();
 
-            if(try_lock ||
-                    (_coups[_numero_partie-1].getDefinie() == false) ||
-                    !_jeu.coup_licite(_coups[_numero_partie-1],tour))
+            if(try_lock || !_jeu.coup_licite(_piece,_coups[_numero_partie-1]))
                 {
                     if(_jeu.partie_nulle())
                         {
@@ -151,17 +147,17 @@ result Arbitre::partie()
                     if(tour%2)
                         {
                             std::cout << _joueur2->nom() <<" gagne ! Nombre de tours : " << tour << std::endl;
-                            return result::O; // joueur jouant en 2eme gagne
+                            return result::UNI; // joueur jouant en 2eme gagne
                         }
                     else
                         {
                             std::cout << _joueur1->nom() <<" gagne ! Nombre de tours : " << tour << std::endl;
-                            return result::X; // joueur jouant en 1er gagne
+                            return result::EXI; // joueur jouant en 1er gagne
                         }
                 }
             //On joue le coup, on l'affiche et on affiche le plateau
-            _jeu.joue(_coups[_numero_partie-1]);
-            std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" "<< _coups[_numero_partie-1]
+            _jeu.joue(_piece,_coups[_numero_partie-1]);
+            std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" "<< _piece
                       << std::endl << _jeu << std::endl;
         }
 
@@ -171,15 +167,15 @@ result Arbitre::partie()
             std::cout << std::endl << "Partie nulle" << std::endl;
             return result::NULLE;
         }
-    else if (_jeu.partie_X())
+    else if (_jeu.partie_J1())
         {
             std::cout << std::endl << _joueur1->nom()  <<" gagne. Nombre de tours : " << tour << std::endl;
-            return result::X;
+            return result::EXI;
         }
-    else if (_jeu.partie_O())
+    else if (_jeu.partie_J2())
         {
             std::cout << std::endl << _joueur2->nom()  <<" gagne. Nombre de tours : " << tour << std::endl;
-            return result::O;
+            return result::UNI;
         }
 
     return result::ERREUR;

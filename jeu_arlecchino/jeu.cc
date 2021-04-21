@@ -719,7 +719,7 @@ bool Jeu::partie_J2() const{
 //ADAPTER L AFFICHAGE DU PLATEAU
 std::ostream& operator<<( std::ostream &flux, Jeu const& jeu ){
 //void Jeu::afficher( std::ostream &flux) const {
-    for (auto & ligne : jeu._plateau){
+    for (auto & ligne : jeu.plateau()){
         flux<<'|';
         for (auto & colonne : ligne){
             if (colonne.getCouleurs()=="TROU"){
