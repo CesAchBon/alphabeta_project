@@ -51,6 +51,7 @@ void Jeu::reset(){
     //_nombre = NB_TOUR_MAX;
     _etat = Etat::PARTIE_NON_TERMINEE;
     _nb_tours = 0;
+    _couleurActuelle = 0;
 }
 
 bool Jeu::coordValide(int abscisse,int ordonnee) const{
@@ -96,7 +97,7 @@ std::array<int,2> Jeu::get_position(Piece const & coup) const{
 }
 
 //Retourne un vector contenant tous les coups possibles d'une piece donnée
-deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const {
+deplacements Jeu::coups_possibles( Piece const & coup) const {
     
     // Les 4 directions possibles de déplacements
     deplacements directions = {{1,0},{-1,0},{0,1},{0,-1}};
@@ -105,7 +106,7 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
     deplacements dpts;
 
     // Si la piece ne contient pas la couleur du joueur, alors aucun deplacement n est possible 
-    if(!coup.contient(couleur)){
+    if(!coup.contient(couleurs[_couleurActuelle])){
         return dpts;
     }
 
@@ -114,7 +115,7 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
     int a0=position[0];
     int o0=position[1];
 
-    int degre=coup.degre(couleur);
+    int degre=coup.degre(couleurs[_couleurActuelle]);
 
     if (degre==1){
         // Coups possibles : 
@@ -323,7 +324,7 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
                         // SAUT puis SAUT puis IMMOBILE
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
-                            if (saut_possible(a3,o3,d[0],d[1])){
+                            if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
                                 int o3=o2+d[1]*2;
                                 // SAUT puis SAUT puis SAUT puis IMMOBILE
@@ -525,9 +526,9 @@ deplacements Jeu::coups_possibles(std::string couleur, Piece const & coup) const
 }
 
 // verifie si a partir des coordonnées d'une piece passée en parametre le tour représenté par un vecteur de coordonnées passé en parametre est licite
-bool Jeu::coup_licite( std::string couleur,Piece piece,std::vector<int> coupChoisi ) const {
+bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi ) const {
     
-    deplacements deplacements_possibles = this->coups_possibles(couleur,piece);
+    deplacements deplacements_possibles = this->coups_possibles(piece);
 
     if (deplacements_possibles.size()>0){
         for (const auto &coup : deplacements_possibles) {
@@ -541,90 +542,116 @@ bool Jeu::coup_licite( std::string couleur,Piece piece,std::vector<int> coupChoi
 }
 
 
-//joue le coup en partant du principe que le coup est licite (on le verifiera avant)
-void Jeu::joue(std::string couleur,Piece const & piece,std::vector<int> coupChoisi) {
+//joue le coup choisi et verifie si il est licite puis teste si c'est la fin de partie
+void Jeu::joue(Piece const & piece,std::vector<int> coupChoisi) {
     _nb_tours++;
-    
-    std::array<int,2> position=get_position(piece);
-    int abs=position[0];
-    int ord=position[1];
+    if (this->coup_licite(piece,coupChoisi)){
+        std::array<int,2> position=get_position(piece);
+        int abs=position[0];
+        int ord=position[1];
 
-    // on joue sur le plateau chacun des deplacements/sauts chaque couple de coordonnées que contient le vecteur coupChoisi
-    for (int i=0;i<coupChoisi.size()/2;i+=2){
-        // si c'est un deplacement
-        //haut
-        if (coupChoisi[i+1]==ord+1){
-            _plateau[abs][ord+1].setCouleurs(piece.getCouleurs());
-            _plateau[abs][ord].setCouleurs("TROU");
-        }
-        //bas
-        else if (coupChoisi[i+1]==ord-1){
-            _plateau[abs][ord-1].setCouleurs(piece.getCouleurs());
-            _plateau[abs][ord].setCouleurs("TROU");
-        }
-        //gauche
-        else if (coupChoisi[i]==abs+1){
-            _plateau[abs+1][ord].setCouleurs(piece.getCouleurs());
-            _plateau[abs][ord].setCouleurs("TROU");
-        }
-        //droite
-        else if (coupChoisi[i]==abs-1){
-            _plateau[abs-1][ord].setCouleurs(piece.getCouleurs());
-            _plateau[abs][ord].setCouleurs("TROU");
-        }
-        //si c'est un saut
-        //haut
-        else if (coupChoisi[i+1]==ord+2){
-            _plateau[abs][ord+2].setCouleurs(piece.getCouleurs());
-            _plateau[abs][ord].setCouleurs("TROU");
-            _plateau[abs][ord+1].setCouleurs("TROU");
+        // on joue sur le plateau chacun des deplacements/sauts chaque couple de coordonnées que contient le vecteur coupChoisi
+        for (int i=0;i<coupChoisi.size()/2;i+=2){
+            // si c'est un deplacement
+            //haut
+            if (coupChoisi[i+1]==ord+1){
+                _plateau[abs][ord+1].setCouleurs(piece.getCouleurs());
+                _plateau[abs][ord].setCouleurs("TROU");
+            }
+            //bas
+            else if (coupChoisi[i+1]==ord-1){
+                _plateau[abs][ord-1].setCouleurs(piece.getCouleurs());
+                _plateau[abs][ord].setCouleurs("TROU");
+            }
+            //gauche
+            else if (coupChoisi[i]==abs+1){
+                _plateau[abs+1][ord].setCouleurs(piece.getCouleurs());
+                _plateau[abs][ord].setCouleurs("TROU");
+            }
+            //droite
+            else if (coupChoisi[i]==abs-1){
+                _plateau[abs-1][ord].setCouleurs(piece.getCouleurs());
+                _plateau[abs][ord].setCouleurs("TROU");
+            }
+            //si c'est un saut
+            //haut
+            else if (coupChoisi[i+1]==ord+2){
+                _plateau[abs][ord+2].setCouleurs(piece.getCouleurs());
+                _plateau[abs][ord].setCouleurs("TROU");
+                _plateau[abs][ord+1].setCouleurs("TROU");
 
-        }
-        //bas
-        else if (coupChoisi[i+1]==ord-2){
-            _plateau[abs][ord-2].setCouleurs(piece.getCouleurs());
-            _plateau[abs][ord].setCouleurs("TROU");
-            _plateau[abs][ord-1].setCouleurs("TROU");
-        }
-        //gauche
-        else if (coupChoisi[i]==abs+2){
-            _plateau[abs+2][ord].setCouleurs(piece.getCouleurs());
-            _plateau[abs][ord].setCouleurs("TROU");
-            _plateau[abs+1][ord].setCouleurs("TROU");
-        }
-        //droite
-        else if (coupChoisi[i]==abs-2){
-            _plateau[abs-2][ord].setCouleurs(piece.getCouleurs());
-            _plateau[abs][ord].setCouleurs("TROU");
-            _plateau[abs-1][ord].setCouleurs("TROU");
-        }
+            }
+            //bas
+            else if (coupChoisi[i+1]==ord-2){
+                _plateau[abs][ord-2].setCouleurs(piece.getCouleurs());
+                _plateau[abs][ord].setCouleurs("TROU");
+                _plateau[abs][ord-1].setCouleurs("TROU");
+            }
+            //gauche
+            else if (coupChoisi[i]==abs+2){
+                _plateau[abs+2][ord].setCouleurs(piece.getCouleurs());
+                _plateau[abs][ord].setCouleurs("TROU");
+                _plateau[abs+1][ord].setCouleurs("TROU");
+            }
+            //droite
+            else if (coupChoisi[i]==abs-2){
+                _plateau[abs-2][ord].setCouleurs(piece.getCouleurs());
+                _plateau[abs][ord].setCouleurs("TROU");
+                _plateau[abs-1][ord].setCouleurs("TROU");
+            }
 
-        abs = coupChoisi[i];
-        ord = coupChoisi[i+1];
+            abs = coupChoisi[i];
+            ord = coupChoisi[i+1];
+        }
+    }
+
+    // TEST DE FIN DE PARTIE
+    int couleurAux = _couleurActuelle;//on sauvegarde l'etat de la couleur qu on vient de jouer car on va modifier couleurActuelle pour des testes
+
+    bool finDePartie = true;
+    int i = 0;
+
+    //pour chaque couleur on parcours le plateau et on regarde si au moins une piece a un coup possible, si oui la partie n'est pas finie
+    while (finDePartie && i<4){
+        //parcours du plateau
+        for (auto & ligne : _plateau){
+            for (auto & colonne : ligne){
+                if (colonne.getCouleurs()!="TROU"){
+                    deplacements coupsPotentiels = this->coups_possibles(colonne);// recherche des coups potentiels pour une piece
+                    //test si la piece a au moins un coup jouable , si oui la partie n'est pas finie
+                    if (coupsPotentiels.size()!=0) {
+                        finDePartie = false;
+                        break;
+                    }
+                }
+            }
+            if (!finDePartie) break;
+        }
+        //on change de couleur
+        if (_couleurActuelle==3) _couleurActuelle=0;
+        else ++_couleurActuelle;
+        ++i;
     }
 
 
-//RENDU ICI TACHE : IMPLEMENTER LA VERIFICATION DE FIN DE PARTIE
-/**********************
-*
-*
-*
-*
-*
-*
-*********************/
 
-//puis modifier la mise a jour d'état
+//MAJ des ETATS
 
-//Je mets à jour état
-    if (_alignementO && !_alignementX)
-    _etat = Etat::ALIGNEMENT_O;
-
-    if (_alignementX && !_alignementO)
-    _etat = Etat::ALIGNEMENT_X;
-
-    if ((_nb_tours == NB_PIECE_MAX) || (_alignementX && _alignementO))
-    _etat = Etat::PARTIE_NULLE;
+    if (finDePartie){
+        std::vector<int> comptageCouleurs = this->comptage_couleurs();
+        if (comptageCouleurs[0]+comptageCouleurs[2]==comptageCouleurs[1]+comptageCouleurs[3])
+            _etat = Etat::PARTIE_NULLE;
+        else if (comptageCouleurs[0]+comptageCouleurs[2]<comptageCouleurs[1]+comptageCouleurs[3])
+            _etat = Etat::AVANTAGE_UNI;
+        else 
+            _etat = Etat::AVANTAGE_EXI;
+    }
+    else {
+        _etat = Etat::PARTIE_NON_TERMINEE;
+        //mise a jour de la couleur actuelle pour le prochain tour
+        if (couleurAux==3) _couleurActuelle=0;
+        else _couleurActuelle=couleurAux+1;
+    }
 
 }
 
@@ -651,10 +678,10 @@ std::vector<int> Jeu::comptage_couleurs() const{
 }
 
 
-//PUIS MODIFIER CES FONCTIONS
 
+//(mathias) je crois pas que la foncion reste_des_coups nous servira
 
-
+/*
 bool Jeu::reste_des_coups() const{
     std::vector<int> vector_couleurs=comptage_couleurs();
     int points_Exi=vector_couleurs[0]+vector_couleurs[2];
@@ -672,11 +699,11 @@ bool Jeu::reste_des_coups() const{
                         //etape 1 on compte le nb de fois qu il y a la couleur du tour sur la piece
                         //etape 2 on  regarde si il y a une possibilité de sauter une piece avec le nombre de coup qu'on doit faire 
                         //si c'est bon on revoir true (sinon on continue la boucle a la recherche d'une autre piece)
-                        /*
+                        
                         if (coup_licite(colonne,colonne.getAbscisse(),colonne.getOrdonnee())){
                             return true;
                             // PLACEHOLDER : la fonction doit être terminée après implémentation des coups licites terminaux.
-                        */
+                        
                         }
                     }
                 }
@@ -686,7 +713,7 @@ bool Jeu::reste_des_coups() const{
     }
     return false;
 }
-
+*/
 
 bool Jeu::fini() const {
     return (_etat != Etat::PARTIE_NON_TERMINEE);
@@ -743,5 +770,5 @@ Pour chaque Piece :
     si elle a une couleur :
         regarder les sauts
 
-
+*/
     
