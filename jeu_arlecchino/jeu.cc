@@ -735,23 +735,19 @@ bool Jeu::partie_J2() const{
 //ADAPTER L AFFICHAGE DU PLATEAU
 std::ostream& operator<<( std::ostream &flux, Jeu const& jeu ){
 //void Jeu::afficher( std::ostream &flux) const {
-    int j;
-    for(int i=MAX_HAUTEUR -1; i>=0; i--){
-            flux<<'|';
-            auto ligne =jeu.plateau()[i];
-            for (auto colonne : ligne)
-                if (colonne == '0')
-                    flux<< " |";
-                else if (colonne == 'x')
-                    flux<< "x|";
-                else flux<< "o|";
-            flux<<"  "<<i<<std::endl;
+    for (auto & ligne : jeu._plateau){
+        flux<<'|';
+        for (auto & colonne : ligne){
+            if (colonne.getCouleurs()=="TROU"){
+                flux<<"----|";
+            }
+            else{
+                flux<<colonne.getCouleurs()<<"|";
+            }
         }
-    flux<<std::endl << '|';
-    for (j=0 ; j<MAX_LARGEUR ; j++) {
-            flux << j << '|';
-        }
-    flux << std::endl;
+        flux<<std::endl;
+    }
+    flux<<std::endl;
     return flux;
 }
 
