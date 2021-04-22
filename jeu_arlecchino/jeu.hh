@@ -46,6 +46,9 @@ public :
     bool coup_licite(Piece piece,std::vector<int> coupChoisi) const; // Vérifie si le coup a jouer est licite
     void joue(Piece const & piece,std::vector<int> coupChoisi); // Joue le coup (sans vérifier qu'il est licite)
 
+    void set_couleur_actuelle(int indice_couleur){_couleurActuelle=indice_couleur;};
+    int get_couleur_actuelle() const {return _couleurActuelle;};
+    
     bool saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const;//Retourne si on peut deplacer une piece par un saut des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
     bool deplacement_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const;//Retourne si on peut deplacer une piece des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
     std::array<int,2> get_position(Piece const & coup) const; // Retourne les coordonnees dune piece sur le plateau

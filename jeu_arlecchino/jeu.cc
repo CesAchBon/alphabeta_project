@@ -551,7 +551,7 @@ void Jeu::joue(Piece const & piece,std::vector<int> coupChoisi) {
         int ord=position[1];
 
         // on joue sur le plateau chacun des deplacements/sauts chaque couple de coordonnées que contient le vecteur coupChoisi
-        for (int i=0;i<coupChoisi.size()/2;i+=2){
+        for (int i=0;i<coupChoisi.size();i+=2){
             // si c'est un deplacement
             //haut
             if (coupChoisi[i+1]==ord+1){
