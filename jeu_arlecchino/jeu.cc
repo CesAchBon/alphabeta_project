@@ -57,7 +57,8 @@ void Jeu::reset(){
 bool Jeu::coordValide(int abscisse,int ordonnee) const{
     return (abscisse >= 0) && (abscisse < MAX_LARGEUR) &&
            (ordonnee >= 0) && (ordonnee < MAX_HAUTEUR) &&
-           (_plateau[abscisse][ordonnee].getCouleurs()=="TROU");
+           ( (_plateau[abscisse][ordonnee].getCouleurs()=="TROU")
+           ||(!_plateau[abscisse][ordonnee].getDefinie()));
 }
 
 
@@ -69,7 +70,7 @@ int Jeu::nbCoupJoue() const
 // Retourne si il est possible d'effectuer un saut depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un trou et
 // qu'une piece est sautée
 bool Jeu::saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const {
-    if (coordValide(abs_depart+abscisse*2,ord_depart+ordonnee*2) && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getCouleurs()!="TROU" )
+    if (coordValide(abs_depart+abscisse*2,ord_depart+ordonnee*2) && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getCouleurs()!="TROU" && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getDefinie())
     {
         return true;
     }
@@ -97,7 +98,7 @@ std::array<int,2> Jeu::get_position(Piece const & coup) const{
 }
 
 //Retourne un vector contenant tous les coups possibles d'une piece donnée
-deplacements Jeu::coups_possibles( Piece const & coup) const {
+deplacements Jeu::coups_possibles( Piece const & coup){
     
     // Les 4 directions possibles de déplacements
     deplacements directions = {{1,0},{-1,0},{0,1},{0,-1}};
@@ -140,6 +141,11 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
             if (saut_possible(a0,o0,direction[0],direction[1])){
                 int a1=a0+direction[0]*2;
                 int o1=o0+direction[1]*2;
+
+                int as1=a0+direction[0];
+                int os1=o0+direction[1];
+                _plateau[as1][os1].setDefinie(false);
+
                 // SAUT puis IMMOBILE
                 dpts.push_back({a0,o0,a1,o1});
                 
@@ -157,6 +163,8 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                     }
                 }
+
+                _plateau[as1][os1].setDefinie(true);
 
             }
             if(deplacement_possible(a0,o0,direction[0],direction[1])){
@@ -191,6 +199,11 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
             if (saut_possible(a0,o0,direction[0],direction[1])){
                 int a1=a0+direction[0]*2;
                 int o1=o0+direction[1]*2;
+
+                int as1=a0+direction[0];
+                int os1=o0+direction[1];
+                _plateau[as1][os1].setDefinie(false);
+
                 // SAUT puis IMMOBILE
                 dpts.push_back({a0,o0,a1,o1});
 
@@ -198,6 +211,11 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                     if(saut_possible(a1,o1,dir[0],dir[1])){
                         int a2=a1+dir[0]*2;
                         int o2=o1+dir[1]*2;
+
+                        int as2=a1+dir[0];
+                        int os2=o1+dir[1];
+                        _plateau[as2][os2].setDefinie(false);
+
                         // SAUT puis SAUT puis IMMOBILE
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
@@ -214,6 +232,8 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
                         }
+
+                        _plateau[as2][os2].setDefinie(true);
 
                     }
                     if(deplacement_possible(a1,o1,dir[0],dir[1])){
@@ -240,6 +260,9 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                     }
 
                 }
+
+                _plateau[as1][os1].setDefinie(true);
+
             }
             if(deplacement_possible(a0,o0,direction[0],direction[1])){
                 int a1=a0+direction[0];
@@ -248,6 +271,11 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                     if(saut_possible(a1,o1,dir[0],dir[1])){
                         int a2=a1+dir[0]*2;
                         int o2=o1+dir[1]*2;
+
+                        int as2=a1+dir[0];
+                        int os2=o1+dir[1];
+                        _plateau[as2][os2].setDefinie(false);
+
                         // DEPLACEMENT puis SAUT puis IMMOBILE
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
@@ -264,6 +292,9 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                             }
                         }
+
+                        _plateau[as2][os2].setDefinie(true);
+
                     }
                     if(deplacement_possible(a1,o1,dir[0],dir[1])){
                         int a2=a1+dir[0];
@@ -314,6 +345,11 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
             if (saut_possible(a0,o0,direction[0],direction[1])){
                 int a1=a0+direction[0]*2;
                 int o1=o0+direction[1]*2;
+
+                int as1=a0+direction[0];
+                int os1=o0+direction[1];
+                _plateau[as1][os1].setDefinie(false);
+
                 // SAUT puis IMMOBILE
                 dpts.push_back({a0,o0,a1,o1});
 
@@ -321,12 +357,22 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                     if(saut_possible(a1,o1,dir[0],dir[1])){
                         int a2=a1+dir[0]*2;
                         int o2=o1+dir[1]*2;
+
+                        int as2=a1+dir[0];
+                        int os2=o1+dir[1];
+                        _plateau[as2][os2].setDefinie(false);
+
                         // SAUT puis SAUT puis IMMOBILE
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
                                 int o3=o2+d[1]*2;
+
+                                int as3=a2+d[0];
+                                int os3=o2+d[1];
+                                _plateau[as3][os3].setDefinie(false);
+
                                 // SAUT puis SAUT puis SAUT puis IMMOBILE
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                                 for (auto d4 : directions){
@@ -343,6 +389,8 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                                         dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
                                     }
                                 }
+
+                                _plateau[as3][os3].setDefinie(true);
                             }
                             if (deplacement_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0];
@@ -366,6 +414,8 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                             }
                         }
 
+                        _plateau[as2][os2].setDefinie(true);
+
                     }
                     if(deplacement_possible(a1,o1,dir[0],dir[1])){
                         int a2=a1+dir[0];
@@ -376,6 +426,11 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                             if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
                                 int o3=o2+d[1]*2;
+
+                                int as3=a2+d[0];
+                                int os3=o2+d[1];
+                                _plateau[as3][os3].setDefinie(false);
+
                                 // SAUT puis DEPLACEMENT puis SAUT puis IMMOBILE
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                                 for (auto d4 : directions){
@@ -395,6 +450,9 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                                        
                                     }
                                 }
+
+                                _plateau[as3][os3].setDefinie(true);
+
                             }
                             if (deplacement_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0];
@@ -422,6 +480,9 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                     }
 
                 }
+
+                _plateau[as1][os1].setDefinie(true);
+
             }
             if(deplacement_possible(a0,o0,direction[0],direction[1])){
                 int a1=a0+direction[0];
@@ -430,12 +491,22 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                     if(saut_possible(a1,o1,dir[0],dir[1])){
                         int a2=a1+dir[0]*2;
                         int o2=o1+dir[1]*2;
+
+                        int as2=a1+dir[0];
+                        int os2=o1+dir[1];
+                        _plateau[as2][os2].setDefinie(false);
+
                         // DEPLACEMENT puis SAUT puis IMMOBILE
                         dpts.push_back({a0,o0,a1,o1,a2,o2});
                         for (auto d : directions){
                             if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
                                 int o3=o2+d[1]*2;
+
+                                int as3=a2+d[0];
+                                int os3=o2+d[1];
+                                _plateau[as3][os3].setDefinie(false);
+
                                 // DEPLACEMENT puis SAUT puis SAUT puis IMMOBILE
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                                 for (auto d4 : directions){
@@ -452,6 +523,9 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                                         dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
                                     }
                                 }
+
+                                _plateau[as3][os3].setDefinie(true);
+
                             }
                             if (deplacement_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0];
@@ -476,6 +550,9 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                                 }
                             }
                         }
+
+                        _plateau[as2][os2].setDefinie(true);
+
                     }
                     if(deplacement_possible(a1,o1,dir[0],dir[1])){
                         int a2=a1+dir[0];
@@ -484,6 +561,11 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                             if (saut_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0]*2;
                                 int o3=o2+d[1]*2;
+
+                                int as3=a2+d[0];
+                                int os3=o2+d[1];
+                                _plateau[as3][os3].setDefinie(false);
+
                                 // DEPLACEMENT puis DEPLACEMENT puis SAUT puis IMMOBILE
                                 dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3});
                                 for (auto d4 : directions){
@@ -500,6 +582,9 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
                                         dpts.push_back({a0,o0,a1,o1,a2,o2,a3,o3,a4,o4});
                                     }
                                 }
+
+                                _plateau[as3][os3].setDefinie(true);
+                                
                             }
                             if(deplacement_possible(a2,o2,d[0],d[1])){
                                 int a3=a2+d[0];
@@ -526,7 +611,7 @@ deplacements Jeu::coups_possibles( Piece const & coup) const {
 }
 
 // verifie si a partir des coordonnées d'une piece passée en parametre le tour représenté par un vecteur de coordonnées passé en parametre est licite
-bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi ) const {
+bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi )  {
     
     deplacements deplacements_possibles = this->coups_possibles(piece);
 
@@ -682,7 +767,7 @@ std::vector<int> Jeu::comptage_couleurs() const{
 //(mathias) je crois pas que la foncion reste_des_coups nous servira
 //(cesar) Elle peut être utile pour regarder si une couleur peut jouer ou non (je l'ai réimplémentée)
 
-bool Jeu::reste_des_coups(int indice_couleur) const{
+bool Jeu::reste_des_coups(int indice_couleur) {
     if(comptage_couleurs()[indice_couleur]!=0){
         for (auto & ligne : _plateau){
             for (auto & colonne : ligne){
