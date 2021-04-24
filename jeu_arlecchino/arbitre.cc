@@ -2,7 +2,7 @@
 
 
 Arbitre::Arbitre(player player1, player player2, int nombre_parties):
-    _coups(),
+    _coups(nombre_parties),
     _coups_mutex(nombre_parties),
     _nombre_parties(nombre_parties),
     _numero_partie(1),
@@ -78,7 +78,7 @@ int Arbitre::challenge()
     int victoire_joueur_2 = 0;
     for(int i=0 ; i < _nombre_parties ; i++)
         {
-            std::cout << "\n" << "Partie n°" << _numero_partie << " : "<<std::endl<<_jeu;
+            std::cout << "\n" << "Partie n " << _numero_partie << " : "<<std::endl<<_jeu;
             result resultat = partie();
             if (resultat == result::ERREUR)
                 {
@@ -109,14 +109,12 @@ int Arbitre::challenge()
 result Arbitre::partie()
 {
     int tour = 0;
-    deplacement dpcmt =  _coups[_numero_partie-1];
     while(!_jeu.fini())
         {
             bool try_lock = false;
             tour++;
             std::cout << "tour : " << tour << std::endl;
             _coups_mutex[_numero_partie-1].unlock();
-
             std::thread thread_joueur(&Joueur::jouer,
                                       ((tour%2)? (_joueur1) :(_joueur2) ),
                                       _jeu,
@@ -125,7 +123,8 @@ result Arbitre::partie()
 
             std::this_thread::sleep_for (std::chrono::milliseconds(TEMPS_POUR_UN_COUP));
             //        std::this_thread::sleep_for (std::chrono::seconds(TEMPS_POUR_UN_COUP));
-
+            
+            deplacement dpcmt =  _coups[_numero_partie-1];
             if (!_coups_mutex[_numero_partie-1].try_lock()) {
                     std::cerr <<  std::endl << "mutex non rendu " << std::endl;
                     try_lock = true;
@@ -156,7 +155,7 @@ result Arbitre::partie()
                 }
             //On joue le coup, on l'affiche et on affiche le plateau
             _jeu.joue(_coups[_numero_partie-1]);
-            std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" "<< _jeu.plateau()[dpcmt[0]][dpcmt[1]]
+            std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" "<< _jeu.plateau()[dpcmt[dpcmt.size()-2]][dpcmt[dpcmt.size()-1]]
                       << std::endl << _jeu << std::endl;
         }
 

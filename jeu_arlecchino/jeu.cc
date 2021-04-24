@@ -21,7 +21,7 @@ void Jeu::reset(){
             Piece piece (piecesAPlacer.at(randPiece));
             colonne = piece;
             if (randPiece==0&&!maitrePlace){
-                colonne.setCouleurs("TROU");
+                colonne.setCouleurs("----");
                 maitrePlace=true;
             } 
             piecesAPlacer.erase(piecesAPlacer.begin()+randPiece);
@@ -36,8 +36,8 @@ void Jeu::reset(){
                 
                 //si elle n'est pas présente sur le plateau on l'ajoute
                 if (appartient == end(indicesPiecesParcourus)) {
-                    //si c'est la piece noire et blanche on fait un trou
-                    if (randPiece==0) colonne = "TROU";
+                    //si c'est la piece noire et blanche on fait un ----
+                    if (randPiece==0) colonne = "----";
                     else colonne = pieces[randPiece];
 
                     piecePasPresente=true;
@@ -57,7 +57,7 @@ void Jeu::reset(){
 bool Jeu::coordValide(int abscisse,int ordonnee) const{
     return (abscisse >= 0) && (abscisse < MAX_LARGEUR) &&
            (ordonnee >= 0) && (ordonnee < MAX_HAUTEUR) &&
-           ( (_plateau[abscisse][ordonnee].getCouleurs()=="TROU")
+           ( (_plateau[abscisse][ordonnee].getCouleurs()=="----")
            ||(!_plateau[abscisse][ordonnee].getDefinie()));
 }
 
@@ -67,17 +67,17 @@ int Jeu::nbCoupJoue() const
     return _nb_tours;
 }
 
-// Retourne si il est possible d'effectuer un saut depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un trou et
+// Retourne si il est possible d'effectuer un saut depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un ---- et
 // qu'une piece est sautée
 bool Jeu::saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const {
-    if (coordValide(abs_depart+abscisse*2,ord_depart+ordonnee*2) && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getCouleurs()!="TROU" && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getDefinie())
+    if (coordValide(abs_depart+abscisse*2,ord_depart+ordonnee*2) && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getCouleurs()!="----" && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getDefinie())
     {
         return true;
     }
     return false;
 }
 
-// Retourne si il est possible d'effectuer un déplacement depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un trou
+// Retourne si il est possible d'effectuer un déplacement depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un ----
 bool Jeu::deplacement_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const {
     if (coordValide(abs_depart+abscisse,ord_depart+ordonnee))
     {
@@ -615,7 +615,8 @@ bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi )  {
     
     deplacements deplacements_possibles = this->coups_possibles(piece);
 
-    if (deplacements_possibles.size()>0){
+    if (deplacements_possibles.size()==0) return true;// si c'est un coup ou l'on passe son tour CAR pas le choix
+    else {
         for (const auto &coup : deplacements_possibles) {
             if (coup==coupChoisi) 
                 return true;
@@ -643,48 +644,48 @@ void Jeu::joue(std::vector<int> coupChoisi) {
             //haut
             if (coupChoisi[i+1]==ord+1){
                 _plateau[abs][ord+1].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("TROU");
+                _plateau[abs][ord].setCouleurs("----");
             }
             //bas
             else if (coupChoisi[i+1]==ord-1){
                 _plateau[abs][ord-1].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("TROU");
+                _plateau[abs][ord].setCouleurs("----");
             }
             //gauche
             else if (coupChoisi[i]==abs+1){
                 _plateau[abs+1][ord].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("TROU");
+                _plateau[abs][ord].setCouleurs("----");
             }
             //droite
             else if (coupChoisi[i]==abs-1){
                 _plateau[abs-1][ord].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("TROU");
+                _plateau[abs][ord].setCouleurs("----");
             }
             //si c'est un saut
             //haut
             else if (coupChoisi[i+1]==ord+2){
                 _plateau[abs][ord+2].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("TROU");
-                _plateau[abs][ord+1].setCouleurs("TROU");
+                _plateau[abs][ord].setCouleurs("----");
+                _plateau[abs][ord+1].setCouleurs("----");
 
             }
             //bas
             else if (coupChoisi[i+1]==ord-2){
                 _plateau[abs][ord-2].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("TROU");
-                _plateau[abs][ord-1].setCouleurs("TROU");
+                _plateau[abs][ord].setCouleurs("----");
+                _plateau[abs][ord-1].setCouleurs("----");
             }
             //gauche
             else if (coupChoisi[i]==abs+2){
                 _plateau[abs+2][ord].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("TROU");
-                _plateau[abs+1][ord].setCouleurs("TROU");
+                _plateau[abs][ord].setCouleurs("----");
+                _plateau[abs+1][ord].setCouleurs("----");
             }
             //droite
             else if (coupChoisi[i]==abs-2){
                 _plateau[abs-2][ord].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("TROU");
-                _plateau[abs-1][ord].setCouleurs("TROU");
+                _plateau[abs][ord].setCouleurs("----");
+                _plateau[abs-1][ord].setCouleurs("----");
             }
 
             abs = coupChoisi[i];
@@ -703,7 +704,7 @@ void Jeu::joue(std::vector<int> coupChoisi) {
         //parcours du plateau
         for (auto & ligne : _plateau){
             for (auto & colonne : ligne){
-                if (colonne.getCouleurs()!="TROU"){
+                if (colonne.getCouleurs()!="----"){
                     deplacements coupsPotentiels = this->coups_possibles(colonne);// recherche des coups potentiels pour une piece
                     //test si la piece a au moins un coup jouable , si oui la partie n'est pas finie
                     if (coupsPotentiels.size()!=0) {
@@ -809,7 +810,7 @@ std::ostream& operator<<( std::ostream &flux, Jeu const& jeu ){
     for (auto & ligne : jeu.plateau()){
         flux<<'|';
         for (auto & colonne : ligne){
-            if (colonne.getCouleurs()=="TROU"){
+            if (colonne.getCouleurs()=="----"){
                 flux<<"----|";
             }
             else{

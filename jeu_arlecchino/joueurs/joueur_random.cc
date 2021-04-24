@@ -20,7 +20,7 @@ void Joueur_Random::recherche_coup(Jeu jeu, std::vector<int> &coup)
     //parcours du plateau
         for (auto & ligne : jeu.plateau()){
             for (auto & colonne : ligne){
-                if (colonne.getCouleurs()!="TROU"){
+                if (colonne.getCouleurs()!="----"){
                     deplacements coupsPotentiels = jeu.coups_possibles(colonne);// recherche des coups potentiels pour une piece
                     //test si la piece a au moins un coup jouable , si oui la partie n'est pas finie
                     if (coupsPotentiels.size()!=0) {
@@ -30,16 +30,21 @@ void Joueur_Random::recherche_coup(Jeu jeu, std::vector<int> &coup)
             }
         }
     
-    //std::cout<<coupValide<<std::endl;
-    //On choisit une piece qui peut jouer au hazard
-    taille =coupValide.size();
-    indice_piece_choisi= taille == 1 ?  0 : rand() % (taille-1);
-    //on choisi un coup de la piece choisi au hasard
-    taille_piece =coupValide[indice_piece_choisi].size();
-    indice_coup_choisi= taille_piece == 1 ?  0 : rand() % (taille_piece-1);
+    if (coupValide.size()!=0){
+        //On choisit une piece qui peut jouer au hazard
+        taille =coupValide.size();
+        indice_piece_choisi= taille == 1 ?  0 : rand() % (taille-1);
+        //on choisi un coup de la piece choisi au hasard
+        taille_piece =coupValide[indice_piece_choisi].size();
+        indice_coup_choisi= taille_piece == 1 ?  0 : rand() % (taille_piece-1);
 
-    coup = coupValide[indice_piece_choisi][indice_coup_choisi];
+        coup = coupValide[indice_piece_choisi][indice_coup_choisi];
 
+        std::cout << "coup joué : ";
+        for (auto &c : coup)
+            std::cout << c << ",";
+        std::cout << "\n";
+    }
 
     //std::this_thread::sleep_for (std::chrono::milliseconds(rand() % (TEMPS_POUR_UN_COUP+1)));
 
