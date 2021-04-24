@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\stage_alphaBeta.dir/objects.a
+C:\mingw64\bin\ar.exe cr CMakeFiles\stage_alphaBeta.dir/objects.a @CMakeFiles\stage_alphaBeta.dir\objects1.rsp
+C:\mingw64\bin\x86_64-w64-mingw32-g++.exe -g -Wl,--whole-archive CMakeFiles\stage_alphaBeta.dir/objects.a -Wl,--no-whole-archive -o stage_alphaBeta.exe -Wl,--out-implib,libstage_alphaBeta.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\stage_alphaBeta.dir\linklibs.rsp

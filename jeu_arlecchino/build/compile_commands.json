@@ -1,0 +1,42 @@
+[
+{
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\stage_alphaBeta.dir\\arbitre.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\arbitre.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/arbitre.cc"
+},
+{
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\stage_alphaBeta.dir\\jeu.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\jeu.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/jeu.cc"
+},
+{
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\stage_alphaBeta.dir\\main.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\main.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/main.cc"
+},
+{
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\stage_alphaBeta.dir\\piece.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\piece.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/piece.cc"
+},
+{
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build/joueurs",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\joueurs.dir\\joueur.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\joueurs\\joueur.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur.cc"
+},
+{
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build/joueurs",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\joueurs.dir\\joueur_random.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\joueurs\\joueur_random.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur_random.cc"
+},
+{
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build/joueurs",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\joueurs.dir\\joueur_manuel.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\joueurs\\joueur_manuel.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur_manuel.cc"
+},
+{
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build/joueurs",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\joueurs.dir\\joueur_montecarlo_.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\joueurs\\joueur_montecarlo_.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur_montecarlo_.cc"
+}
+]

@@ -44,7 +44,7 @@ public :
     int nbCoupJoue() const;// Retourne le nombre de coup deja joue
 
     bool coup_licite(Piece piece,std::vector<int> coupChoisi); // Vérifie si le coup a jouer est licite
-    void joue(Piece const & piece,std::vector<int> coupChoisi); // Joue le coup (sans vérifier qu'il est licite)
+    void joue(std::vector<int> coupChoisi); // Joue le coup (sans vérifier qu'il est licite)
 
     void set_couleur_actuelle(int indice_couleur){_couleurActuelle=indice_couleur;};
     int get_couleur_actuelle() const {return _couleurActuelle;};

@@ -16,7 +16,6 @@ void Joueur_Random::recherche_coup(Jeu jeu, std::vector<int> &coup)
 {
     std::vector<deplacements> coupValide;
     int indice_piece_choisi,indice_coup_choisi, taille, taille_piece;
-    int aX, oX, aO, oO; //coordonnees de la Brix que l'on va joué
 
     //parcours du plateau
         for (auto & ligne : jeu.plateau()){

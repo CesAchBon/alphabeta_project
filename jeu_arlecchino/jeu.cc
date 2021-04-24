@@ -628,7 +628,9 @@ bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi )  {
 
 
 //joue le coup choisi et verifie si il est licite puis teste si c'est la fin de partie
-void Jeu::joue(Piece const & piece,std::vector<int> coupChoisi) {
+void Jeu::joue(std::vector<int> coupChoisi) {
+    Piece piece;
+    piece = _plateau[coupChoisi[0]][coupChoisi[1]];
     _nb_tours++;
     if (this->coup_licite(piece,coupChoisi)){
         std::array<int,2> position=get_position(piece);

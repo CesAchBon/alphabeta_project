@@ -48,7 +48,6 @@ private:
     std::shared_ptr<Joueur> _joueur2;
 
     Jeu _jeu;
-    Piece _piece;
     deplacements _coups;
 
     std::vector<std::mutex> _coups_mutex;

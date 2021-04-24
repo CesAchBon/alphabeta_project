@@ -3,7 +3,6 @@
 
 Arbitre::Arbitre(player player1, player player2, int nombre_parties):
     _coups(),
-    _piece(),
     _coups_mutex(nombre_parties),
     _nombre_parties(nombre_parties),
     _numero_partie(1),
@@ -110,6 +109,7 @@ int Arbitre::challenge()
 result Arbitre::partie()
 {
     int tour = 0;
+    deplacement dpcmt =  _coups[_numero_partie-1];
     while(!_jeu.fini())
         {
             bool try_lock = false;
@@ -121,7 +121,6 @@ result Arbitre::partie()
                                       ((tour%2)? (_joueur1) :(_joueur2) ),
                                       _jeu,
                                       std::ref(_coups[_numero_partie-1]),
-                                      std::ref(_piece),
                     std::ref(_coups_mutex[_numero_partie-1]));
 
             std::this_thread::sleep_for (std::chrono::milliseconds(TEMPS_POUR_UN_COUP));
@@ -131,13 +130,13 @@ result Arbitre::partie()
                     std::cerr <<  std::endl << "mutex non rendu " << std::endl;
                     try_lock = true;
                 }
-            else if(!_jeu.coup_licite(_piece,_coups[_numero_partie-1])) {
-                    std::cerr << "coup invalide " << _piece << std::endl;
+            else if(!_jeu.coup_licite(_jeu.plateau()[dpcmt[0]][dpcmt[1]],_coups[_numero_partie-1])) {
+                    std::cerr << "coup invalide " << _jeu.plateau()[dpcmt[0]][dpcmt[1]] << std::endl;
                 }
 
             thread_joueur.detach();
 
-            if(try_lock || !_jeu.coup_licite(_piece,_coups[_numero_partie-1]))
+            if(try_lock || !_jeu.coup_licite(_jeu.plateau()[dpcmt[0]][dpcmt[1]],_coups[_numero_partie-1]))
                 {
                     if(_jeu.partie_nulle())
                         {
@@ -156,8 +155,8 @@ result Arbitre::partie()
                         }
                 }
             //On joue le coup, on l'affiche et on affiche le plateau
-            _jeu.joue(_piece,_coups[_numero_partie-1]);
-            std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" "<< _piece
+            _jeu.joue(_coups[_numero_partie-1]);
+            std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" "<< _jeu.plateau()[dpcmt[0]][dpcmt[1]]
                       << std::endl << _jeu << std::endl;
         }
 
