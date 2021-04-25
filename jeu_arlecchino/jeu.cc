@@ -116,8 +116,6 @@ deplacements Jeu::coups_possibles( Piece const & coup){
     int a0=position[0];
     int o0=position[1];
 
-    _plateau[a0][o0].setDefinie(false);
-
     int degre=coup.degre(couleurs[_couleurActuelle]);
 
     if (degre==1){
@@ -607,8 +605,6 @@ deplacements Jeu::coups_possibles( Piece const & coup){
         }
     }
 
-    _plateau[a0][o0].setDefinie(true);
-
     return dpts;
     
 
@@ -619,7 +615,7 @@ bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi )  {
     
     deplacements deplacements_possibles = this->coups_possibles(piece);
 
-    if (deplacements_possibles.size()==0) return true;// si c'est un coup ou l'on passe son tour CAR pas le choix
+    if (deplacements_possibles.size()==0) return true;// si c'est un coup ou l'on passe son tour pas le choix
     else {
         for (const auto &coup : deplacements_possibles) {
             if (coup==coupChoisi) 
@@ -634,117 +630,123 @@ bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi )  {
 
 //joue le coup choisi et verifie si il est licite puis teste si c'est la fin de partie
 void Jeu::joue(std::vector<int> coupChoisi) {
-    Piece piece;
-    piece = _plateau[coupChoisi[0]][coupChoisi[1]];
-    _nb_tours++;
-    if (this->coup_licite(piece,coupChoisi)){
-        std::array<int,2> position=get_position(piece);
-        int abs=position[0];
-        int ord=position[1];
+    if (coupChoisi.size()!=0){
+        Piece piece;
+        piece = _plateau[coupChoisi[0]][coupChoisi[1]];
+        _nb_tours++;
+        if (this->coup_licite(piece,coupChoisi)){
+            std::array<int,2> position=get_position(piece);
+            int abs=position[0];
+            int ord=position[1];
 
-        // on joue sur le plateau chacun des deplacements/sauts chaque couple de coordonnées que contient le vecteur coupChoisi
-        for (int i=0;i<coupChoisi.size();i+=2){
-            // si c'est un deplacement
-            //haut
-            if (coupChoisi[i+1]==ord+1){
-                _plateau[abs][ord+1].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("----");
-            }
-            //bas
-            else if (coupChoisi[i+1]==ord-1){
-                _plateau[abs][ord-1].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("----");
-            }
-            //gauche
-            else if (coupChoisi[i]==abs+1){
-                _plateau[abs+1][ord].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("----");
-            }
-            //droite
-            else if (coupChoisi[i]==abs-1){
-                _plateau[abs-1][ord].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("----");
-            }
-            //si c'est un saut
-            //haut
-            else if (coupChoisi[i+1]==ord+2){
-                _plateau[abs][ord+2].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("----");
-                _plateau[abs][ord+1].setCouleurs("----");
+            // on joue sur le plateau chacun des deplacements/sauts chaque couple de coordonnées que contient le vecteur coupChoisi
+            for (int i=2;i<coupChoisi.size();i+=2){
+                // si c'est un deplacement
+                //haut
+                if (coupChoisi[i+1]==ord+1){
+                    _plateau[abs][ord+1].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                }
+                //bas
+                else if (coupChoisi[i+1]==ord-1){
+                    _plateau[abs][ord-1].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                }
+                //gauche
+                else if (coupChoisi[i]==abs+1){
+                    _plateau[abs+1][ord].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                }
+                //droite
+                else if (coupChoisi[i]==abs-1){
+                    _plateau[abs-1][ord].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                }
+                //si c'est un saut
+                //haut
+                else if (coupChoisi[i+1]==ord+2){
+                    _plateau[abs][ord+2].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                    _plateau[abs][ord+1].setCouleurs("----");
 
-            }
-            //bas
-            else if (coupChoisi[i+1]==ord-2){
-                _plateau[abs][ord-2].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("----");
-                _plateau[abs][ord-1].setCouleurs("----");
-            }
-            //gauche
-            else if (coupChoisi[i]==abs+2){
-                _plateau[abs+2][ord].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("----");
-                _plateau[abs+1][ord].setCouleurs("----");
-            }
-            //droite
-            else if (coupChoisi[i]==abs-2){
-                _plateau[abs-2][ord].setCouleurs(piece.getCouleurs());
-                _plateau[abs][ord].setCouleurs("----");
-                _plateau[abs-1][ord].setCouleurs("----");
-            }
+                }
+                //bas
+                else if (coupChoisi[i+1]==ord-2){
+                    _plateau[abs][ord-2].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                    _plateau[abs][ord-1].setCouleurs("----");
+                }
+                //gauche
+                else if (coupChoisi[i]==abs+2){
+                    _plateau[abs+2][ord].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                    _plateau[abs+1][ord].setCouleurs("----");
+                }
+                //droite
+                else if (coupChoisi[i]==abs-2){
+                    _plateau[abs-2][ord].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                    _plateau[abs-1][ord].setCouleurs("----");
+                }
 
-            abs = coupChoisi[i];
-            ord = coupChoisi[i+1];
+                abs = coupChoisi[i];
+                ord = coupChoisi[i+1];
+            }
         }
-    }
 
-    // TEST DE FIN DE PARTIE
-    int couleurAux = _couleurActuelle;//on sauvegarde l'etat de la couleur qu on vient de jouer car on va modifier couleurActuelle pour des testes
+        // TEST DE FIN DE PARTIE
+        int couleurAux = _couleurActuelle;//on sauvegarde l'etat de la couleur qu on vient de jouer car on va modifier couleurActuelle pour des testes
 
-    bool finDePartie = true;
-    int i = 0;
+        bool finDePartie = true;
+        int i = 0;
 
-    //pour chaque couleur on parcours le plateau et on regarde si au moins une piece a un coup possible, si oui la partie n'est pas finie
-    while (finDePartie && i<4){
-        //parcours du plateau
-        for (auto & ligne : _plateau){
-            for (auto & colonne : ligne){
-                if (colonne.getCouleurs()!="----"){
-                    deplacements coupsPotentiels = this->coups_possibles(colonne);// recherche des coups potentiels pour une piece
-                    //test si la piece a au moins un coup jouable , si oui la partie n'est pas finie
-                    if (coupsPotentiels.size()!=0) {
-                        finDePartie = false;
-                        break;
+        //pour chaque couleur on parcours le plateau et on regarde si au moins une piece a un coup possible, si oui la partie n'est pas finie
+        while (finDePartie && i<4){
+            //parcours du plateau
+            for (auto & ligne : _plateau){
+                for (auto & colonne : ligne){
+                    if (colonne.getCouleurs()!="----"){
+                        deplacements coupsPotentiels = this->coups_possibles(colonne);// recherche des coups potentiels pour une piece
+                        //test si la piece a au moins un coup jouable , si oui la partie n'est pas finie
+                        if (coupsPotentiels.size()!=0) {
+                            finDePartie = false;
+                            break;
+                        }
                     }
                 }
+                if (!finDePartie) break;
             }
-            if (!finDePartie) break;
+            //on change de couleur
+            if (_couleurActuelle==3) _couleurActuelle=0;
+            else ++_couleurActuelle;
+            ++i;
         }
-        //on change de couleur
-        if (_couleurActuelle==3) _couleurActuelle=0;
-        else ++_couleurActuelle;
-        ++i;
-    }
 
 
 
-//MAJ des ETATS
+    //MAJ des ETATS
 
-    if (finDePartie){
-        std::vector<int> comptageCouleurs = this->comptage_couleurs();
-        if (comptageCouleurs[0]+comptageCouleurs[2]==comptageCouleurs[1]+comptageCouleurs[3])
-            _etat = Etat::PARTIE_NULLE;
-        else if (comptageCouleurs[0]+comptageCouleurs[2]<comptageCouleurs[1]+comptageCouleurs[3])
-            _etat = Etat::AVANTAGE_UNI;
-        else 
-            _etat = Etat::AVANTAGE_EXI;
+        if (finDePartie){
+            std::vector<int> comptageCouleurs = this->comptage_couleurs();
+            if (comptageCouleurs[0]+comptageCouleurs[2]==comptageCouleurs[1]+comptageCouleurs[3])
+                _etat = Etat::PARTIE_NULLE;
+            else if (comptageCouleurs[0]+comptageCouleurs[2]<comptageCouleurs[1]+comptageCouleurs[3])
+                _etat = Etat::AVANTAGE_UNI;
+            else 
+                _etat = Etat::AVANTAGE_EXI;
+        }
+        else {
+            _etat = Etat::PARTIE_NON_TERMINEE;
+            //mise a jour de la couleur actuelle pour le prochain tour
+            if (couleurAux==3) _couleurActuelle=0;
+            else _couleurActuelle=couleurAux+1;
+        }
     }
     else {
-        _etat = Etat::PARTIE_NON_TERMINEE;
-        //mise a jour de la couleur actuelle pour le prochain tour
-        if (couleurAux==3) _couleurActuelle=0;
-        else _couleurActuelle=couleurAux+1;
+            //on passe le tour et on change de couleur
+            if (_couleurActuelle==3) _couleurActuelle=0;
+            else ++_couleurActuelle;
     }
-
 }
 
 

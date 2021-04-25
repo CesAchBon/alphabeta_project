@@ -125,17 +125,20 @@ result Arbitre::partie()
             //        std::this_thread::sleep_for (std::chrono::seconds(TEMPS_POUR_UN_COUP));
             
             deplacement dpcmt =  _coups[_numero_partie-1];
+
+
             if (!_coups_mutex[_numero_partie-1].try_lock()) {
                     std::cerr <<  std::endl << "mutex non rendu " << std::endl;
                     try_lock = true;
                 }
+            /*
             else if(!_jeu.coup_licite(_jeu.plateau()[dpcmt[0]][dpcmt[1]],_coups[_numero_partie-1])) {
                     std::cerr << "coup invalide " << _jeu.plateau()[dpcmt[0]][dpcmt[1]] << std::endl;
                 }
-
+            */
             thread_joueur.detach();
 
-            if(try_lock || !_jeu.coup_licite(_jeu.plateau()[dpcmt[0]][dpcmt[1]],_coups[_numero_partie-1]))
+            if(try_lock /*|| !_jeu.coup_licite(_jeu.plateau()[dpcmt[0]][dpcmt[1]],_coups[_numero_partie-1])*/)
                 {
                     if(_jeu.partie_nulle())
                         {
@@ -154,9 +157,16 @@ result Arbitre::partie()
                         }
                 }
             //On joue le coup, on l'affiche et on affiche le plateau
-            _jeu.joue(_coups[_numero_partie-1]);
-            std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" "<< _jeu.plateau()[dpcmt[dpcmt.size()-2]][dpcmt[dpcmt.size()-1]]
-                      << std::endl << _jeu << std::endl;
+            if (dpcmt.size()!=0){
+                std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" "<< _jeu.plateau()[dpcmt[0]][dpcmt[1]];
+                _jeu.joue(_coups[_numero_partie-1]);
+                std::cout << std::endl << _jeu << std::endl;
+            }
+            else {
+                std::cout << ((tour%2) ? _joueur1->nom_abbrege() : _joueur2->nom_abbrege())<<" tour passe ";
+                _jeu.joue(_coups[_numero_partie-1]);
+                std::cout << std::endl << _jeu << std::endl;
+            }
         }
 
 

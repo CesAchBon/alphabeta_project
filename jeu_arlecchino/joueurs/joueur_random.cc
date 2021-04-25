@@ -40,10 +40,13 @@ void Joueur_Random::recherche_coup(Jeu jeu, std::vector<int> &coup)
 
         coup = coupValide[indice_piece_choisi][indice_coup_choisi];
 
-        std::cout << "coup joué : ";
+        std::cout << "coup choisi : ";
         for (auto &c : coup)
             std::cout << c << ",";
         std::cout << "\n";
+    }
+    else {
+        coup.clear(); 
     }
 
     //std::this_thread::sleep_for (std::chrono::milliseconds(rand() % (TEMPS_POUR_UN_COUP+1)));
