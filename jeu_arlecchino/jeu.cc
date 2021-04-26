@@ -116,6 +116,8 @@ deplacements Jeu::coups_possibles( Piece const & coup){
     int a0=position[0];
     int o0=position[1];
 
+    _plateau[a0][o0].setDefinie(false);
+
     int degre=coup.degre(couleurs[_couleurActuelle]);
 
     if (degre==1){
@@ -604,6 +606,7 @@ deplacements Jeu::coups_possibles( Piece const & coup){
             }
         }
     }
+    _plateau[a0][o0].setDefinie(true);
 
     return dpts;
     
