@@ -32,13 +32,13 @@ void Joueur_Manuel::recherche_coup(Jeu jeu, std::vector<int> &coup)
 
         deplacement coup_utilisateur = {};
 
-        string entree_utilisateur("");
-        cout << "Quel coup voulez vous jouer ?" << endl;
-        cin >> entree_utilisateur ;
+        std::string entree_utilisateur("");
+        std::cout << "Quel coup voulez vous jouer ?" << std::endl;
+        std::cin >> entree_utilisateur ;
 
         for(char c : entree_utilisateur){
             if (c!=','){
-                coup_utilisateur.push_back((int)c);
+                coup_utilisateur.push_back((int)c-48);
             }
         }
         if (coup_utilisateur.size()%2==0){
