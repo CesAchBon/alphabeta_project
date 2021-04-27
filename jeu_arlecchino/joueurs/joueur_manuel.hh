@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <string>
 #include "joueur.hh"
 
 
@@ -13,4 +13,4 @@ public:
 
   void recherche_coup(Jeu, std::vector<int> &coup) override;
 
-};
+}; 
