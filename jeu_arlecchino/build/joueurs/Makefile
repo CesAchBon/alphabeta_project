@@ -183,6 +183,30 @@ joueur.cc.s:
 	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build && $(MAKE) $(MAKESILENT) -f joueurs\CMakeFiles\joueurs.dir\build.make joueurs/CMakeFiles/joueurs.dir/joueur.cc.s
 .PHONY : joueur.cc.s
 
+joueur_alphaBeta_.obj: joueur_alphaBeta_.cc.obj
+.PHONY : joueur_alphaBeta_.obj
+
+# target to build an object file
+joueur_alphaBeta_.cc.obj:
+	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build && $(MAKE) $(MAKESILENT) -f joueurs\CMakeFiles\joueurs.dir\build.make joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.obj
+.PHONY : joueur_alphaBeta_.cc.obj
+
+joueur_alphaBeta_.i: joueur_alphaBeta_.cc.i
+.PHONY : joueur_alphaBeta_.i
+
+# target to preprocess a source file
+joueur_alphaBeta_.cc.i:
+	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build && $(MAKE) $(MAKESILENT) -f joueurs\CMakeFiles\joueurs.dir\build.make joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.i
+.PHONY : joueur_alphaBeta_.cc.i
+
+joueur_alphaBeta_.s: joueur_alphaBeta_.cc.s
+.PHONY : joueur_alphaBeta_.s
+
+# target to generate assembly for a file
+joueur_alphaBeta_.cc.s:
+	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build && $(MAKE) $(MAKESILENT) -f joueurs\CMakeFiles\joueurs.dir\build.make joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.s
+.PHONY : joueur_alphaBeta_.cc.s
+
 joueur_manuel.obj: joueur_manuel.cc.obj
 .PHONY : joueur_manuel.obj
 
@@ -206,30 +230,6 @@ joueur_manuel.s: joueur_manuel.cc.s
 joueur_manuel.cc.s:
 	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build && $(MAKE) $(MAKESILENT) -f joueurs\CMakeFiles\joueurs.dir\build.make joueurs/CMakeFiles/joueurs.dir/joueur_manuel.cc.s
 .PHONY : joueur_manuel.cc.s
-
-joueur_montecarlo_.obj: joueur_montecarlo_.cc.obj
-.PHONY : joueur_montecarlo_.obj
-
-# target to build an object file
-joueur_montecarlo_.cc.obj:
-	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build && $(MAKE) $(MAKESILENT) -f joueurs\CMakeFiles\joueurs.dir\build.make joueurs/CMakeFiles/joueurs.dir/joueur_montecarlo_.cc.obj
-.PHONY : joueur_montecarlo_.cc.obj
-
-joueur_montecarlo_.i: joueur_montecarlo_.cc.i
-.PHONY : joueur_montecarlo_.i
-
-# target to preprocess a source file
-joueur_montecarlo_.cc.i:
-	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build && $(MAKE) $(MAKESILENT) -f joueurs\CMakeFiles\joueurs.dir\build.make joueurs/CMakeFiles/joueurs.dir/joueur_montecarlo_.cc.i
-.PHONY : joueur_montecarlo_.cc.i
-
-joueur_montecarlo_.s: joueur_montecarlo_.cc.s
-.PHONY : joueur_montecarlo_.s
-
-# target to generate assembly for a file
-joueur_montecarlo_.cc.s:
-	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build && $(MAKE) $(MAKESILENT) -f joueurs\CMakeFiles\joueurs.dir\build.make joueurs/CMakeFiles/joueurs.dir/joueur_montecarlo_.cc.s
-.PHONY : joueur_montecarlo_.cc.s
 
 joueur_random.obj: joueur_random.cc.obj
 .PHONY : joueur_random.obj
@@ -270,12 +270,12 @@ help:
 	@echo ... joueur.obj
 	@echo ... joueur.i
 	@echo ... joueur.s
+	@echo ... joueur_alphaBeta_.obj
+	@echo ... joueur_alphaBeta_.i
+	@echo ... joueur_alphaBeta_.s
 	@echo ... joueur_manuel.obj
 	@echo ... joueur_manuel.i
 	@echo ... joueur_manuel.s
-	@echo ... joueur_montecarlo_.obj
-	@echo ... joueur_montecarlo_.i
-	@echo ... joueur_montecarlo_.s
 	@echo ... joueur_random.obj
 	@echo ... joueur_random.i
 	@echo ... joueur_random.s

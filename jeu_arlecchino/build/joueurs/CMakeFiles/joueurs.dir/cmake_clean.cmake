@@ -1,10 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/joueurs.dir/joueur.cc.obj"
   "CMakeFiles/joueurs.dir/joueur.cc.obj.d"
+  "CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.obj"
+  "CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.obj.d"
   "CMakeFiles/joueurs.dir/joueur_manuel.cc.obj"
   "CMakeFiles/joueurs.dir/joueur_manuel.cc.obj.d"
-  "CMakeFiles/joueurs.dir/joueur_montecarlo_.cc.obj"
-  "CMakeFiles/joueurs.dir/joueur_montecarlo_.cc.obj.d"
   "CMakeFiles/joueurs.dir/joueur_random.cc.obj"
   "CMakeFiles/joueurs.dir/joueur_random.cc.obj.d"
   "libjoueurs.a"

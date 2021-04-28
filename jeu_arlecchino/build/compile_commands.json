@@ -36,7 +36,7 @@
 },
 {
   "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build/joueurs",
-  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\joueurs.dir\\joueur_montecarlo_.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\joueurs\\joueur_montecarlo_.cc",
-  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur_montecarlo_.cc"
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\joueurs.dir\\joueur_alphaBeta_.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\joueurs\\joueur_alphaBeta_.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur_alphaBeta_.cc"
 }
 ]

@@ -179,4 +179,4 @@ CMakeFiles/stage_alphaBeta.dir/arbitre.cc.obj: \
  C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs/joueur.hh \
  C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs/joueur_random.hh \
  C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs/joueur_manuel.hh \
- C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs/joueur_montecarlo_.hh
+ C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs/joueur_alphaBeta_.hh

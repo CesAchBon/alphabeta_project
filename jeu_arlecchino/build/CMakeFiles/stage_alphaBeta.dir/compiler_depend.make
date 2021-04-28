@@ -186,7 +186,7 @@ CMakeFiles/stage_alphaBeta.dir/arbitre.cc.obj: ../arbitre.cc \
   ../joueurs/joueur.hh \
   ../joueurs/joueur_random.hh \
   ../joueurs/joueur_manuel.hh \
-  ../joueurs/joueur_montecarlo_.hh
+  ../joueurs/joueur_alphaBeta_.hh
 
 CMakeFiles/stage_alphaBeta.dir/jeu.cc.obj: ../jeu.cc \
   ../jeu.hh \
@@ -525,7 +525,7 @@ CMakeFiles/stage_alphaBeta.dir/main.cc.obj: ../main.cc \
   ../joueurs/joueur.hh \
   ../joueurs/joueur_random.hh \
   ../joueurs/joueur_manuel.hh \
-  ../joueurs/joueur_montecarlo_.hh
+  ../joueurs/joueur_alphaBeta_.hh
 
 CMakeFiles/stage_alphaBeta.dir/piece.cc.obj: ../piece.cc \
   ../piece.hh \
@@ -685,8 +685,6 @@ C:/mingw64/include/c++/10.3.0/bits/stl_heap.h:
 C:/mingw64/include/c++/10.3.0/memory:
 
 C:/mingw64/include/c++/10.3.0/iosfwd:
-
-../joueurs/joueur_montecarlo_.hh:
 
 C:/mingw64/include/c++/10.3.0/ext/type_traits.h:
 
@@ -1037,6 +1035,8 @@ C:/mingw64/include/c++/10.3.0/algorithm:
 ../joueurs/joueur_random.hh:
 
 ../joueurs/joueur_manuel.hh:
+
+../joueurs/joueur_alphaBeta_.hh:
 
 ../jeu.cc:
 

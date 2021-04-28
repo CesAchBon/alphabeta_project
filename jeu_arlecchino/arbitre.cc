@@ -32,6 +32,12 @@ void Arbitre::initialisation()
         case player::RAND2:
             _joueur1 = std::make_shared<Joueur_Random> ("Aleatoire",true);
             break;
+        case player::ALPHABETA:
+            _joueur1 = std::make_shared<Joueur_alphaBeta_> ("alpha",true);
+            break;
+        case player::ALPHABETA2:
+            _joueur1 = std::make_shared<Joueur_alphaBeta_> ("beta",true);
+            break;
         default:
             break;
         }
@@ -49,6 +55,12 @@ void Arbitre::initialisation()
             break;
         case player::RAND2:
             _joueur2 = std::make_shared<Joueur_Random> ("Aleatoire",false);
+            break;
+        case player::ALPHABETA:
+            _joueur2 = std::make_shared<Joueur_alphaBeta_> ("alpha",true);
+            break;
+        case player::ALPHABETA2:
+            _joueur2 = std::make_shared<Joueur_alphaBeta_> ("beta",true);
             break;
         default:
             break;

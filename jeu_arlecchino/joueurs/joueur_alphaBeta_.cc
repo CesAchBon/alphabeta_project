@@ -1,6 +1,19 @@
-#include "arbitre.hh"
+#include "joueur_alphaBeta_.hh"
+#include<bits/stdc++.h>
 
-std::vector<deplacements> coupPossibles(Jeu &jeu){
+Joueur_alphaBeta_::Joueur_alphaBeta_(std::string nom, bool joueur)
+    :Joueur(nom,joueur),_premierAppel(true),_premierJoueur(false)
+{}
+
+
+
+/*char Joueur_MonteCarlo_::nom_abbrege() const
+{
+    return 'M';
+}
+*/
+
+std::vector<deplacements> Joueur_alphaBeta_::coupPossibles(Jeu &jeu) const {
 
     std::vector<deplacements> coupValide;
     int indice_piece_choisi,indice_coup_choisi, taille, taille_piece;
@@ -22,7 +35,7 @@ std::vector<deplacements> coupPossibles(Jeu &jeu){
 
 }
 
-int eval (const Jeu &jeu,deplacement coup){
+int Joueur_alphaBeta_::eval (const Jeu &jeu,deplacement coup) const{
    int nb_Rouge=0;
    int nb_Vert=0;
    int nb_Jaune=0;
@@ -38,14 +51,22 @@ int eval (const Jeu &jeu,deplacement coup){
             }
         }
     }
+    if (_premierJoueur)
         return ((nb_Bleu+nb_Rouge) - (nb_Vert+nb_Jaune));
+    else 
+        return ((nb_Vert+nb_Jaune) - (nb_Bleu+nb_Rouge));
 
 }
 
-int alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alpha, int beta)
+int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alpha, int beta)
 {   
 
-    
+    //sert a savoir si on a les rouge et bleus OU jaune et vert lors de la partie
+    if (_premierAppel){
+        if (jeu.nbCoupJoue()==0)
+            _premierJoueur=true;
+        _premierAppel=false;
+    }
     // si c'est une feuille
     if (profondeur == 5)
         return eval(jeu,coup);//eval à definir
@@ -67,19 +88,11 @@ int alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alp
                 Jeu jeuApresCoup = jeu;
                 jeuApresCoup.joue(coupChoisi);
 
-                int score = alphaBeta(jeuApresCoup,profondeur + 1, coup, false, alpha, beta);
+                int score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, false, alpha, beta);
                 score_max = std::max(score_max, score);
-                if (alpha<score_max && profondeur==0){
-                    std::cout << "potentiel meilleur coup : ";
-                    for (auto &c : coupChoisi){
-                        std::cout << c << " ";
-                    }
-                    std::cout << "\n";
-                
+                if (alpha<score_max && profondeur==0)
                     coup = coupChoisi;// ce qui permet de savoir quel est le meilleur coup a selectionner
-                }
                 alpha = std::max(alpha, score_max);
-    
                 // Elagage Beta
                 if (beta <= alpha)
                     break;
@@ -101,7 +114,7 @@ int alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alp
                 Jeu jeuApresCoup = jeu;
                 jeuApresCoup.joue(coupChoisi);
 
-                int score = alphaBeta(jeuApresCoup,profondeur + 1, coup, true, alpha, beta);
+                int score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, true, alpha, beta);
                 score_max = std::min(score_max, score);
                 beta = std::min(beta, score_max);
   
@@ -117,46 +130,9 @@ int alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alp
 }
 
 
-void recherche_coup(Jeu jeu, std::vector<int> &coup,int &x)
+void Joueur_alphaBeta_::recherche_coup(Jeu jeu, std::vector<int> &coup)
 {
     deplacement coupChoisi;
-    x = alphaBeta(jeu,0, coupChoisi, true,-200,200);
+    int eval = alphaBeta(jeu,0, coupChoisi, true,-200,200);
     coup=coupChoisi;
-}
-
-
-int main()
-{
-    
-    //initialise la graine du générateur aléatoire
-    std::srand(std::time(nullptr));
-    
-    // création de l'Arbitre (joueur jouant en 1er la premiere partie, joueur jouant en 2eme celle-ci , nombre de parties)
-    Arbitre a (player::ALPHABETA, player::RAND2,1);
-    // commence le challenge
-    int r= a.challenge();
-    return r;
-    
-/*
-    Jeu jeu;
-    jeu.reset();
-    std::cout << jeu;
-    std::cout << "\n";
-    std::vector<int> coup;
-
-    int x;
-    recherche_coup(jeu,coup,x);
-    
-    std::cout << "coup choisi : ";
-    for (auto &c : coup){
-        std::cout << c << " ";
-    }
-    std::cout << "\n";
-    
-    std::cout << "valeur meilleur coup : " << x << "\n";
-
-    return 0;
-
-*/
-
 }

@@ -12,8 +12,8 @@
 #include "joueurs/joueur.hh"
 #include "joueurs/joueur_random.hh"
 #include "joueurs/joueur_manuel.hh"
-#include "joueurs/joueur_montecarlo_.hh"
-const int TEMPS_POUR_UN_COUP(10); // millisecondes
+#include "joueurs/joueur_alphaBeta_.hh"
+const int TEMPS_POUR_UN_COUP(1500); // millisecondes
 //const int TEMPS_POUR_UN_COUP(10);//millisecondes -- temps lors de la compétition
 /**********************************************************************************
  *             classe lançant la partie et qui se sert des                        *
@@ -22,14 +22,14 @@ const int TEMPS_POUR_UN_COUP(10); // millisecondes
  **********************************************************************************/
 
 /*Pour appeler les joueurs
- * M_1 et M_2 instancieront la classe Joueur_monte_carlo
- * M_1 s'appelle MonteCarlo (M) ; M_2 s'appelle StoMonteCarlo (S)
+ * M_1 et M_2 instancieront la classe Joueur_alphaBeta
+ * M_1 s'appelle alphaBeta (M) ; M_2 s'appelle StoalphaBeta (S)
  * MANUEL et MANUEL2 instancieront la classe Joueur_manuel
  * RAND et RAND2 instancieront la classe Joueur_Random
  * RAND s'appelle Random (R) et RAND2 s'appelle Aleatoire (A)
  * MANUEL s'appelle Caro (C) et MANUEL2 s'appelle Vio (V)
  * */
-enum class player {MANUEL , MANUEL2, RAND, RAND2} ;
+enum class player {MANUEL , MANUEL2, RAND, RAND2 , ALPHABETA , ALPHABETA2} ;
 enum class result {NULLE , EXI , UNI, ERREUR } ;
 
 /**

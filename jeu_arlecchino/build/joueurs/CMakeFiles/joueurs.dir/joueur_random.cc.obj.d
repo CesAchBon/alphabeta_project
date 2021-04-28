@@ -180,4 +180,4 @@ joueurs/CMakeFiles/joueurs.dir/joueur_random.cc.obj: \
  c:\mingw64\include\c++\10.3.0\functional \
  c:\mingw64\include\c++\10.3.0\bits\std_function.h \
  c:\users\mathi\documents\github\alphabeta_project\jeu_arlecchino\joueurs/joueur_manuel.hh \
- c:\users\mathi\documents\github\alphabeta_project\jeu_arlecchino\joueurs/joueur_montecarlo_.hh
+ c:\users\mathi\documents\github\alphabeta_project\jeu_arlecchino\joueurs/joueur_alphaBeta_.hh

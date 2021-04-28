@@ -1,2 +1,2 @@
-C:\mingw64\bin\ar.exe qc libjoueurs.a CMakeFiles/joueurs.dir/joueur.cc.obj CMakeFiles/joueurs.dir/joueur_random.cc.obj CMakeFiles/joueurs.dir/joueur_manuel.cc.obj CMakeFiles/joueurs.dir/joueur_montecarlo_.cc.obj
+C:\mingw64\bin\ar.exe qc libjoueurs.a CMakeFiles/joueurs.dir/joueur.cc.obj CMakeFiles/joueurs.dir/joueur_random.cc.obj CMakeFiles/joueurs.dir/joueur_manuel.cc.obj CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.obj
 C:\mingw64\bin\ranlib.exe libjoueurs.a

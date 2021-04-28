@@ -1,0 +1,2 @@
+C:\mingw64\bin\ar.exe qc libalphaBeta.a CMakeFiles/alphaBeta.dir/alphaBeta.cc.obj
+C:\mingw64\bin\ranlib.exe libalphaBeta.a
