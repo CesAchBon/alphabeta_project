@@ -20,12 +20,6 @@ void Arbitre::initialisation()
 
     //si le numero de partie est pair, c'est _joueur1 qui commence
     switch (((_numero_partie%2)? _player1 : _player2)) {
-        case player::M_1:
-            _joueur1 = std::make_shared<Joueur_MonteCarlo_> ("MonteCarlo",true);
-            break;
-        case player::M_2:
-            _joueur1 = std::make_shared<Joueur_MonteCarlo_> ("StoMonteCarlo",true);
-            break;
         case player::MANUEL:
             _joueur1 = std::make_shared<Joueur_Manuel> ("César",true);
             break;
@@ -44,12 +38,6 @@ void Arbitre::initialisation()
 
     //si le numero de partie est impair, c'est _joueur2 qui commence
     switch (((!(_numero_partie%2))? _player1 : _player2)) {
-        case player::M_1:
-            _joueur2 = std::make_shared<Joueur_MonteCarlo_> ("MonteCarlo",false);
-            break;
-        case player::M_2:
-            _joueur2 = std::make_shared<Joueur_MonteCarlo_> ("StoMonteCarlo",false);
-            break;
         case player::MANUEL:
             _joueur2 = std::make_shared<Joueur_Manuel> ("César",false);
             break;
@@ -130,12 +118,15 @@ result Arbitre::partie()
             if (!_coups_mutex[_numero_partie-1].try_lock()) {
                     std::cerr <<  std::endl << "mutex non rendu " << std::endl;
                     try_lock = true;
+            }
+            else if(dpcmt.size()!=0){
+                if(!_jeu.coup_licite(_jeu.plateau()[dpcmt[0]][dpcmt[1]],dpcmt)) {
+                    std::cerr <<  std::endl << "coup invalide " << _jeu.plateau()[dpcmt[0]][dpcmt[1]] << std::endl;
+                    try_lock = true;
                 }
-            /*
-            else if(!_jeu.coup_licite(_jeu.plateau()[dpcmt[0]][dpcmt[1]],_coups[_numero_partie-1])) {
-                    std::cerr << "coup invalide " << _jeu.plateau()[dpcmt[0]][dpcmt[1]] << std::endl;
-                }
-            */
+            }
+            
+            
             thread_joueur.detach();
 
             if(try_lock /*|| !_jeu.coup_licite(_jeu.plateau()[dpcmt[0]][dpcmt[1]],_coups[_numero_partie-1])*/)

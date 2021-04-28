@@ -618,12 +618,9 @@ bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi )  {
     
     deplacements deplacements_possibles = this->coups_possibles(piece);
 
-    if (deplacements_possibles.size()==0) return true;// si c'est un coup ou l'on passe son tour pas le choix
-    else {
-        for (const auto &coup : deplacements_possibles) {
-            if (coup==coupChoisi) 
-                return true;
-        }
+    for (const auto &coup : deplacements_possibles) {
+        if (coup==coupChoisi) 
+            return true;
     }
 
     return false;

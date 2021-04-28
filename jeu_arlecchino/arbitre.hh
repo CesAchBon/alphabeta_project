@@ -29,7 +29,7 @@ const int TEMPS_POUR_UN_COUP(10); // millisecondes
  * RAND s'appelle Random (R) et RAND2 s'appelle Aleatoire (A)
  * MANUEL s'appelle Caro (C) et MANUEL2 s'appelle Vio (V)
  * */
-enum class player {M_1, M_2 , MANUEL , MANUEL2, RAND, RAND2} ;
+enum class player {MANUEL , MANUEL2, RAND, RAND2} ;
 enum class result {NULLE , EXI , UNI, ERREUR } ;
 
 /**

@@ -41,9 +41,8 @@ void Joueur_Manuel::recherche_coup(Jeu jeu, std::vector<int> &coup)
                 coup_utilisateur.push_back((int)c-48);
             }
         }
-        if (coup_utilisateur.size()%2==0){
-            coup=coup_utilisateur;
-        }
+        coup=coup_utilisateur;
+        
         std::cout << "coup choisi : ";
         for (auto &c : coup)
             std::cout << c << ",";
