@@ -15,6 +15,7 @@ public:
     Piece();//constructeur d'une Brix non definie (i.e. vide)
     Piece(std::string couleurs);//constructeur d'une piece
 
+    bool operator!= (const Piece &p) const;
     std::string getCouleurs() const{
         return _couleurs;
     };//accesseur des couleurs de la pièce

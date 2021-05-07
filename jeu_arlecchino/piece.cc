@@ -9,6 +9,10 @@ Piece::Piece (std::string couleurs)
       _definie(true)
 {}
 
+bool Piece::operator!= (const Piece &p)const {
+    return _couleurs!=p.getCouleurs();
+}
+
 void Piece::setCouleurs(std::string couleurs){
 _couleurs=couleurs;
 }

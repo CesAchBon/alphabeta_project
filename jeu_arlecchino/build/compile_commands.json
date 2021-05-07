@@ -20,6 +20,11 @@
   "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/piece.cc"
 },
 {
+  "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build",
+  "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\stage_alphaBeta.dir\\zobrist.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\zobrist.cc",
+  "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/zobrist.cc"
+},
+{
   "directory": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/build/joueurs",
   "command": "C:\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -Wall -Wpedantic -std=c++14 -o CMakeFiles\\joueurs.dir\\joueur.cc.obj -c C:\\Users\\mathi\\Documents\\GitHub\\alphabeta_project\\jeu_arlecchino\\joueurs\\joueur.cc",
   "file": "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur.cc"

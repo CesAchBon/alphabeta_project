@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/jeu.cc" "CMakeFiles/stage_alphaBeta.dir/jeu.cc.obj" "gcc" "CMakeFiles/stage_alphaBeta.dir/jeu.cc.obj.d"
   "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/main.cc" "CMakeFiles/stage_alphaBeta.dir/main.cc.obj" "gcc" "CMakeFiles/stage_alphaBeta.dir/main.cc.obj.d"
   "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/piece.cc" "CMakeFiles/stage_alphaBeta.dir/piece.cc.obj" "gcc" "CMakeFiles/stage_alphaBeta.dir/piece.cc.obj.d"
+  "C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/zobrist.cc" "CMakeFiles/stage_alphaBeta.dir/zobrist.cc.obj" "gcc" "CMakeFiles/stage_alphaBeta.dir/zobrist.cc.obj.d"
   )
 
 # Targets to which this target links.

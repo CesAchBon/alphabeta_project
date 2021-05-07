@@ -11,6 +11,9 @@ const int NB_PIECE_MAX(35);
 const int MAX_HAUTEUR(6);
 const int MAX_LARGEUR(6);
 
+using ligne=std::array<Piece,MAX_LARGEUR>;
+using board=std::array<ligne,MAX_HAUTEUR>;
+
 using deplacement=std::vector<int>;
 using deplacements=std::vector<deplacement>;
 
@@ -30,8 +33,6 @@ class Jeu {
 
 
 private :
-    using ligne=std::array<Piece,MAX_LARGEUR>;
-    using board=std::array<ligne,MAX_HAUTEUR>;
     board _plateau;
     Etat _etat;
     int _nb_tours;
@@ -57,6 +58,7 @@ public :
 
     std::vector<int> comptage_couleurs() const;//compte le nombre de couleur de chaque joueur
     bool reste_des_coups(int indice_couleur);// retourne si il reste encore des coups licites a jouer
+
 
     bool fini()const; // Vérifie si un état final a été atteint (dans ce cas le jeu prend fin)
     bool partie_nulle() const; // Vérifie si la partie est nulle

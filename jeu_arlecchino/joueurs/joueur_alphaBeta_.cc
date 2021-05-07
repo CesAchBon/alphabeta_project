@@ -2,7 +2,7 @@
 #include<bits/stdc++.h>
 
 Joueur_alphaBeta_::Joueur_alphaBeta_(std::string nom, bool joueur)
-    :Joueur(nom,joueur),_premierAppel(true),_premierJoueur(false)
+    :Joueur(nom,joueur),_premierAppel(true),_premierJoueur(false),_table_transposition(1000000000,40),_zobrist()
 {}
 
 
@@ -16,7 +16,6 @@ Joueur_alphaBeta_::Joueur_alphaBeta_(std::string nom, bool joueur)
 std::vector<deplacements> Joueur_alphaBeta_::coupPossibles(Jeu &jeu) const {
 
     std::vector<deplacements> coupValide;
-    int indice_piece_choisi,indice_coup_choisi, taille, taille_piece;
 
     //parcours du plateau
         for (auto & ligne : jeu.plateau()){
@@ -58,21 +57,22 @@ int Joueur_alphaBeta_::eval (const Jeu &jeu,deplacement coup) const{
 
 }
 
+
 int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alpha, int beta)
 {   
-
     //sert a savoir si on a les rouge et bleus OU jaune et vert lors de la partie
     if (_premierAppel){
+        _table_transposition.clear();
         if (jeu.nbCoupJoue()==0)
             _premierJoueur=true;
         _premierAppel=false;
     }
     // si c'est une feuille
-    if (profondeur == 5)
+    if (profondeur == 3)
         return eval(jeu,coup);//eval à definir
 
     std::vector<deplacements> coupsPossibles = coupPossibles(jeu);
-    //si la partie est finie apres le dernier coup joué
+    //si pas de coups possibles
     if(coupsPossibles.empty()) return eval(jeu,coup);
 
   
@@ -87,11 +87,21 @@ int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, boo
             for (deplacement & coupChoisi : dpcmts ){
                 Jeu jeuApresCoup = jeu;
                 jeuApresCoup.joue(coupChoisi);
-
-                int score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, false, alpha, beta);
+                int indiceConfig = _zobrist.buildKeyZobrist(jeuApresCoup.get_couleur_actuelle(),jeuApresCoup.plateau());//va chercher l'indice de la configuration
+                                int score;
+                // si la configuration est deja dans la table de transposition, on consulte l'evaluation du resultat deja obtenu
+                if (_table_transposition[indiceConfig]!=40){//la table de configuration a ete initialisé dans le constructeur, toutes ses cases ont par défauts la valeur 40
+                    score = _table_transposition[indiceConfig];
+                }
+                //sinon on appel alphaBeta et on stocke dans la table de transposition la nouvelle configuration rencontrée
+                else {
+                    score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, false, alpha, beta);
+                    int indiceConfig = _zobrist.buildKeyZobrist(jeuApresCoup.get_couleur_actuelle(),jeuApresCoup.plateau());//va chercher l'indice de la configuration
+                    _table_transposition[indiceConfig]=score;//on stock l'evaluation de la nouvelle configuration dans la table de transposition
+                }
                 score_max = std::max(score_max, score);
                 if (alpha<score_max && profondeur==0)
-                    coup = coupChoisi;// ce qui permet de savoir quel est le meilleur coup a selectionner
+                    coup = coupChoisi;// selectionne le meilleur coup
                 alpha = std::max(alpha, score_max);
                 // Elagage Beta
                 if (beta <= alpha)
@@ -113,8 +123,18 @@ int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, boo
             for (deplacement & coupChoisi : dpcmts){
                 Jeu jeuApresCoup = jeu;
                 jeuApresCoup.joue(coupChoisi);
-
-                int score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, true, alpha, beta);
+                int indiceConfig = _zobrist.buildKeyZobrist(jeuApresCoup.get_couleur_actuelle(),jeuApresCoup.plateau());//va chercher l'indice de la configuration
+                int score;
+                // si la configuration est deja dans la table de transposition, on consulte l'evaluation du resultat deja obtenu
+                if (_table_transposition[indiceConfig]!=40){//la table de configuration a ete initialisé dans le constructeur, toutes ses cases ont par défauts la valeur 40
+                    score = _table_transposition[indiceConfig];
+                }
+                //sinon on appel alphaBeta et on stocke dans la table de transposition la nouvelle configuration rencontrée
+                else {
+                    score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, true, alpha, beta);
+                    int indiceConfig = _zobrist.buildKeyZobrist(jeuApresCoup.get_couleur_actuelle(),jeuApresCoup.plateau());//va chercher l'indice de la configuration
+                    _table_transposition[indiceConfig]=score;//on stock l'evaluation de la nouvelle configuration dans la table de transposition
+                }
                 score_max = std::min(score_max, score);
                 beta = std::min(beta, score_max);
   
@@ -136,3 +156,7 @@ void Joueur_alphaBeta_::recherche_coup(Jeu jeu, std::vector<int> &coup)
     int eval = alphaBeta(jeu,0, coupChoisi, true,-200,200);
     coup=coupChoisi;
 }
+
+
+// IMPLEMENTATION DE LA TABLE DE TRANSPOSITION
+

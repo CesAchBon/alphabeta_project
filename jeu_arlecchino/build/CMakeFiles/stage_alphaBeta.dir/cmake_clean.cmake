@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/stage_alphaBeta.dir/main.cc.obj.d"
   "CMakeFiles/stage_alphaBeta.dir/piece.cc.obj"
   "CMakeFiles/stage_alphaBeta.dir/piece.cc.obj.d"
+  "CMakeFiles/stage_alphaBeta.dir/zobrist.cc.obj"
+  "CMakeFiles/stage_alphaBeta.dir/zobrist.cc.obj.d"
   "libstage_alphaBeta.dll.a"
   "stage_alphaBeta.exe"
   "stage_alphaBeta.exe.manifest"

@@ -631,6 +631,30 @@ piece.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\stage_alphaBeta.dir\build.make CMakeFiles/stage_alphaBeta.dir/piece.cc.s
 .PHONY : piece.cc.s
 
+zobrist.obj: zobrist.cc.obj
+.PHONY : zobrist.obj
+
+# target to build an object file
+zobrist.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\stage_alphaBeta.dir\build.make CMakeFiles/stage_alphaBeta.dir/zobrist.cc.obj
+.PHONY : zobrist.cc.obj
+
+zobrist.i: zobrist.cc.i
+.PHONY : zobrist.i
+
+# target to preprocess a source file
+zobrist.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\stage_alphaBeta.dir\build.make CMakeFiles/stage_alphaBeta.dir/zobrist.cc.i
+.PHONY : zobrist.cc.i
+
+zobrist.s: zobrist.cc.s
+.PHONY : zobrist.s
+
+# target to generate assembly for a file
+zobrist.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\stage_alphaBeta.dir\build.make CMakeFiles/stage_alphaBeta.dir/zobrist.cc.s
+.PHONY : zobrist.cc.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -684,6 +708,9 @@ help:
 	@echo ... piece.obj
 	@echo ... piece.i
 	@echo ... piece.s
+	@echo ... zobrist.obj
+	@echo ... zobrist.i
+	@echo ... zobrist.s
 .PHONY : help
 
 

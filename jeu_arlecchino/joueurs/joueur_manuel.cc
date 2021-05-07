@@ -13,7 +13,6 @@ Joueur_Manuel::Joueur_Manuel(std::string nom, bool joueur)
 void Joueur_Manuel::recherche_coup(Jeu jeu, std::vector<int> &coup)
 { 
     std::vector<deplacements> coupValide;
-    int indice_piece_choisi,indice_coup_choisi, taille, taille_piece;
 
     //parcours du plateau
         for (auto & ligne : jeu.plateau()){

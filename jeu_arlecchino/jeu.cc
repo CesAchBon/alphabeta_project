@@ -793,6 +793,7 @@ bool Jeu::reste_des_coups(int indice_couleur) {
 }
 
 
+
 bool Jeu::fini() const {
     return (_etat != Etat::PARTIE_NON_TERMINEE);
 }
