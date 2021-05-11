@@ -9,8 +9,7 @@
  *             temps d'execution avec la table de transposition.                  *
  *                                                                                *
  **********************************************************************************/
-
-//NOTE : MAJ a faire : prendre en compte la profondeur en plus de la couleur et du plateau pour représenter une configuration 
+ 
 
 class zobrist{
     public:
@@ -20,8 +19,8 @@ class zobrist{
     int indicePiece (const std::string &piece) const;
     int nombreRandom ();
     void buildTableauIndice();
-    int buildKeyZobrist(const int &couleur,const board &plateau);
+    int buildKeyZobrist(const int &couleur,const board &plateau,const int &profondeur);
 
     private:
-    std::vector<std::vector<std::vector<int>>> _tableau_indice_zobrist;
+    std::vector<std::vector<std::vector<std::vector<int>>>> _tableau_indice_zobrist;
 };
