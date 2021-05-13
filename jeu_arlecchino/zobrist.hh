@@ -9,7 +9,6 @@
  *             temps d'execution avec la table de transposition.                  *
  *                                                                                *
  **********************************************************************************/
- 
 
 class zobrist{
     public:

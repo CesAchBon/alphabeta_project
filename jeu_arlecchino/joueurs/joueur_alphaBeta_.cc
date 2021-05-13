@@ -90,12 +90,9 @@ int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, boo
                 jeuApresCoup.joue(coupChoisi);
                 //recherche de la configuration dans la table de transposition qui a été évaluée avec une profondeur au maximum 
                 //aussi grande que la profondeur actuelle , pour une évaluation d'au moins aussi qualitative que si on lancait l'alpha-beta a cette profondeur
-                int profondeurAux = 0;
-                int indiceConfig = 40;
-                while (profondeurAux<=profondeur+1){
-                    indiceConfig = _zobrist.buildKeyZobrist(jeuApresCoup.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeurAux);//va chercher l'indice de la configuration
-                    if (indiceConfig!=40) break;//configuration trouvée dans la table , plus la peine de chercher
-                }
+
+                int indiceConfig = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur);//va chercher l'indice de la configuration
+                    
                 int score;
                 // si la configuration est deja dans la table de transposition, on consulte l'evaluation du resultat deja obtenu
                 if (_table_transposition[indiceConfig]!=40){//la table de configuration a ete initialisé dans le constructeur, toutes ses cases ont par défauts la valeur 40
@@ -103,8 +100,8 @@ int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, boo
                 }
                 //sinon on appel alphaBeta et on stocke dans la table de transposition la nouvelle configuration rencontrée
                 else {
-                    score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, false, alpha, beta);
-                    int indiceConfig = _zobrist.buildKeyZobrist(jeuApresCoup.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur+1);//va chercher l'indice de la configuration
+                    score = alphaBeta(jeuApresCoup,profondeur+1, coupChoisi, false, alpha, beta);
+                    int indiceConfig = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur);//construit l'indice de la configuration
                     _table_transposition[indiceConfig]=score;//on stock l'evaluation de la nouvelle configuration dans la table de transposition
                 }
                 score_max = std::max(score_max, score);
@@ -132,12 +129,8 @@ int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, boo
                 jeuApresCoup.joue(coupChoisi);
                 //recherche de la configuration dans la table de transposition qui a été évaluée avec une profondeur au maximum 
                 //aussi grande que la profondeur actuelle , pour une évaluation d'au moins aussi qualitative que si on lancait l'alpha-beta a cette profondeur
-                int profondeurAux = 0;
-                int indiceConfig = 40;
-                while (profondeurAux<=profondeur+1){
-                    indiceConfig = _zobrist.buildKeyZobrist(jeuApresCoup.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeurAux);//va chercher l'indice de la configuration
-                    if (indiceConfig!=40) break;//configuration trouvée dans la table , plus la peine de chercher
-                }
+                int indiceConfig = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur);//va chercher l'indice de la configuration
+                    
                 int score;
                 // si la configuration est deja dans la table de transposition, on consulte l'evaluation du resultat deja obtenu
                 if (_table_transposition[indiceConfig]!=40){//la table de configuration a ete initialisé dans le constructeur, toutes ses cases ont par défauts la valeur 40
@@ -146,7 +139,7 @@ int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, boo
                 //sinon on appel alphaBeta et on stocke dans la table de transposition la nouvelle configuration rencontrée
                 else {
                     score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, true, alpha, beta);
-                    int indiceConfig = _zobrist.buildKeyZobrist(jeuApresCoup.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur+1);//va chercher l'indice de la configuration
+                    int indiceConfig = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur);//va chercher l'indice de la configuration
                     _table_transposition[indiceConfig]=score;//on stock l'evaluation de la nouvelle configuration dans la table de transposition
                 }
                 score_max = std::min(score_max, score);

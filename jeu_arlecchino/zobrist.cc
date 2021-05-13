@@ -54,6 +54,7 @@ int zobrist::buildKeyZobrist(const int &couleur,const board &plateau,const int &
     int zobrist = 0;
     for(int abscisse =0;abscisse < MAX_LARGEUR;abscisse++){
         for(int ordonnee =0;ordonnee < MAX_HAUTEUR;ordonnee++){
+
                 int indiceP = indicePiece(plateau[abscisse][ordonnee].getCouleurs());
                 zobrist ^= _tableau_indice_zobrist[couleur][numCase][indiceP][profondeur];//XOR
                 ++numCase;
