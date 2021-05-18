@@ -67,6 +67,8 @@ public :
     board const & plateau() const {
         return _plateau;
     };//retourne le plateau en cours
+
+    bool plateauxEgaux(board &plateau) const;
 };
 //affiche le plateau du jeu
 std::ostream& operator<<( std::ostream &flux, Jeu const& jeu );

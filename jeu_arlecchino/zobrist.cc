@@ -1,6 +1,6 @@
 #include "zobrist.hh"
 
-zobrist::zobrist() : _tableau_indice_zobrist(4,std::vector<std::vector<std::vector<int>>>(36,std::vector <std::vector<int>>(36,std::vector<int>(3,-1)))) {
+zobrist::zobrist() : _tableau_indice_zobrist(4,std::vector<std::vector<unsigned long long int>>(36,std::vector <unsigned long long int>(36,-1))) {
     buildTableauIndice();
 }
 
@@ -19,28 +19,30 @@ int zobrist::indicePiece (const std::string &piece) const {
     }
 }
 
-//retourne un nombre alétoire de maniere beaucoup plus uniforme que la fonction rand()
-int zobrist::nombreRandom(){
-    std::random_device r;
+//retourne un nombre alétoire sur 64 bit de maniere beaucoup plus uniforme que la fonction rand()
+unsigned long long int zobrist::nombreRandom(){
 
-    std::default_random_engine e1(r());
-    std::uniform_int_distribution<int> uniform_dist(1, 100000000);
-    return uniform_dist(e1);
+
+    std::random_device rd;
+
+    std::mt19937_64 e2(rd());
+
+    std::uniform_int_distribution<unsigned long long int> dist(0,18446744073709551615);
+    
+    return dist(e2);
 }
 
 
 //pour chaque case on rentre un nombre aleatoire pour chaque piece possible,soit 36 nombre aleatoire par case
 //puis on repete ca 4 fois pour chaque tour donc chaque couleur soit 4 fois
 //le tout par le nombre de profondeur de notre recherche alpha beta (ici 3)
-//on a donc 36 * 36 * 4 * 3 generation de nombre aleatoire qui vont nous servir pour
+//on a donc 36 * 36 * 4 * 4 generation de nombre aleatoire qui vont nous servir pour
 //representer une configuration sous forme d'un entier de maniere unique
 void zobrist::buildTableauIndice(){
     for (int i=0; i<4; ++i){
         for(int j=0; j<36 ; ++j){
             for (int k=0; k<36 ; ++k){
-                for (int l=0; l<3 ;++l){
-                    _tableau_indice_zobrist[i][j][k][l] = nombreRandom();
-                }
+                _tableau_indice_zobrist[i][j][k] = nombreRandom();
             }
         }
     }
@@ -49,14 +51,14 @@ void zobrist::buildTableauIndice(){
 //parcours le plateau donnée en parametre et va chercher pour chaque case le nombre aleatoire du tableau rempli dans buildTableauIndice()
 //en fonction de la couleur actuelle a qui c'est le tour et de la piece qui est sur cette case
 //puis on fait un XOR successif de ces 36 nombres aléatoire afin d'avoir un nombre entier qui représente une configuration
-int zobrist::buildKeyZobrist(const int &couleur,const board &plateau,const int &profondeur){
+unsigned long long int zobrist::buildKeyZobrist(const int &couleur,const board &plateau){
     int numCase = 0;
-    int zobrist = 0;
+    unsigned long long int zobrist = 0;
     for(int abscisse =0;abscisse < MAX_LARGEUR;abscisse++){
         for(int ordonnee =0;ordonnee < MAX_HAUTEUR;ordonnee++){
 
                 int indiceP = indicePiece(plateau[abscisse][ordonnee].getCouleurs());
-                zobrist ^= _tableau_indice_zobrist[couleur][numCase][indiceP][profondeur];//XOR
+                zobrist ^= _tableau_indice_zobrist[couleur][numCase][indiceP];//XOR
                 ++numCase;
             }
     }

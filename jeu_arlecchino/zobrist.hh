@@ -16,10 +16,10 @@ class zobrist{
     static const std::string pieces[36];
 
     int indicePiece (const std::string &piece) const;
-    int nombreRandom ();
+    unsigned long long int nombreRandom ();
     void buildTableauIndice();
-    int buildKeyZobrist(const int &couleur,const board &plateau,const int &profondeur);
+    unsigned long long int buildKeyZobrist(const int &couleur,const board &plateau);
 
     private:
-    std::vector<std::vector<std::vector<std::vector<int>>>> _tableau_indice_zobrist;
+    std::vector<std::vector<std::vector<unsigned long long int>>> _tableau_indice_zobrist;
 };

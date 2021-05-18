@@ -829,7 +829,16 @@ std::ostream& operator<<( std::ostream &flux, Jeu const& jeu ){
     flux<<std::endl;
     return flux;
 }
-
+bool Jeu::plateauxEgaux(board &plateau) const{
+        for(int abscisse =0;abscisse < MAX_LARGEUR;abscisse++){
+            for(int ordonnee =0;ordonnee < MAX_HAUTEUR;ordonnee++){
+                if (_plateau[abscisse][ordonnee].getCouleurs() != plateau[abscisse][ordonnee].getCouleurs()){
+                    return false;
+                }
+            }
+        }
+        return true;
+        }
 /*
 Quel coup voulez vous jouer :
     si il répond avec une piece a plusieurs couleurs, il faut lui redemander autant de fois qu'elle a de couleurs -1 (avec actualisation du plateau)
