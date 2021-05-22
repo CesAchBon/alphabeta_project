@@ -13,7 +13,7 @@
 #include "joueurs/joueur_random.hh"
 #include "joueurs/joueur_manuel.hh"
 #include "joueurs/joueur_alphaBeta_.hh"
-const int TEMPS_POUR_UN_COUP(1000); // millisecondes
+const int TEMPS_POUR_UN_COUP(500); // millisecondes
 //const int TEMPS_POUR_UN_COUP(10);//millisecondes -- temps lors de la compétition
 /**********************************************************************************
  *             classe lançant la partie et qui se sert des                        *

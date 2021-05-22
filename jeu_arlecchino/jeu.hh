@@ -41,17 +41,17 @@ private :
 public :
     Jeu();
     void reset(); // Remet à la graine le jeu
-    bool coordValide(int abscisse,int ordonnee) const;//Le coup est dans le plateau et est un trou
+    bool coordValide(const int &abscisse,const int &ordonnee) const;//Le coup est dans le plateau et est un trou
     int nbCoupJoue() const;// Retourne le nombre de coup deja joue
 
-    bool coup_licite(Piece piece,std::vector<int> coupChoisi); // Vérifie si le coup a jouer est licite
-    void joue(std::vector<int> coupChoisi); // Joue le coup (sans vérifier qu'il est licite)
+    bool coup_licite(const Piece &piece,const std::vector<int> &coupChoisi); // Vérifie si le coup a jouer est licite
+    void joue(const std::vector<int> &coupChoisi); // Joue le coup (sans vérifier qu'il est licite)
 
-    void set_couleur_actuelle(int indice_couleur){_couleurActuelle=indice_couleur;};
+    void set_couleur_actuelle(const int &indice_couleur){_couleurActuelle=indice_couleur;};
     int get_couleur_actuelle() const {return _couleurActuelle;};
     
-    bool saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const;//Retourne si on peut deplacer une piece par un saut des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
-    bool deplacement_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const;//Retourne si on peut deplacer une piece des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
+    bool saut_possible(const int &abs_depart,const int &ord_depart,const int &abscisse,const int &ordonnee) const;//Retourne si on peut deplacer une piece par un saut des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
+    bool deplacement_possible(const int &abs_depart,const int &ord_depart,const int &abscisse,const int &ordonnee) const;//Retourne si on peut deplacer une piece des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
     std::array<int,2> get_position(Piece const & coup) const; // Retourne les coordonnees dune piece sur le plateau
     deplacements coups_possibles(Piece const & coup);//Renvoie le vector de tous les coups possibles d'une piece
 

@@ -54,7 +54,7 @@ void Jeu::reset(){
     _couleurActuelle = 0;
 }
 
-bool Jeu::coordValide(int abscisse,int ordonnee) const{
+bool Jeu::coordValide(const int &abscisse,const int & ordonnee) const{
     return (abscisse >= 0) && (abscisse < MAX_LARGEUR) &&
            (ordonnee >= 0) && (ordonnee < MAX_HAUTEUR) &&
            ( (_plateau[abscisse][ordonnee].getCouleurs()=="----")
@@ -69,7 +69,7 @@ int Jeu::nbCoupJoue() const
 
 // Retourne si il est possible d'effectuer un saut depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un ---- et
 // qu'une piece est sautée
-bool Jeu::saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const {
+bool Jeu::saut_possible(const int &abs_depart,const int &ord_depart,const int &abscisse,const int &ordonnee) const {
     if (coordValide(abs_depart+abscisse*2,ord_depart+ordonnee*2) && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getCouleurs()!="----" && _plateau[abs_depart+abscisse][ord_depart+ordonnee].getDefinie())
     {
         return true;
@@ -78,7 +78,7 @@ bool Jeu::saut_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee)
 }
 
 // Retourne si il est possible d'effectuer un déplacement depuis les coordonnees (abs_depart,ord_depart) vers (abscisse,ordonnee). Cela vérifie que la destination est un ----
-bool Jeu::deplacement_possible(int abs_depart,int ord_depart,int abscisse,int ordonnee) const {
+bool Jeu::deplacement_possible(const int &abs_depart,const int &ord_depart,const int &abscisse,const int &ordonnee) const {
     if (coordValide(abs_depart+abscisse,ord_depart+ordonnee))
     {
         return true;
@@ -614,7 +614,7 @@ deplacements Jeu::coups_possibles( Piece const & coup){
 }
 
 // verifie si a partir des coordonnées d'une piece passée en parametre le tour représenté par un vecteur de coordonnées passé en parametre est licite
-bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi )  {
+bool Jeu::coup_licite(const Piece &piece,const std::vector<int> &coupChoisi )  {
     
     deplacements deplacements_possibles = this->coups_possibles(piece);
 
@@ -629,7 +629,7 @@ bool Jeu::coup_licite( Piece piece,std::vector<int> coupChoisi )  {
 
 
 //joue le coup choisi et verifie si il est licite puis teste si c'est la fin de partie
-void Jeu::joue(std::vector<int> coupChoisi) {
+void Jeu::joue(const std::vector<int> &coupChoisi) {
     if (coupChoisi.size()!=0){
         Piece piece;
         piece = _plateau[coupChoisi[0]][coupChoisi[1]];

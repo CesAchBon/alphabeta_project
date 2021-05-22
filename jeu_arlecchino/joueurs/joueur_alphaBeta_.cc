@@ -93,58 +93,65 @@ deplacement Joueur_alphaBeta_::MTDF(Jeu &root,int &firstGuess,int &profondeur) {
 }
 
 int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool joueur_E, int profondeur,deplacement &meilleureCoup){
-    //recherche de la configuration dans la table de transposition qui a été évaluée avec une profondeur au maximum 
-    //aussi grande que la profondeur actuelle , pour une évaluation d'au moins aussi qualitative que si on lancait l'alpha-beta a cette profondeur
-    unsigned long long int numZobrist = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeu.plateau());//va chercher la clé zobrist de la configuration
+    //recherche de la configuration dans la table de transposition qui prend en compte la profondeur a la quelle la position a été évaluée
+    unsigned long long int numZobrist = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeu.plateau(),profondeur);//va chercher la clé zobrist de la configuration
     int indiceConfig = 16777215 & numZobrist; //hache la clé de zobrist en rendant le nombre =<16777215 , nombre beaucoup trop grand pour etre un indice de tableau sinon
     
     
-    // si la configuration est deja dans la table de transposition et que la profondeur a laquelle la position a ete evaluée est une position égale a celle actuelle
-    //, on consulte l'evaluation du resultat deja obtenu
-    if ( _table_transposition[indiceConfig].cleZobrist==numZobrist && _table_transposition[indiceConfig].profondeur==profondeur){//la table de configuration a ete initialisé dans le constructeur
-
+    // si la configuration est deja dans la table de transposition, on consulte l'evaluation du resultat deja obtenu
+    if ( _table_transposition[indiceConfig].cleZobrist==numZobrist){//la table de configuration a ete initialisé dans le constructeur
+        //si la borne inf trouvée est superieur a la borne sup actuel alors on retourne la borne inf 
         if (_table_transposition[indiceConfig].borneInfSet && _table_transposition[indiceConfig].borneInf >= beta){
            return _table_transposition[indiceConfig].borneInf; 
         }
+        //si la borne sup trouvée est inferieur a la borne inf actuel alors on retourne la borne sup 
         if (_table_transposition[indiceConfig].borneSupSet && _table_transposition[indiceConfig].borneSup <= alpha) {
             return _table_transposition[indiceConfig].borneSup;
         }
-        if (_table_transposition[indiceConfig].borneInfSet)
+        //sinon on continue et on met à jour les infos de cette configuration
+        if (_table_transposition[indiceConfig].borneInfSet)//permet de faire evoluer la borne inf actuel si la borne inf trouvée donne une borne plus grande
             alpha = std::max(alpha, _table_transposition[indiceConfig].borneInf);
-        if (_table_transposition[indiceConfig].borneSupSet)    
+        if (_table_transposition[indiceConfig].borneSupSet)//permet de faire evoluer la borne sup actuel si la borne sup trouvée donne une borne plus petite    
             beta = std::min(beta, _table_transposition[indiceConfig].borneSup);
     }
-    int g;
-    if (profondeur == 0) g = eval(jeu); /* noeud de profondeur MAX */
-    else if (joueur_E){
-        g = -200; 
+    int g;// variable que retourne l'alpha beta a chaque appel
+    if (profondeur == 0) 
+        g = eval(jeu); /* noeud de profondeur MAX */
+    else if (joueur_E){// si c'est a notre joueur de choisir un coup
+        g = -200; //on initialise g a -l'infini
         int a = alpha; /* sauvegarde de alpha */
         std::vector<deplacements> coupsPossibles = coupPossibles(jeu);
+        //on regarde chaque coup possible et on choisit celui qui a l'evaluation maximale tout en faisant des coupes beta si possiblité pour arreter au plus vite la recherche
         for (deplacements & dpcmts : coupsPossibles){
             for (deplacement & coupChoisi : dpcmts){
                 Jeu jeuApresCoup = jeu;
                 jeuApresCoup.joue(coupChoisi);
-                g = std::max(g, AlphaBetaWithMemory(jeuApresCoup, a, beta,false, profondeur - 1,meilleureCoup));
+                g = std::max(g, AlphaBetaWithMemory(jeuApresCoup, a, beta,false, profondeur - 1,meilleureCoup));// retourne l'evaluation d'un coup possible
+                
                 //mise à jour du potentiel meilleur coup à jouer
+                //on trouve un meilleure nouveau coup quand l'evaluation du coup actuel est superieur a l'evaluation du dernier meilleur coup trouvé, c'est a dire a alpha  
                 if (a<g && profondeur==3){
                     meilleureCoup = coupChoisi;
                 }
-                a = std::max(a, g);
-                if (g >= beta) break;
+                a = std::max(a, g);// mise a jour de alpha si le coup choisi est le nouveau meilleure coup, il devient a son tour au minimum notre meilleure coup
+                if (g >= beta) break;// si g depasse le gain maximale possible on stop la recherche car on par du principe que le joueur adverse
+                                     // ne nous laissera pas la possiblité d'avoir acces a ce coup
             }
             if (g >= beta) break;
         }
     }
-    else { /* Tour du joueur universel */
-        g = 200;
+    else { /* Tour du joueur adverse */
+        g = 200; //on initialise g a +l'infini
         int b = beta; /* sauvegarde de beta */
         std::vector<deplacements> coupsPossibles = coupPossibles(jeu);
+        //on regarde chaque coup possible et on choisit celui qui a l'evaluation minimale tout en faisant des coupes alpha si possiblité pour arreter au plus vite la recherche
         for (deplacements & dpcmts : coupsPossibles){
             for (deplacement & coupChoisi : dpcmts){
                 Jeu jeuApresCoup = jeu;
                 jeuApresCoup.joue(coupChoisi);
-                g = std::min(g, AlphaBetaWithMemory(jeuApresCoup, alpha, b,true, profondeur - 1,meilleureCoup));
-                b = std::min(b, g);
+                g = std::min(g, AlphaBetaWithMemory(jeuApresCoup, alpha, b,true, profondeur - 1,meilleureCoup));// retourne l'evaluation d'un coup possible
+                b = std::min(b, g);// mise a jour de beta si le coup choisi est le nouveau meilleure coup de l'adveraire, le score de ce coup devient alors notre esperance de points maximum
+                                   // pour les autres coups possibles de l'adversaire
                 if (g <= alpha) break;
             }
             if (g <= alpha) break;
@@ -168,11 +175,12 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
          _table_transposition[indiceConfig].borneInfSet = true;
          _table_transposition[indiceConfig].borneInf = g;
     }
-    _table_transposition[indiceConfig].profondeur=profondeur;
     _table_transposition[indiceConfig].cleZobrist=numZobrist;
     
     return g;
 }
+
+
 void Joueur_alphaBeta_::recherche_coup(Jeu jeu, std::vector<int> &coup)
 {   
     deplacement coupChoisi;

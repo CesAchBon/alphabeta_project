@@ -18,8 +18,8 @@ class zobrist{
     int indicePiece (const std::string &piece) const;
     unsigned long long int nombreRandom ();
     void buildTableauIndice();
-    unsigned long long int buildKeyZobrist(const int &couleur,const board &plateau);
+    unsigned long long int buildKeyZobrist(const int &couleur,const board &plateau,const int &profondeur);
 
     private:
-    std::vector<std::vector<std::vector<unsigned long long int>>> _tableau_indice_zobrist;
+    std::vector<std::vector<std::vector<std::vector<unsigned long long int>>>> _tableau_indice_zobrist;
 };

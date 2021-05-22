@@ -23,7 +23,6 @@ struct evaluation {
   int borneSup;
   bool borneInfSet;//sert à verifier si la borne inf a deja ete initialisée pour ne pas l'utiliser quand c est la valeur null (=0).
   bool borneSupSet;//sert à verifier si la borne sup a deja ete initialisée pour ne pas l'utiliser quand c est la valeur null (=0).
-  int profondeur;
 };
 
 class Joueur_alphaBeta_ : public Joueur
