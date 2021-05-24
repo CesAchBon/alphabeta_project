@@ -34,6 +34,9 @@ std::vector<deplacements> Joueur_alphaBeta_::coupPossibles(Jeu &jeu) const {
 
 }
 
+
+//la fonction d'evaluation retourne un score qui nous donne : (NB_couleurs_allié - NB_couleur_adverse)
+//plus le score est élevé plus on a de couleur sur le plateau par rapport à l'adversaire 
 int Joueur_alphaBeta_::eval (const Jeu &jeu) const{
    int nb_Rouge=0;
    int nb_Vert=0;
@@ -57,10 +60,12 @@ int Joueur_alphaBeta_::eval (const Jeu &jeu) const{
 
 }
 /*
-la fonction MTDF effectue uniquement des recherches alpha-bêta à fenêtre zéro, avec une «bonne» borne (variable bêta). 
+la fonction MTDF effectue uniquement des recherches alpha-bêta à fenêtre zéro -> alpha = beta-1, avec une «bonne» borne (variable beta). 
 Ainsi l' AlphaBeta va échouer avec un score haut ou bas,
 renvoyant une limite inférieure ou une limite supérieure sur la valeur minimax. Les appels à fenêtre zéro provoquent plus d'élagage,
-mais renvoient moins d'informations - seulement une limite sur la valeur minimax. Pour trouver la valeur minimax, MTD (f) appelle AlphaBeta un certain nombre de fois,
+mais renvoient moins d'informations - seulement une limite sur la valeur minimax, en effet appeler alpha beta avec une fenetre de valeur tres proche de celle
+de la variation principale est un gain de temps et d'efficacité.
+Pour trouver la valeur minimax, MTD (f) appelle AlphaBeta un certain nombre de fois,
 convergeant vers elle et finissant par trouver la valeur exacte.
 Une table de transposition stocke et récupère les parties précédemment recherchées de l arbre en mémoire pour réduire la surcharge de réexploration des parties de
 l arbre de recherche.
@@ -68,26 +73,25 @@ l arbre de recherche.
 deplacement Joueur_alphaBeta_::MTDF(Jeu &root,int &firstGuess,int &profondeur) {
     //sert a savoir si on a les rouge et bleus OU jaune et vert lors de la partie
     if (_premierAppel){
-        _table_transposition.clear();
         if (root.nbCoupJoue()==0)
             _premierJoueur=true;
         _premierAppel=false;
     }
 
-    int g = firstGuess;
-    int borneSup = 200;
+    int g = firstGuess;// estimation de la valeur de retour du premier appel à alpha beta 
     int borneInf = -200;
-    deplacement meilleureCoup;
+    deplacement meilleureCoup;//le meilleure coup que la recherche va nous apporter
 
-    while (borneInf < borneSup) {
-        int beta = std::max(g, borneInf + 1);
-        if (g == borneInf) beta = g + 1;
-        else beta = g;
+    while (true) {
+        int beta = std::max(g, borneInf + 1);// beta prend la valeur de retour du dernier appel a alphabBeta si celle ci est plus grande que la borne Inf
         g = AlphaBetaWithMemory(root, beta-1, beta,true, profondeur,meilleureCoup);
-        if (g < beta)
-            borneSup = g; 
+        // si g < beta alors on a parcourus tous les coups possibles car pas d'elagage beta et donc on peut rompre la boucle
+        if (g < beta){
+            break;
+        }
+        // si g > beta alors on a trouvé un nouveau meilleur coup dont l'evaluation est maintenant la borne inf
         else
-            borneInf = g;
+            borneInf = g;// si g > beta alors on a trouvé un nouveau meilleur coup dont l'evaluation est maintenant la borne inf
     }
     return meilleureCoup;
 }
@@ -118,9 +122,12 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
     if (profondeur == 0) 
         g = eval(jeu); /* noeud de profondeur MAX */
     else if (joueur_E){// si c'est a notre joueur de choisir un coup
-        g = -200; //on initialise g a -l'infini
         int a = alpha; /* sauvegarde de alpha */
         std::vector<deplacements> coupsPossibles = coupPossibles(jeu);
+        if (coupsPossibles.size()==0)
+            g = eval(jeu); //si pas de coups possible 
+        else 
+            g = -200; //on initialise g a -l'infini
         //on regarde chaque coup possible et on choisit celui qui a l'evaluation maximale tout en faisant des coupes beta si possiblité pour arreter au plus vite la recherche
         for (deplacements & dpcmts : coupsPossibles){
             for (deplacement & coupChoisi : dpcmts){
@@ -141,9 +148,12 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
         }
     }
     else { /* Tour du joueur adverse */
-        g = 200; //on initialise g a +l'infini
         int b = beta; /* sauvegarde de beta */
         std::vector<deplacements> coupsPossibles = coupPossibles(jeu);
+        if (coupsPossibles.size()==0)
+            g = eval(jeu); //si pas de coups possible 
+        else 
+            g = 200; //on initialise g a +l'infini
         //on regarde chaque coup possible et on choisit celui qui a l'evaluation minimale tout en faisant des coupes alpha si possiblité pour arreter au plus vite la recherche
         for (deplacements & dpcmts : coupsPossibles){
             for (deplacement & coupChoisi : dpcmts){
@@ -152,7 +162,8 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
                 g = std::min(g, AlphaBetaWithMemory(jeuApresCoup, alpha, b,true, profondeur - 1,meilleureCoup));// retourne l'evaluation d'un coup possible
                 b = std::min(b, g);// mise a jour de beta si le coup choisi est le nouveau meilleure coup de l'adveraire, le score de ce coup devient alors notre esperance de points maximum
                                    // pour les autres coups possibles de l'adversaire
-                if (g <= alpha) break;
+                if (g <= alpha) break;// si g est en dessous du gain minimale possible on stop la recherche car on par du principe que notre joueur
+                                     // ne laissera pas la possiblité au joueur adverse d'avoir acces a ce coup
             }
             if (g <= alpha) break;
         }
@@ -175,7 +186,7 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
          _table_transposition[indiceConfig].borneInfSet = true;
          _table_transposition[indiceConfig].borneInf = g;
     }
-    _table_transposition[indiceConfig].cleZobrist=numZobrist;
+    _table_transposition[indiceConfig].cleZobrist=numZobrist;//stockage de la configuration actuelle qui a été haché en un nombre de 64 bit
     
     return g;
 }
@@ -186,6 +197,7 @@ void Joueur_alphaBeta_::recherche_coup(Jeu jeu, std::vector<int> &coup)
     deplacement coupChoisi;
     int firstGuess=0;// une bonne estimation de ce qu'est l'evaluation du noeud à jouer
     int profondeur=3;
+    _table_transposition.clear();//on efface la table de transposition entre les coups
     coup = MTDF(jeu,firstGuess,profondeur);
 
 } 
