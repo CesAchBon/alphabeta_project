@@ -35,7 +35,7 @@ public:
   int alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alpha, int beta);
   void recherche_coup(Jeu, std::vector<int> &coup) override;
 
-  deplacement MTDF(Jeu &root,int &firstGuess,int &profondeur);
+  deplacement MTDF(Jeu &jeu,int &firstGuess,int &profondeur);
   int AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool joueur_E, int profondeur,deplacement &meilleureCoup);
 
 private: 

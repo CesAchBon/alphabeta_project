@@ -70,10 +70,10 @@ convergeant vers elle et finissant par trouver la valeur exacte.
 Une table de transposition stocke et récupère les parties précédemment recherchées de l arbre en mémoire pour réduire la surcharge de réexploration des parties de
 l arbre de recherche.
 */  
-deplacement Joueur_alphaBeta_::MTDF(Jeu &root,int &firstGuess,int &profondeur) {
+deplacement Joueur_alphaBeta_::MTDF(Jeu &jeu,int &firstGuess,int &profondeur) {
     //sert a savoir si on a les rouge et bleus OU jaune et vert lors de la partie
     if (_premierAppel){
-        if (root.nbCoupJoue()==0)
+        if (jeu.nbCoupJoue()==0)
             _premierJoueur=true;
         _premierAppel=false;
     }
@@ -84,7 +84,8 @@ deplacement Joueur_alphaBeta_::MTDF(Jeu &root,int &firstGuess,int &profondeur) {
 
     while (true) {
         int beta = std::max(g, borneInf + 1);// beta prend la valeur de retour du dernier appel a alphabBeta si celle ci est plus grande que la borne Inf
-        g = AlphaBetaWithMemory(root, beta-1, beta,true, profondeur,meilleureCoup);
+        g = AlphaBetaWithMemory(jeu, beta-1, beta,true, profondeur,meilleureCoup);
+        std::cout << "g : " << g << "\n";
         // si g < beta alors on a parcourus tous les coups possibles car pas d'elagage beta et donc on peut rompre la boucle
         if (g < beta){
             break;
@@ -128,6 +129,8 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
             g = eval(jeu); //si pas de coups possible 
         else 
             g = -200; //on initialise g a -l'infini
+        
+        int evalMeilleurCoup = g; // sert a stocker l'evaluation du dernier meilleur coup trouvé
         //on regarde chaque coup possible et on choisit celui qui a l'evaluation maximale tout en faisant des coupes beta si possiblité pour arreter au plus vite la recherche
         for (deplacements & dpcmts : coupsPossibles){
             for (deplacement & coupChoisi : dpcmts){
@@ -137,8 +140,9 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
                 
                 //mise à jour du potentiel meilleur coup à jouer
                 //on trouve un meilleure nouveau coup quand l'evaluation du coup actuel est superieur a l'evaluation du dernier meilleur coup trouvé, c'est a dire a alpha  
-                if (a<g && profondeur==3){
+                if (evalMeilleurCoup<g && profondeur==3){
                     meilleureCoup = coupChoisi;
+                    evalMeilleurCoup = g;
                 }
                 a = std::max(a, g);// mise a jour de alpha si le coup choisi est le nouveau meilleure coup, il devient a son tour au minimum notre meilleure coup
                 if (g >= beta) break;// si g depasse le gain maximale possible on stop la recherche car on par du principe que le joueur adverse
