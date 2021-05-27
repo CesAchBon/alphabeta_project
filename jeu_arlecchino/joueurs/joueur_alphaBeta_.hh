@@ -2,6 +2,7 @@
 
 #include "joueur.hh"
 #include "../zobrist.hh"
+#include <ctime>
 
 const int MAX = 2500;
 const int MIN = -2500;
@@ -32,15 +33,13 @@ public:
   //char nom_abbrege() const override;
   std::vector<deplacements> coupPossibles( Jeu &jeu) const;
   int eval (const Jeu &jeu) const;
-  int alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alpha, int beta);
   void recherche_coup(Jeu, std::vector<int> &coup) override;
 
-  deplacement MTDF(Jeu &jeu,int &firstGuess,int &profondeur);
-  int AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool joueur_E, int profondeur,deplacement &meilleureCoup);
+  deplacement MTDF(Jeu &jeu,int &firstGuess,std::vector<evaluation> &table_transposition);
+  int AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool joueur_E, int profondeur,deplacement &meilleureCoup,std::vector<evaluation> &table_transposition);
 
 private: 
 bool _premierAppel;
 bool _premierJoueur;
-std::vector<evaluation> _table_transposition;//une case contient 2 éléments : la clé de zobrist complete de 64 bit en case 0 et la valeur d' evaluation de la position en case 1
 zobrist _zobrist;
 };

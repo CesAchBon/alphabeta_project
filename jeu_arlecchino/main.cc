@@ -16,7 +16,6 @@ int main()
     int r= a.challenge();
     return r;
     
-   
  
 
 }
