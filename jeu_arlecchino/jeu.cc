@@ -25,26 +25,6 @@ void Jeu::reset(){
                 maitrePlace=true;
             } 
             piecesAPlacer.erase(piecesAPlacer.begin()+randPiece);
-            /*bool piecePasPresente = false;
-            while (!piecePasPresente){
-                //on choisit une piece au hasard
-                int randPiece = rand()%(0-35 + 1);
-
-
-                //on verifie qu'elle ne soit pas deja placée sur le plateau
-                auto appartient = std::find(begin(indicesPiecesParcourus), end(indicesPiecesParcourus), randPiece);
-                
-                //si elle n'est pas présente sur le plateau on l'ajoute
-                if (appartient == end(indicesPiecesParcourus)) {
-                    //si c'est la piece noire et blanche on fait un ----
-                    if (randPiece==0) colonne = "----";
-                    else colonne = pieces[randPiece];
-
-                    piecePasPresente=true;
-                    indicesPiecesParcourus.push_back(randPiece);
-                }
-            }
-            */
         }
     }
 
@@ -98,7 +78,7 @@ std::array<int,2> Jeu::get_position(Piece const & coup) const{
 }
 
 //Retourne un vector contenant tous les coups possibles d'une piece donnée
-deplacements Jeu::coups_possibles( Piece const & coup){
+deplacements Jeu::coups_possibles( Piece const & coup,const int &abscisse,const int &ordonnee){
     
     // Les 4 directions possibles de déplacements
     deplacements directions = {{1,0},{-1,0},{0,1},{0,-1}};
@@ -112,9 +92,8 @@ deplacements Jeu::coups_possibles( Piece const & coup){
     }
 
     // on récupère la position de la pièce que l'on souhaite bouger
-    std::array<int,2> position=get_position(coup);
-    int a0=position[0];
-    int o0=position[1];
+    int a0=abscisse;
+    int o0=ordonnee;
 
     _plateau[a0][o0].setDefinie(false);
 
@@ -616,7 +595,7 @@ deplacements Jeu::coups_possibles( Piece const & coup){
 // verifie si a partir des coordonnées d'une piece passée en parametre le tour représenté par un vecteur de coordonnées passé en parametre est licite
 bool Jeu::coup_licite(const Piece &piece,const std::vector<int> &coupChoisi )  {
     
-    deplacements deplacements_possibles = this->coups_possibles(piece);
+    deplacements deplacements_possibles = this->coups_possibles(piece,coupChoisi[0],coupChoisi[1]);
 
     for (const auto &coup : deplacements_possibles) {
         if (coup==coupChoisi) 
@@ -635,9 +614,8 @@ void Jeu::joue(const std::vector<int> &coupChoisi) {
         piece = _plateau[coupChoisi[0]][coupChoisi[1]];
         _nb_tours++;
         if (this->coup_licite(piece,coupChoisi)){
-            std::array<int,2> position=get_position(piece);
-            int abs=position[0];
-            int ord=position[1];
+            int abs=coupChoisi[0];
+            int ord=coupChoisi[1];
 
             // on joue sur le plateau chacun des deplacements/sauts chaque couple de coordonnées que contient le vecteur coupChoisi
             for (int i=2;i<coupChoisi.size();i+=2){
@@ -703,18 +681,22 @@ void Jeu::joue(const std::vector<int> &coupChoisi) {
         //pour chaque couleur on parcours le plateau et on regarde si au moins une piece a un coup possible, si oui la partie n'est pas finie
         while (finDePartie && i<4){
             //parcours du plateau
+            int abscisse=0;
             for (auto & ligne : _plateau){
+                int ordonnee=0;
                 for (auto & colonne : ligne){
                     if (colonne.getCouleurs()!="----"){
-                        deplacements coupsPotentiels = this->coups_possibles(colonne);// recherche des coups potentiels pour une piece
+                        deplacements coupsPotentiels = this->coups_possibles(colonne,abscisse,ordonnee);// recherche des coups potentiels pour une piece
                         //test si la piece a au moins un coup jouable , si oui la partie n'est pas finie
                         if (coupsPotentiels.size()!=0) {
                             finDePartie = false;
                             break;
                         }
                     }
+                    ++ordonnee;
                 }
                 if (!finDePartie) break;
+                abscisse++;
             }
             //on change de couleur
             if (_couleurActuelle==3) _couleurActuelle=0;
@@ -758,38 +740,19 @@ std::vector<int> Jeu::comptage_couleurs() const{
    int nb_Bleu=0;
     for (auto & ligne : _plateau){
         for (auto & colonne : ligne){
-            for(int i = 0; i < colonne.getCouleurs().length(); ++i){
-                char c = colonne.getCouleurs()[i];
-                if (c=='B') {nb_Bleu++;}
-                if (c=='J') {nb_Jaune++;}
-                if (c=='V') {nb_Vert++;}
-                if (c=='R') {nb_Rouge++;}
+            if (colonne.getCouleurs() != "----"){
+                for(int i = 0; i < colonne.getCouleurs().length(); ++i){
+                    char c = colonne.getCouleurs()[i];
+                    if (c=='B') {nb_Bleu++;}
+                    if (c=='J') {nb_Jaune++;}
+                    if (c=='V') {nb_Vert++;}
+                    if (c=='R') {nb_Rouge++;}
+                }
             }
         }
     }
     std::vector<int> vector_couleurs={nb_Bleu,nb_Jaune,nb_Rouge,nb_Vert};
     return vector_couleurs;
-}
-
-
-
-//(mathias) je crois pas que la foncion reste_des_coups nous servira
-//(cesar) Elle peut être utile pour regarder si une couleur peut jouer ou non (je l'ai réimplémentée)
-
-bool Jeu::reste_des_coups(int indice_couleur) {
-    if(comptage_couleurs()[indice_couleur]!=0){
-        for (auto & ligne : _plateau){
-            for (auto & colonne : ligne){
-                if (colonne.contient(couleurs[indice_couleur])){
-                    deplacements coupsPotentiels = coups_possibles(colonne);
-                    if (coupsPotentiels.size()!=0) {
-                        return true;
-                    }
-                }
-            }
-        }
-    }
-    return false;
 }
 
 
@@ -811,6 +774,76 @@ bool Jeu::partie_J2() const{
 }
 
 
+// sert a simuler un coup pour le jouer alpha beta , fais comme la methode joue mais sans le test de fin de partie
+void Jeu::simuleCoup(const std::vector<int> &coupChoisi){
+
+    if (coupChoisi.size()!=0){
+            Piece piece;
+            piece = _plateau[coupChoisi[0]][coupChoisi[1]];
+            _nb_tours++;
+            int abs=coupChoisi[0];
+            int ord=coupChoisi[1];
+
+            // on joue sur le plateau chacun des deplacements/sauts chaque couple de coordonnées que contient le vecteur coupChoisi
+            for (int i=2;i<coupChoisi.size();i+=2){
+                // si c'est un deplacement
+                //haut
+                if (coupChoisi[i+1]==ord+1){
+                    _plateau[abs][ord+1].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                }
+                //bas
+                else if (coupChoisi[i+1]==ord-1){
+                    _plateau[abs][ord-1].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                }
+                //gauche
+                else if (coupChoisi[i]==abs+1){
+                    _plateau[abs+1][ord].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                }
+                //droite
+                else if (coupChoisi[i]==abs-1){
+                    _plateau[abs-1][ord].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                }
+                //si c'est un saut
+                //haut
+                else if (coupChoisi[i+1]==ord+2){
+                    _plateau[abs][ord+2].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                    _plateau[abs][ord+1].setCouleurs("----");
+
+                }
+                //bas
+                else if (coupChoisi[i+1]==ord-2){
+                    _plateau[abs][ord-2].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                    _plateau[abs][ord-1].setCouleurs("----");
+                }
+                //gauche
+                else if (coupChoisi[i]==abs+2){
+                    _plateau[abs+2][ord].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                    _plateau[abs+1][ord].setCouleurs("----");
+                }
+                //droite
+                else if (coupChoisi[i]==abs-2){
+                    _plateau[abs-2][ord].setCouleurs(piece.getCouleurs());
+                    _plateau[abs][ord].setCouleurs("----");
+                    _plateau[abs-1][ord].setCouleurs("----");
+                }
+
+                abs = coupChoisi[i];
+                ord = coupChoisi[i+1];
+            }
+    }
+    //on change de couleur
+    if (_couleurActuelle==3) _couleurActuelle=0;
+    else ++_couleurActuelle;
+
+}
+
 //ADAPTER L AFFICHAGE DU PLATEAU
 std::ostream& operator<<( std::ostream &flux, Jeu const& jeu ){
 //void Jeu::afficher( std::ostream &flux) const {
@@ -829,6 +862,7 @@ std::ostream& operator<<( std::ostream &flux, Jeu const& jeu ){
     flux<<std::endl;
     return flux;
 }
+
 bool Jeu::plateauxEgaux(board &plateau) const{
         for(int abscisse =0;abscisse < MAX_LARGEUR;abscisse++){
             for(int ordonnee =0;ordonnee < MAX_HAUTEUR;ordonnee++){

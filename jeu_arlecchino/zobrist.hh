@@ -19,6 +19,7 @@ class zobrist{
     unsigned long long int nombreRandom ();
     void buildTableauIndice();
     unsigned long long int buildKeyZobrist(const int &couleur,const board &plateau,const int &profondeur);
+    void switchKeyZobrist(unsigned long long int &cleZobrist,const board &plateau,const deplacement &coupChoisi,const int &couleur,const int &profondeur);
 
     private:
     std::vector<std::vector<std::vector<std::vector<unsigned long long int>>>> _tableau_indice_zobrist;

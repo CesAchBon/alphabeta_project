@@ -42,4 +42,5 @@ private:
 bool _premierAppel;
 bool _premierJoueur;
 zobrist _zobrist;
+unsigned long long int _cleZobrist;
 };

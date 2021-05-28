@@ -53,11 +53,10 @@ public :
     bool saut_possible(const int &abs_depart,const int &ord_depart,const int &abscisse,const int &ordonnee) const;//Retourne si on peut deplacer une piece par un saut des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
     bool deplacement_possible(const int &abs_depart,const int &ord_depart,const int &abscisse,const int &ordonnee) const;//Retourne si on peut deplacer une piece des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
     std::array<int,2> get_position(Piece const & coup) const; // Retourne les coordonnees dune piece sur le plateau
-    deplacements coups_possibles(Piece const & coup);//Renvoie le vector de tous les coups possibles d'une piece
+    deplacements coups_possibles(Piece const & coup,const int &abscisse,const int &ordonnee);//Renvoie le vector de tous les coups possibles d'une piece
 
 
     std::vector<int> comptage_couleurs() const;//compte le nombre de couleur de chaque joueur
-    bool reste_des_coups(int indice_couleur);// retourne si il reste encore des coups licites a jouer
 
 
     bool fini()const; // Vérifie si un état final a été atteint (dans ce cas le jeu prend fin)
@@ -69,6 +68,7 @@ public :
     };//retourne le plateau en cours
 
     bool plateauxEgaux(board &plateau) const;
+    void simuleCoup(const std::vector<int> &coupChoisi);
 };
 //affiche le plateau du jeu
 std::ostream& operator<<( std::ostream &flux, Jeu const& jeu );

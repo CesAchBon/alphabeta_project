@@ -66,3 +66,13 @@ unsigned long long int zobrist::buildKeyZobrist(const int &couleur,const board &
     }
     return zobrist;
 }
+
+
+//la fonction switchKeyZobrist prend la clé actuelle et fait un XOR que avec les élements qui ont changés depuis le coup précédent
+void zobrist::switchKeyZobrist(unsigned long long int &cleZobrist,const board &plateau,const deplacement &coupChoisi,const int &couleur,const int &profondeur){
+    for (auto i=0;i<coupChoisi.size();i+=2){ // commencer a deux normalement
+        int indiceP = indicePiece(plateau[coupChoisi[i]][coupChoisi[i+1]].getCouleurs());
+        int numCase = coupChoisi[i]*MAX_LARGEUR+coupChoisi[i+1];
+        cleZobrist ^= _tableau_indice_zobrist[couleur][numCase][indiceP][profondeur];
+    }
+}
