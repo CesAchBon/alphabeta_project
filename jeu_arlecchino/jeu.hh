@@ -1,11 +1,11 @@
 #pragma once
-
 #include <iostream>
 #include <algorithm> 
 #include <array>
 #include <vector>
 #include "piece.hh"
 
+const int profondeurMAX = 4;// c'est ici qu'on fixe la profondeur a laquelle l'alpha beta descend
 
 const int NB_PIECE_MAX(35);
 const int MAX_HAUTEUR(6);
@@ -52,7 +52,6 @@ public :
     
     bool saut_possible(const int &abs_depart,const int &ord_depart,const int &abscisse,const int &ordonnee) const;//Retourne si on peut deplacer une piece par un saut des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
     bool deplacement_possible(const int &abs_depart,const int &ord_depart,const int &abscisse,const int &ordonnee) const;//Retourne si on peut deplacer une piece des coordonnees (abs_depart,ord_depart) vers les coordonnes(abscisse,ordonnee)
-    std::array<int,2> get_position(Piece const & coup) const; // Retourne les coordonnees dune piece sur le plateau
     deplacements coups_possibles(Piece const & coup,const int &abscisse,const int &ordonnee);//Renvoie le vector de tous les coups possibles d'une piece
 
 
@@ -66,8 +65,6 @@ public :
     board const & plateau() const {
         return _plateau;
     };//retourne le plateau en cours
-
-    bool plateauxEgaux(board &plateau) const;
     void simuleCoup(const std::vector<int> &coupChoisi);
 };
 //affiche le plateau du jeu

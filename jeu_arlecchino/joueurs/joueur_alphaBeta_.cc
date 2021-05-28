@@ -2,7 +2,7 @@
 #include<bits/stdc++.h>
 
 Joueur_alphaBeta_::Joueur_alphaBeta_(std::string nom, bool joueur)
-    :Joueur(nom,joueur),_premierAppel(true),_premierJoueur(false),_zobrist(),_cleZobrist(0) //16777215 = 0xFFFFF -> utile et assez grand pour haché des nombre de 64 bit en evitant trop de collision
+    :Joueur(nom,joueur),_premierAppel(true),_premierJoueur(false),_zobrist(),_cleZobrist(0)
 {}
 
 
@@ -82,7 +82,7 @@ deplacement Joueur_alphaBeta_::MTDF(Jeu &jeu,int &firstGuess,std::vector<evaluat
             _premierJoueur=true;
         _premierAppel=false;
     }
-    int profondeur = 3;//la profondeur jusqu'a la quelle on va evaluer un coup
+    int profondeur = profondeurMAX;//la profondeur jusqu'a la quelle on va evaluer un coup
     int g = firstGuess;// estimation de la valeur de retour du premier appel à alpha beta 
     deplacement meilleureCoup;//le meilleure coup que la recherche va nous apporter
     int borneInf = -200;
@@ -111,23 +111,21 @@ deplacement Joueur_alphaBeta_::MTDF(Jeu &jeu,int &firstGuess,std::vector<evaluat
 
 int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool joueur_E, int profondeur,deplacement &meilleureCoup,std::vector<evaluation> &table_transposition){
 
-    int indiceConfig = 16777215 & _cleZobrist; //hache la clé de zobrist en faisant un ET binaire en rendant le nombre =<16777215 , nombre beaucoup trop grand pour etre un indice de tableau sinon
-    
     if (profondeur!=0){
         // si la configuration est deja dans la table de transposition, on consulte l'evaluation du resultat deja obtenu
-        if ( table_transposition[indiceConfig].cleZobrist==_cleZobrist){//la table de configuration a ete initialisé dans le constructeur
-            if (table_transposition[indiceConfig].borneInfSet && table_transposition[indiceConfig].borneInf >= beta){
-            return table_transposition[indiceConfig].borneInf; 
+        if ( table_transposition[_cleZobrist].cleZobrist==_cleZobrist){//la table de configuration a ete initialisé dans le constructeur
+            if (table_transposition[_cleZobrist].borneInfSet && table_transposition[_cleZobrist].borneInf >= beta){
+            return table_transposition[_cleZobrist].borneInf; 
             }
             //si la borne sup trouvée est inferieur a la borne inf actuel alors on retourne la borne sup 
-            if (table_transposition[indiceConfig].borneSupSet && table_transposition[indiceConfig].borneSup <= alpha) {
-                return table_transposition[indiceConfig].borneSup;
+            if (table_transposition[_cleZobrist].borneSupSet && table_transposition[_cleZobrist].borneSup <= alpha) {
+                return table_transposition[_cleZobrist].borneSup;
             }
             //sinon on continue et on met à jour les infos de cette configuration
-            if (table_transposition[indiceConfig].borneInfSet)//permet de faire evoluer la borne inf actuel si la borne inf trouvée donne une borne plus grande
-                alpha = std::max(alpha, table_transposition[indiceConfig].borneInf);
-            if (table_transposition[indiceConfig].borneSupSet)//permet de faire evoluer la borne sup actuel si la borne sup trouvée donne une borne plus petite    
-                beta = std::min(beta, table_transposition[indiceConfig].borneSup);
+            if (table_transposition[_cleZobrist].borneInfSet)//permet de faire evoluer la borne inf actuel si la borne inf trouvée donne une borne plus grande
+                alpha = std::max(alpha, table_transposition[_cleZobrist].borneInf);
+            if (table_transposition[_cleZobrist].borneSupSet)//permet de faire evoluer la borne sup actuel si la borne sup trouvée donne une borne plus petite    
+                beta = std::min(beta, table_transposition[_cleZobrist].borneSup);
         }
     }
     int g;// variable que retourne l'alpha beta a chaque appel
@@ -147,13 +145,13 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
             for (deplacement & coupChoisi : dpcmts){
                 Jeu jeuApresCoup = jeu;
                 jeuApresCoup.simuleCoup(coupChoisi);
-                unsigned long long int cleZ = _cleZobrist; //sauvegarde de la clé actuelle
+                unsigned long int cleZ = _cleZobrist; //sauvegarde de la clé actuelle
                 _zobrist.switchKeyZobrist(_cleZobrist,jeuApresCoup.plateau(),coupChoisi,jeuApresCoup.get_couleur_actuelle(),profondeur-1);//modifie la clé uniquement en fonction des nouveaux éléments de ce tour
                 g = std::max(g, AlphaBetaWithMemory(jeuApresCoup, a, beta,false, profondeur - 1,meilleureCoup,table_transposition));// retourne l'evaluation d'un coup possible
                 _cleZobrist=cleZ;//on remet la clé comme elle etait avant le coup
                 //mise à jour du potentiel meilleur coup à jouer
                 //on trouve un meilleure nouveau coup quand l'evaluation du coup actuel est superieur a l'evaluation du dernier meilleur coup trouvé, c'est a dire a alpha  
-                if (evalMeilleurCoup<g && profondeur==3){
+                if (evalMeilleurCoup<g && profondeur==profondeurMAX){
                     meilleureCoup = coupChoisi;
                     evalMeilleurCoup = g;
                 }
@@ -176,7 +174,7 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
             for (deplacement & coupChoisi : dpcmts){
                 Jeu jeuApresCoup = jeu;
                 jeuApresCoup.simuleCoup(coupChoisi);
-                unsigned long long int cleZ = _cleZobrist;//sauvegarde de la clé actuelle
+                unsigned long int cleZ = _cleZobrist;//sauvegarde de la clé actuelle
                 _zobrist.switchKeyZobrist(_cleZobrist,jeuApresCoup.plateau(),coupChoisi,jeuApresCoup.get_couleur_actuelle(),profondeur-1);//modifie la clé uniquement en fonction des nouveaux éléments de ce tour
                 g = std::min(g, AlphaBetaWithMemory(jeuApresCoup, alpha, b,true, profondeur - 1,meilleureCoup,table_transposition));// retourne l'evaluation d'un coup possible
                 _cleZobrist=cleZ;//on remet la clé comme elle etait avant le coup
@@ -193,22 +191,22 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
         /* mise a jour de la table de transposition */
         /* echec bas -> on fixe la borne sup a g */
         if (g <= alpha){  
-            table_transposition[indiceConfig].borneSupSet = true;
-            table_transposition[indiceConfig].borneSup = g;
+            table_transposition[_cleZobrist].borneSupSet = true;
+            table_transposition[_cleZobrist].borneSup = g;
         }
         /* on a trouvé une valeur dans l'intervalle de recherche ce qui n'arrivera jamais avec une fenetre de 1 comme on le fait */
         if (g > alpha and g < beta) {
-            table_transposition[indiceConfig].borneInfSet = true;
-            table_transposition[indiceConfig].borneSupSet = true;
-            table_transposition[indiceConfig].borneInf = g;
-            table_transposition[indiceConfig].borneSup = g;
+            table_transposition[_cleZobrist].borneInfSet = true;
+            table_transposition[_cleZobrist].borneSupSet = true;
+            table_transposition[_cleZobrist].borneInf = g;
+            table_transposition[_cleZobrist].borneSup = g;
         }
         /* echec haut -> On fixe la borne inf a g */
         if (g >= beta)  {
-            table_transposition[indiceConfig].borneInfSet = true;
-            table_transposition[indiceConfig].borneInf = g;
+            table_transposition[_cleZobrist].borneInfSet = true;
+            table_transposition[_cleZobrist].borneInf = g;
         }
-        table_transposition[indiceConfig].cleZobrist=_cleZobrist;//stockage de la configuration actuelle qui a été haché en un nombre de 64 bit
+        table_transposition[_cleZobrist].cleZobrist=_cleZobrist;//stockage de la configuration actuelle qui a été haché en un nombre de 64 bit
     }
     return g;
 }
@@ -217,130 +215,7 @@ int Joueur_alphaBeta_::AlphaBetaWithMemory(Jeu &jeu,int alpha ,int beta ,bool jo
 void Joueur_alphaBeta_::recherche_coup(Jeu jeu, std::vector<int> &coup)
 {   
     int firstGuess=0;// une bonne estimation de ce qu'est l'evaluation du noeud à jouer
-    _cleZobrist = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeu.plateau(),3);//construit la clé zobrist de la configuration
-    std::vector<evaluation> table_transposition(16777215);//une nouvelle table de transposition est créee à chaque tour
+    _cleZobrist = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeu.plateau(),profondeurMAX);//construit la clé zobrist de la configuration
+    std::vector<evaluation> table_transposition(1048576);//une nouvelle table de transposition est créee à chaque tour de taille 2 puissance 20
     coup = MTDF(jeu,firstGuess,table_transposition);
 } 
-
-/*
-int Joueur_alphaBeta_::alphaBeta(Jeu &jeu,int profondeur, deplacement &coup, bool joueur_E, int alpha, int beta)
-{   
-    //sert a savoir si on a les rouge et bleus OU jaune et vert lors de la partie
-    if (_premierAppel){
-        table_transposition.clear();
-        if (jeu.nbCoupJoue()==0)
-            _premierJoueur=true;
-        _premierAppel=false;
-    }
-    // si c'est une feuille
-    if (profondeur == 3){
-        return eval(jeu,coup);
-    }
-
-    std::vector<deplacements> coupsPossibles = coupPossibles(jeu);
-    //si pas de coups possibles
-    if(coupsPossibles.empty()) {
-        return eval(jeu,coup);
-    }
-
-  
-    if (joueur_E)
-    {
-        int score_max = alpha;//modification ici : int score_max = MIN (avant)
-
-        //parcours des coups possibles dans l 'etat de plateau du jeu actuel
-        for (deplacements & dpcmts : coupsPossibles){
-            for (deplacement & coupChoisi : dpcmts ){
-                Jeu jeuApresCoup = jeu;
-                jeuApresCoup.joue(coupChoisi);
-                //recherche de la configuration dans la table de transposition qui a été évaluée avec une profondeur au maximum 
-                //aussi grande que la profondeur actuelle , pour une évaluation d'au moins aussi qualitative que si on lancait l'alpha-beta a cette profondeur
-
-                unsigned long long int numZobrist = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur);//va chercher la clé zobrist de la configuration
-                int indiceConfig = 16777215 & numZobrist; //hache la clé de zobrist en rendant le nombre =<16777215 , nombre beaucoup trop grand pour etre un indice de tableau sinon
-                    
-                int score;
-                // si la configuration est deja dans la table de transposition ET qu'elle correspond bien a l'etat actuel (il peut y avoir collision), on consulte l'evaluation du resultat deja obtenu
-                if (table_transposition[indiceConfig].cleZobrist==numZobrist){//la table de configuration a ete initialisé dans le constructeur, toutes ses cases ont par défauts la valeur 40
-                    int score1 = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, false, alpha, beta);
-                    score = table_transposition[indiceConfig].eval;
-                    if (score==score1) std::cout << "ouii \n" << table_transposition[indiceConfig].alpha << " \n" << alpha;
-                    else {
-                        
-                            std::cout << "NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON : " << table_transposition[indiceConfig].alpha << " \n" << alpha;
-                    }
-                }
-                //sinon on appel alphaBeta et on stocke dans la table de transposition la nouvelle configuration rencontrée
-                else {
-                    score = alphaBeta(jeuApresCoup,profondeur+1, coupChoisi, false, alpha, beta);
-                    unsigned long long int numZobrist = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur);//va chercher la clé zobrist de la configuration
-                    int indiceConfig = 16777215 & numZobrist;//hache la clé de zobrist en rendant le nombre =<16777215 , nombre beaucoup trop grand pour etre un indice de tableau sinon
-                    table_transposition[indiceConfig].cleZobrist=numZobrist;//on stock la clé de 64 bit dans la table de maniere a eviter les collisions lorsqu'on tombera sur l'indice haché de ce nombre
-                    table_transposition[indiceConfig].eval=score;//on stock l'evaluation de la nouvelle configuration dans la table de transposition
-                    table_transposition[indiceConfig].alpha=alpha;
-                    table_transposition[indiceConfig].beta=alpha;
-                }
-                score_max = std::max(score_max, score);
-                if (alpha<score_max && profondeur==0){
-                    coup = coupChoisi;// selectionne le meilleur coup
-                }
-                alpha = std::max(alpha, score_max);
-                // Elagage Beta
-                if (beta <= alpha)
-                    break;
-            }
-            if (beta <= alpha)
-                break;
-        }
-        return score_max;
-    }
-    else
-    {
-        int score_max = beta;//modification ici : int score_max = MAX (avant)
-
-        //parcours des coups possibles dans l 'etat de plateau du jeu actuel
-        for (deplacements & dpcmts : coupsPossibles){
-            for (deplacement & coupChoisi : dpcmts){
-                Jeu jeuApresCoup = jeu;
-                jeuApresCoup.joue(coupChoisi);
-                //recherche de la configuration dans la table de transposition qui a été évaluée avec une profondeur au maximum 
-                //aussi grande que la profondeur actuelle , pour une évaluation d'au moins aussi qualitative que si on lancait l'alpha-beta a cette profondeur
-                unsigned long long int numZobrist = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur);//va chercher la clé zobrist de la configuration
-                int indiceConfig = 16777215 & numZobrist; //hache la clé de zobrist en rendant le nombre =<16777215 , nombre beaucoup trop grand pour etre un indice de tableau sinon
-                    
-                int score;
-                // si la configuration est deja dans la table de transposition, on consulte l'evaluation du resultat deja obtenu
-                if ( table_transposition[indiceConfig].cleZobrist==numZobrist){//la table de configuration a ete initialisé dans le constructeur, toutes ses cases ont par défauts la valeur 40
-                    int score1 = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, true, alpha, beta);
-                    score = table_transposition[indiceConfig].eval;
-                    if (score==score1) std::cout << "ouii \n";
-                    else {
-                        
-                            std::cout << "AVAEFNBABTBRTQFDBAER : " << table_transposition[indiceConfig].alpha << " \n" << alpha;
-                    }
-                }
-                //sinon on appel alphaBeta et on stocke dans la table de transposition la nouvelle configuration rencontrée
-                else {
-                    score = alphaBeta(jeuApresCoup,profondeur + 1, coupChoisi, true, alpha, beta);
-                    unsigned long long int numZobrist = _zobrist.buildKeyZobrist(jeu.get_couleur_actuelle(),jeuApresCoup.plateau(),profondeur);//va chercher la clé zobrist de la configuration
-                    int indiceConfig = 16777215 & numZobrist; //hache la clé de zobrist en rendant le nombre =<16777215 , nombre beaucoup trop grand pour etre un indice de tableau sinon
-                    table_transposition[indiceConfig].cleZobrist=numZobrist;//on stock la clé de 64 bit dans la table de maniere a eviter les collisions lorsqu'on tombera sur l'indice haché de ce nombre
-                    table_transposition[indiceConfig].eval=score;//on stock l'evaluation de la nouvelle configuration dans la table de transposition
-                    table_transposition[indiceConfig].alpha=alpha;
-                    table_transposition[indiceConfig].beta=alpha;
-
-                }
-                score_max = std::min(score_max, score);
-                beta = std::min(beta, score_max);
-  
-                // Elagage Alpha
-                if (beta <= alpha)
-                    break;
-            }
-            if (beta <= alpha)
-                break;
-        }
-        return score_max;
-    }
-}
-*/

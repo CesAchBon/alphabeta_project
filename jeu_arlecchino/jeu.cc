@@ -66,16 +66,6 @@ bool Jeu::deplacement_possible(const int &abs_depart,const int &ord_depart,const
     return false;
 }
 
-// Retourne la position (en coordonnees) d'une piece sur le plateau
-std::array<int,2> Jeu::get_position(Piece const & coup) const{
-    for(int abscisse =0;abscisse < MAX_LARGEUR;abscisse++){
-        for(int ordonnee =0;ordonnee < MAX_HAUTEUR;ordonnee++){
-            if (_plateau[abscisse][ordonnee].getCouleurs() ==  coup.getCouleurs()){
-                return {abscisse,ordonnee};
-            }
-        }
-    }
-}
 
 //Retourne un vector contenant tous les coups possibles d'une piece donnée
 deplacements Jeu::coups_possibles( Piece const & coup,const int &abscisse,const int &ordonnee){
@@ -863,30 +853,4 @@ std::ostream& operator<<( std::ostream &flux, Jeu const& jeu ){
     return flux;
 }
 
-bool Jeu::plateauxEgaux(board &plateau) const{
-        for(int abscisse =0;abscisse < MAX_LARGEUR;abscisse++){
-            for(int ordonnee =0;ordonnee < MAX_HAUTEUR;ordonnee++){
-                if (_plateau[abscisse][ordonnee].getCouleurs() != plateau[abscisse][ordonnee].getCouleurs()){
-                    return false;
-                }
-            }
-        }
-        return true;
-        }
-/*
-Quel coup voulez vous jouer :
-    si il répond avec une piece a plusieurs couleurs, il faut lui redemander autant de fois qu'elle a de couleurs -1 (avec actualisation du plateau)
-
-Liste des coups possibles
-
-Pour chaque Piece :
-    vérifier si elle appartient au joueur actuel
-    regarder les coups qu'elle peut faire
-    si elle a 2 couleurs ou plus :
-        regarder les coups "déplacements"
-        regarder les sauts
-    si elle a une couleur :
-        regarder les sauts
-
-*/
     

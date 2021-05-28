@@ -193,7 +193,8 @@ CMakeFiles/stage_alphaBeta.dir/arbitre.cc.obj: ../arbitre.cc \
   C:/mingw64/include/c++/10.3.0/x86_64-w64-mingw32/bits/opt_random.h \
   C:/mingw64/include/c++/10.3.0/bits/random.tcc \
   C:/mingw64/include/c++/10.3.0/numeric \
-  C:/mingw64/include/c++/10.3.0/bits/stl_numeric.h
+  C:/mingw64/include/c++/10.3.0/bits/stl_numeric.h \
+  ../joueurs/joueur_alphaBeta_Simple.hh
 
 CMakeFiles/stage_alphaBeta.dir/jeu.cc.obj: ../jeu.cc \
   ../jeu.hh \
@@ -539,7 +540,8 @@ CMakeFiles/stage_alphaBeta.dir/main.cc.obj: ../main.cc \
   C:/mingw64/include/c++/10.3.0/x86_64-w64-mingw32/bits/opt_random.h \
   C:/mingw64/include/c++/10.3.0/bits/random.tcc \
   C:/mingw64/include/c++/10.3.0/numeric \
-  C:/mingw64/include/c++/10.3.0/bits/stl_numeric.h
+  C:/mingw64/include/c++/10.3.0/bits/stl_numeric.h \
+  ../joueurs/joueur_alphaBeta_Simple.hh
 
 CMakeFiles/stage_alphaBeta.dir/piece.cc.obj: ../piece.cc \
   ../piece.hh \
@@ -1224,6 +1226,8 @@ C:/mingw64/include/c++/10.3.0/random:
 C:/mingw64/include/c++/10.3.0/bits/random.tcc:
 
 C:/mingw64/include/c++/10.3.0/numeric:
+
+../joueurs/joueur_alphaBeta_Simple.hh:
 
 ../jeu.cc:
 

@@ -12,7 +12,7 @@ private :
 
 public:
 
-    Piece();//constructeur d'une Brix non definie (i.e. vide)
+    Piece();//constructeur d'une Piece non definie (i.e. vide)
     Piece(std::string couleurs);//constructeur d'une piece
 
     bool operator!= (const Piece &p) const;

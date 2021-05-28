@@ -195,6 +195,7 @@ CMakeFiles/stage_alphaBeta.dir/arbitre.cc.obj
  C:/mingw64/include/c++/10.3.0/bits/random.tcc
  C:/mingw64/include/c++/10.3.0/numeric
  C:/mingw64/include/c++/10.3.0/bits/stl_numeric.h
+ C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur_alphaBeta_Simple.hh
 
 CMakeFiles/stage_alphaBeta.dir/jeu.cc.obj
  C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/jeu.cc
@@ -543,6 +544,7 @@ CMakeFiles/stage_alphaBeta.dir/main.cc.obj
  C:/mingw64/include/c++/10.3.0/bits/random.tcc
  C:/mingw64/include/c++/10.3.0/numeric
  C:/mingw64/include/c++/10.3.0/bits/stl_numeric.h
+ C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/joueurs/joueur_alphaBeta_Simple.hh
 
 CMakeFiles/stage_alphaBeta.dir/piece.cc.obj
  C:/Users/mathi/Documents/GitHub/alphabeta_project/jeu_arlecchino/piece.cc

@@ -187,4 +187,5 @@ joueurs/CMakeFiles/joueurs.dir/joueur_random.cc.obj: \
  c:\mingw64\include\c++\10.3.0\x86_64-w64-mingw32\bits\opt_random.h \
  c:\mingw64\include\c++\10.3.0\bits\random.tcc \
  c:\mingw64\include\c++\10.3.0\numeric \
- c:\mingw64\include\c++\10.3.0\bits\stl_numeric.h
+ c:\mingw64\include\c++\10.3.0\bits\stl_numeric.h \
+ c:\users\mathi\documents\github\alphabeta_project\jeu_arlecchino\joueurs/joueur_alphaBeta_Simple.hh

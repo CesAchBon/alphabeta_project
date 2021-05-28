@@ -2,11 +2,9 @@
 
 #include "joueur.hh"
 #include "../zobrist.hh"
-#include <ctime>
 
 const int MAX = 2500;
 const int MIN = -2500;
-
 /****************************************************************************************
  *             classe de L'IA implémenté avec l'alpha beta ayant comme amélioration     *
  *             la table de transposition (en attribut privé ci-dessous),                *
@@ -19,7 +17,7 @@ const int MIN = -2500;
  ****************************************************************************************/
 
 struct evaluation {
-  unsigned long long cleZobrist;
+  unsigned long int cleZobrist;
   int borneInf;
   int borneSup;
   bool borneInfSet;//sert à verifier si la borne inf a deja ete initialisée pour ne pas l'utiliser quand c est la valeur null (=0).
@@ -42,5 +40,5 @@ private:
 bool _premierAppel;
 bool _premierJoueur;
 zobrist _zobrist;
-unsigned long long int _cleZobrist;
+unsigned long int _cleZobrist;
 };

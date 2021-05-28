@@ -124,12 +124,27 @@ joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.s"
 	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\joueurs && C:\mingw64\bin\x86_64-w64-mingw32-g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs\joueur_alphaBeta_.cc -o CMakeFiles\joueurs.dir\joueur_alphaBeta_.cc.s
 
+joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.obj: joueurs/CMakeFiles/joueurs.dir/flags.make
+joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.obj: ../joueurs/joueur_alphaBeta_Simple.cc
+joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.obj: joueurs/CMakeFiles/joueurs.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.obj"
+	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\joueurs && C:\mingw64\bin\x86_64-w64-mingw32-g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.obj -MF CMakeFiles\joueurs.dir\joueur_alphaBeta_Simple.cc.obj.d -o CMakeFiles\joueurs.dir\joueur_alphaBeta_Simple.cc.obj -c C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs\joueur_alphaBeta_Simple.cc
+
+joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.i"
+	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\joueurs && C:\mingw64\bin\x86_64-w64-mingw32-g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs\joueur_alphaBeta_Simple.cc > CMakeFiles\joueurs.dir\joueur_alphaBeta_Simple.cc.i
+
+joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.s"
+	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\joueurs && C:\mingw64\bin\x86_64-w64-mingw32-g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\joueurs\joueur_alphaBeta_Simple.cc -o CMakeFiles\joueurs.dir\joueur_alphaBeta_Simple.cc.s
+
 # Object files for target joueurs
 joueurs_OBJECTS = \
 "CMakeFiles/joueurs.dir/joueur.cc.obj" \
 "CMakeFiles/joueurs.dir/joueur_random.cc.obj" \
 "CMakeFiles/joueurs.dir/joueur_manuel.cc.obj" \
-"CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.obj"
+"CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.obj" \
+"CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.obj"
 
 # External object files for target joueurs
 joueurs_EXTERNAL_OBJECTS =
@@ -138,9 +153,10 @@ joueurs/libjoueurs.a: joueurs/CMakeFiles/joueurs.dir/joueur.cc.obj
 joueurs/libjoueurs.a: joueurs/CMakeFiles/joueurs.dir/joueur_random.cc.obj
 joueurs/libjoueurs.a: joueurs/CMakeFiles/joueurs.dir/joueur_manuel.cc.obj
 joueurs/libjoueurs.a: joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_.cc.obj
+joueurs/libjoueurs.a: joueurs/CMakeFiles/joueurs.dir/joueur_alphaBeta_Simple.cc.obj
 joueurs/libjoueurs.a: joueurs/CMakeFiles/joueurs.dir/build.make
 joueurs/libjoueurs.a: joueurs/CMakeFiles/joueurs.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library libjoueurs.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX static library libjoueurs.a"
 	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\joueurs && $(CMAKE_COMMAND) -P CMakeFiles\joueurs.dir\cmake_clean_target.cmake
 	cd /d C:\Users\mathi\Documents\GitHub\alphabeta_project\jeu_arlecchino\build\joueurs && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\joueurs.dir\link.txt --verbose=$(VERBOSE)
 
